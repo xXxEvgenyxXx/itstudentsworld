@@ -21,12 +21,12 @@ export default tseslint.config(
     },
     settings: {
       "boundaries/elements": [
-        { type: "app", pattern: "src/app/*" },
-        { type: "pages", pattern: "src/pages/*" },
-        { type: "widgets", pattern: "src/widgets/*" },
-        { type: "features", pattern: "src/features/*" },
-        { type: "entities", pattern: "src/entities/*" },
-        { type: "shared", pattern: "src/shared/*" },
+        { type: "app", pattern: "src/app/**/*" },
+        { type: "pages", pattern: "src/pages/**/*" },
+        { type: "widgets", pattern: "src/widgets/**/*" },
+        { type: "features", pattern: "src/features/**/*" },
+        { type: "entities", pattern: "src/entities/**/*" },
+        { type: "shared", pattern: "src/shared/**/*" },
       ],
     },
     rules: {
