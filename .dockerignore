@@ -1,0 +1,33 @@
+# Git
+.git/
+.gitignore
+
+# Node
+node_modules/
+**/node_modules/
+
+# Composer
+vendor/
+**/vendor/
+
+# Среда разработки
+.env
+.env.*
+!.env.example
+
+# Логи
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# ОС
+.DS_Store
+Thumbs.db
+
+# Артефакты сборки
+dist/
+build/

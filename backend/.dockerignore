@@ -1,0 +1,23 @@
+vendor/
+node_modules/
+.git/
+.env
+.env.*
+!.env.example
+
+# Игнорируем содержимое, но сохраняем папки
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*
+!storage/framework/cache/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/framework/views/.gitkeep
+!storage/logs/.gitkeep
+!bootstrap/cache/.gitkeep
+
+*.log
+.idea/
+.vscode/
+.DS_Store
