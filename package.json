@@ -1,0 +1,29 @@
+{
+  "name": "itstudentsworld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && php artisan serve",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && ./vendor/bin/pint --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xXxEvgenyxXx/itstudentsworld.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xXxEvgenyxXx/itstudentsworld/issues"
+  },
+  "homepage": "https://github.com/xXxEvgenyxXx/itstudentsworld#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
