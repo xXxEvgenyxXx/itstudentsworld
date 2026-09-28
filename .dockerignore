@@ -1,27 +1,23 @@
-# Исключаем системные файлы и Git
 .git
 .gitignore
 .DS_Store
 
-# Исключаем зависимости, они будут установлены внутри контейнеров
 **/node_modules
 **/vendor
 
-# Исключаем файлы окружения (они не должны попадать в образ)
 **/.env
 **/.env.*
 
-# Исключаем артефакты сборки
 **/dist
 **/build
 
-# Исключаем Docker-файлы, они не нужны внутри образа
-**/Dockerfile
-**/.dockerignore
-
-# Исключаем документацию и временные файлы
-**/*.md
 **/storage/logs/*
 **/storage/framework/cache/*
 **/storage/framework/sessions/*
 **/storage/framework/views/*
+
+**/*.md
+**/.idea
+**/.vscode
+
+docker/

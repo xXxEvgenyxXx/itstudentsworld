@@ -1,0 +1,49 @@
+# backend/.dockerignore
+
+# Системное и Git
+.git
+.gitignore
+.DS_Store
+Thumbs.db
+
+# Окружение — секреты не должны попадать в образ
+.env
+.env.*
+!.env.example
+
+# Зависимости — переустанавливаются внутри контейнера
+vendor/
+node_modules/
+
+# Кэш и логи Laravel — генерируются в runtime
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing/*
+bootstrap/cache/*.php
+!storage/.gitignore
+!storage/framework/.gitignore
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+!bootstrap/cache/.gitignore
+
+# Docker-специфичное
+Dockerfile
+.dockerignore
+
+# Документация и IDE
+*.md
+!README.md
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Тесты и CI
+tests/
+phpunit.xml
+pest.php
+.github/

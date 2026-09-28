@@ -1,0 +1,44 @@
+# frontend/.dockerignore
+
+# Системное и Git
+.git
+.gitignore
+.DS_Store
+Thumbs.db
+
+# Окружение
+.env
+.env.*
+!.env.example
+
+# Зависимости — переустанавливаются
+node_modules/
+
+# Артефакты сборки — генерируются в контейнере
+dist/
+build/
+.vite/
+
+# Docker-специфичное
+Dockerfile
+.dockerignore
+nginx.conf
+
+# Документация и IDE
+*.md
+!README.md
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Тесты и CI
+coverage/
+.nyc_output/
+.github/
+
+# Логи
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
