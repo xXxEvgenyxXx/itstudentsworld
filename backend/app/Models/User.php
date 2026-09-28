@@ -2,31 +2,62 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $table = 'user';
+
+    protected $fillable = [
+        'name', 'surname', 'patronymic', 'email', 'nickname',
+        'password_hash', 'role_id', 'is_banned', 'created_at',
+    ];
+
+    protected $hidden = ['password_hash'];
+
+    protected $casts = [
+        'is_banned' => 'boolean',
+        'created_at' => 'datetime',
+    ];
+
+    // В БД только created_at, updated_at отсутствует
+    const UPDATED_AT = null;
+    const CREATED_AT = 'created_at';
+
+    // Sanctum будет использовать это поле для проверки пароля
+    public function getAuthPassword(): string
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->password_hash;
+    }
+
+    // Связи
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(UserWallet::class, 'user_id');
+    }
+
+    public function cosmetics()
+    {
+        return $this->belongsToMany(
+            CosmeticItem::class,
+            'user_cosmetic',
+            'user_id',
+            'cosmetic_id'
+        );
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'user_id');
     }
 }
