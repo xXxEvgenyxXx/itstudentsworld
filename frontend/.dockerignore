@@ -22,7 +22,6 @@ build/
 # Docker-специфичное
 Dockerfile
 .dockerignore
-nginx.conf
 
 # Документация и IDE
 *.md
