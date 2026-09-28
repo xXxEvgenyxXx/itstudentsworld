@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 27, 2026 at 08:00 PM
+-- Generation Time: Sep 28, 2026 at 01:25 PM
 -- Server version: 10.5.17-MariaDB
 -- PHP Version: 8.1.9
 
@@ -31,7 +31,8 @@ CREATE TABLE `cosmetic_item` (
   `id` int(11) NOT NULL,
   `name` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_id` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL
+  `price` decimal(10,2) NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
