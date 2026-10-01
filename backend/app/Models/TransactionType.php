@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Role extends Model
+class TransactionType extends Model
 {
-    protected $table = 'role';
+    protected $table = 'transaction_type';
     public $timestamps = false;
 
     protected $fillable = ['name', 'alias'];
 
-    public function users(): HasMany
+    public function transactions(): HasMany
     {
-        return $this->hasMany(User::class, 'role_id');
+        return $this->hasMany(Transaction::class, 'type_id');
     }
 }
