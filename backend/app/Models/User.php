@@ -21,8 +21,7 @@ class User extends Authenticatable
     // Только те поля, что безопасно принимать от клиента
     protected $fillable = [
         'name', 'surname', 'patronymic',
-        'email', 'nickname',
-        'created_at',
+        'email', 'created_at',
     ];
 
     protected $hidden = ['password_hash'];
@@ -72,5 +71,14 @@ class User extends Authenticatable
     public function isOwner(): bool
     {
         return $this->role?->alias === 'owner';
+    }
+    /**
+     * Неизменяемые поля после создания
+     */
+    protected function nickname(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value, $attributes) => $attributes['nickname'] ?? $value,
+        );
     }
 }
