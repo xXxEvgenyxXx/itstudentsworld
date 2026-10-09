@@ -16,7 +16,7 @@ class UserWallet extends Model
     protected $keyType = 'int';
 
     // balance НЕ в fillable — меняется только через сервисы
-    protected $fillable = [];
+    protected $fillable = ['user_id'];
 
     protected $casts = [
         'balance' => 'decimal:2',
