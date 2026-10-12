@@ -1,8 +1,3 @@
-
-export function AdminDashboardPage(){
-    return (
-        <div>
-            Дашборд
-        </div>
-    )
+export function AdminDashboardPage() {
+  return <div>Дашборд</div>;
 }

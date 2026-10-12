@@ -1,8 +1,3 @@
-
-export function MainPage(){
-    return (
-        <div>
-            Главная
-        </div>
-    )
+export function MainPage() {
+  return <div>Главная</div>;
 }

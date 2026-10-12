@@ -1,1 +1,1 @@
-export * from './AdminTransactionsPage'
+export * from "./AdminTransactionsPage";

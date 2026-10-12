@@ -1,8 +1,3 @@
-
-export function ShopPage(){
-    return (
-        <div>
-            Магазин
-        </div>
-    )
+export function ShopPage() {
+  return <div>Магазин</div>;
 }

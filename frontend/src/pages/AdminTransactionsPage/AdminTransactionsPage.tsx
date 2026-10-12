@@ -1,8 +1,3 @@
-
-export function AdminTransactionsPage(){
-    return (
-        <div>
-            Транзакции
-        </div>
-    )
+export function AdminTransactionsPage() {
+  return <div>Транзакции</div>;
 }

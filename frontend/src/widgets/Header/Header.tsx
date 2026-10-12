@@ -1,8 +1,3 @@
-
-export function Header(){
-    return (
-        <header>
-            Шапка
-        </header>
-    )
+export function Header() {
+  return <header>Шапка</header>;
 }

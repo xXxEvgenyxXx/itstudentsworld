@@ -1,8 +1,3 @@
-
-export function ProfilePage(){
-    return (
-        <div>
-            Личный кабинет
-        </div>
-    )
+export function ProfilePage() {
+  return <div>Личный кабинет</div>;
 }

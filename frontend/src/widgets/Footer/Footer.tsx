@@ -1,8 +1,3 @@
-
-export function Footer(){
-    return (
-        <footer>
-            Подвал
-        </footer>
-    )
+export function Footer() {
+  return <footer>Подвал</footer>;
 }

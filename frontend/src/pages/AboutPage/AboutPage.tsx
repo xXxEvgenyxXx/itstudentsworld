@@ -1,8 +1,3 @@
-
-export function AboutPage(){
-    return (
-        <div>
-            О сервере
-        </div>
-    )
+export function AboutPage() {
+  return <div>О сервере</div>;
 }

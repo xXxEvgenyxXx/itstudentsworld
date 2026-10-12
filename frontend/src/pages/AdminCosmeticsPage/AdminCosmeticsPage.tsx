@@ -1,8 +1,3 @@
-
-export function AdminCosmeticsPage(){
-    return (
-        <div>
-            Вся косметика
-        </div>
-    )
+export function AdminCosmeticsPage() {
+  return <div>Вся косметика</div>;
 }

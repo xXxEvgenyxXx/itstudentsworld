@@ -1,1 +1,1 @@
-export * from './AdminCosmeticsPage'
+export * from "./AdminCosmeticsPage";

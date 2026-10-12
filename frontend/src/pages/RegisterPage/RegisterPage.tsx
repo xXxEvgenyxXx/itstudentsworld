@@ -1,8 +1,3 @@
-
-export function RegisterPage(){
-    return (
-        <div>
-            Регистрация
-        </div>
-    )
+export function RegisterPage() {
+  return <div>Регистрация</div>;
 }
