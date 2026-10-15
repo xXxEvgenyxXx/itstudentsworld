@@ -23,7 +23,9 @@ class OwnerSeeder extends Seeder
             $owner->patronymic = null;
             $owner->email = 'owner@itsw.ru';
             $owner->nickname = 'owner';
-            $owner->password_hash = Hash::make('owner12345');
+            $owner->password_hash = Hash::make(
+                env('OWNER_SEED_PASSWORD', 'owner12345')
+            );
             $owner->role_id = $ownerRole->id;
             $owner->is_banned = false;
             $owner->created_at = now();
