@@ -31,7 +31,7 @@ class OwnerSeeder extends Seeder
 
             $wallet = new UserWallet();
             $wallet->user_id = $owner->id;
-            $wallet->balance = 100000;
+            $wallet->balance = config('seeder.owner_balance');
             $wallet->save();
 
             $this->command->info("Owner создан: owner@itsw.ru / owner12345");
