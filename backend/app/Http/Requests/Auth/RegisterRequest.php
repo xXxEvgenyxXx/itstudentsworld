@@ -18,7 +18,7 @@ class RegisterRequest extends FormRequest
             'surname' => ['required', 'string', 'max:50'],
             'patronymic' => ['nullable', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:250', 'unique:user,email'],
-            'nickname' => ['required', 'string', 'max:50', 'unique:user,nickname'],
+            'login' => ['required', 'string', 'max:50', 'unique:user,login'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'email.unique' => 'Этот email уже зарегистрирован.',
-            'nickname.unique' => 'Этот никнейм уже занят.',
+            'login.unique' => 'Этот никнейм уже занят.',
             'password.confirmed' => 'Пароли не совпадают.',
             'password.min' => 'Пароль должен быть не менее 8 символов.',
         ];

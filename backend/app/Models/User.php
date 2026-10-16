@@ -20,7 +20,7 @@ class User extends Authenticatable
 
     // Только те поля, что безопасно принимать от клиента
     protected $fillable = [
-        'name', 'surname', 'patronymic',
+        'name', 'surname', 'patronymic', 'login',
         'email', 'created_at',
     ];
 
@@ -75,10 +75,10 @@ class User extends Authenticatable
     /**
      * Неизменяемые поля после создания
      */
-    protected function nickname(): Attribute
+    protected function login(): Attribute
     {
         return Attribute::make(
-            set: fn ($value, $attributes) => $attributes['nickname'] ?? $value,
+            set: fn ($value, $attributes) => $attributes['login'] ?? $value,
         );
     }
 }

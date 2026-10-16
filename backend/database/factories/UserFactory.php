@@ -14,7 +14,7 @@ class UserFactory extends Factory
             'surname' => fake()->lastName(),
             'patronymic' => fake()->optional()->firstNameMale(),
             'email' => fake()->unique()->safeEmail(),
-            'nickname' => fake()->unique()->userName(),
+            'login' => fake()->unique()->userName(),
             'password_hash' => Hash::make('password'),
             'role_id' => Role::where('alias', 'user')->first()?->id ?? 1,
             'is_banned' => false,

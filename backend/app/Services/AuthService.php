@@ -21,7 +21,7 @@ class AuthService
             $user->surname = $data['surname'];
             $user->patronymic = $data['patronymic'] ?? null;
             $user->email = $data['email'];
-            $user->nickname = $data['nickname'];
+            $user->login = $data['login'];
             $user->password_hash = Hash::make($data['password']);
             $user->role_id = $userRole->id;
             $user->is_banned = false;

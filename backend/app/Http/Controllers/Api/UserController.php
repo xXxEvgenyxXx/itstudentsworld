@@ -24,7 +24,7 @@ class UserController extends Controller
         if ($request->has('search')) {
             $s = $request->input('search');
             $query->where(function ($q) use ($s) {
-                $q->where('nickname', 'like', "%$s%")
+                $q->where('login', 'like', "%$s%")
                   ->orWhere('email', 'like', "%$s%")
                   ->orWhere('name', 'like', "%$s%")
                   ->orWhere('surname', 'like', "%$s%");
@@ -67,7 +67,7 @@ class UserController extends Controller
             'surname' => ['sometimes', 'string', 'max:50'],
             'patronymic' => ['nullable', 'string', 'max:50'],
             'email' => ['sometimes', 'email', 'max:250', 'unique:user,email,' . $user->id],
-            'nickname' => ['prohibited'],  // запрещает поле, вернёт 422 с понятным сообщением
+            'login' => ['prohibited'],  // запрещает поле, вернёт 422 с понятным сообщением
         ]);
 
         return response()->json($this->userService->updateProfile($user, $data));

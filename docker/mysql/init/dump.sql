@@ -150,10 +150,10 @@ CREATE TABLE `user` (
   `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `patronymic` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(250) COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
   `role_id` int(11) NOT NULL,
   `is_banned` int(11) NOT NULL,
-  `nickname` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `login` varchar(50) COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
