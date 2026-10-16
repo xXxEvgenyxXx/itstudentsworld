@@ -34,9 +34,9 @@ class OwnerSeeder extends Seeder
             $wallet->balance = config('seeder.owner_balance');
             $wallet->save();
 
-            $this->command->info("Owner создан: owner@itsw.ru / owner12345");
+            $this->command->info("Owner создан: itswowner@example.com / owner12345");
         } else {
-            $this->command->info("Owner уже существует: owner@itsw.ru");
+            $this->command->info("Owner уже существует: itswowner@example.com");
         }
     }
 }
