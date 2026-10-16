@@ -1,4 +1,5 @@
 // Стили
+/// <reference types="vite/client" />
 declare module "*.scss" {
   const content: Record<string, string>;
   export default content;
@@ -17,7 +18,7 @@ declare module "*.webp";
 declare module "*.gif";
 declare module "*.avif";
 
-// SVG — исправленный вариант без require
+// SVG
 declare module "*.svg" {
   import type { FunctionComponent, SVGProps } from "react";
 
@@ -28,12 +29,9 @@ declare module "*.svg" {
   export default src;
 }
 
+// Только расширение, без ImportMeta
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_APP_NAME: string;
   readonly VITE_APP_ENV: "local" | "production";
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
 }
