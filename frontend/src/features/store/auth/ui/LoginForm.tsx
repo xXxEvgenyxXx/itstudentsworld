@@ -13,11 +13,10 @@ export function LoginForm() {
   const { mutate: login, isPending } = useLogin();
 
   // Если пользователь пришел из ProtectedRoute, вернем его туда
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/profile';
 
   const onFinish = (values: LoginFormData) => {
     setErrorMsg(null);
-    // Валидация через Zod перед отправкой
     const result = loginSchema.safeParse(values);
     if (!result.success) return;
 

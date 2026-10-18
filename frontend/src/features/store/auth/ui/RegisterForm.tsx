@@ -18,7 +18,7 @@ export function RegisterForm(){
 
     register(values, {
       onSuccess: () => {
-        navigate('/'); // После регистрации сразу летим на главную
+        navigate('/profile'); // После регистрации сразу летим на профиль
       },
       onError: (error) => {
         const apiError = parseApiError(error);
