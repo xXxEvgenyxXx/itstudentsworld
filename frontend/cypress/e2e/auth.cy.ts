@@ -59,4 +59,52 @@ describe('Auth Flow & Security', () => {
     // Если мы попали в профиль и alert не сработал — мы в безопасности
     cy.url().should('include', '/profile');
   });
+    it('Ошибка при дублировании ТОЛЬКО логина', () => {
+      cy.visit('/register');
+      
+      cy.get(SELECTORS.auth.regName).type('Тест');
+      cy.get(SELECTORS.auth.regSurname).type('Тест');
+      cy.get(SELECTORS.auth.regEmail).type(`unique-${uniqueId}@test.com`); // Уникальный email
+      cy.get(SELECTORS.auth.regLogin).type('owner'); // Существующий логин
+      cy.get(SELECTORS.auth.regPassword).type('password123');
+      cy.get(SELECTORS.auth.regPasswordConfirm).type('password123');
+      
+      cy.get(SELECTORS.auth.regSubmit).click();
+
+      // Ожидаем появление ошибки от API
+      cy.get(SELECTORS.common.errorAlert).should('be.visible');
+      cy.url().should('include', '/register'); // Остаемся на странице
+    });
+
+    it('Ошибка при дублировании ТОЛЬКО почты', () => {
+      cy.visit('/register');
+      
+      cy.get(SELECTORS.auth.regName).type('Тест');
+      cy.get(SELECTORS.auth.regSurname).type('Тест');
+      cy.get(SELECTORS.auth.regEmail).type('itswowner@example.com'); // Существующий email
+      cy.get(SELECTORS.auth.regLogin).type(`unique_login_${uniqueId}`); // Уникальный логин
+      cy.get(SELECTORS.auth.regPassword).type('password123');
+      cy.get(SELECTORS.auth.regPasswordConfirm).type('password123');
+      
+      cy.get(SELECTORS.auth.regSubmit).click();
+
+      cy.get(SELECTORS.common.errorAlert).should('be.visible');
+      cy.url().should('include', '/register');
+    });
+
+    it('Ошибка при дублировании и почты, и логина', () => {
+      cy.visit('/register');
+      
+      cy.get(SELECTORS.auth.regName).type('Тест');
+      cy.get(SELECTORS.auth.regSurname).type('Тест');
+      cy.get(SELECTORS.auth.regEmail).type('itswowner@example.com'); // Существующий email
+      cy.get(SELECTORS.auth.regLogin).type('owner'); // Существующий логин
+      cy.get(SELECTORS.auth.regPassword).type('password123');
+      cy.get(SELECTORS.auth.regPasswordConfirm).type('password123');
+      
+      cy.get(SELECTORS.auth.regSubmit).click();
+
+      cy.get(SELECTORS.common.errorAlert).should('be.visible');
+      cy.url().should('include', '/register');
+    });
 });
