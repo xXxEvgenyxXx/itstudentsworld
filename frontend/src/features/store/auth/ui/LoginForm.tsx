@@ -34,12 +34,13 @@ export function LoginForm() {
   return (
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
       {errorMsg && (
-        <Alert message={errorMsg} type="error" showIcon style={{ marginBottom: 16 }} />
+        <Alert data-cy="error-alert" message={errorMsg} type="error" showIcon style={{ marginBottom: 16 }} />
       )}
 
       <Form.Item
         label="Email"
         name="email"
+        data-cy="login-email"
         rules={[{ required: true, message: 'Введите email' }, { type: 'email', message: 'Неверный формат' }]}
       >
         <Input size="large" placeholder="example@mail.com" />
@@ -48,13 +49,14 @@ export function LoginForm() {
       <Form.Item
         label="Пароль"
         name="password"
+        data-cy="login-password"
         rules={[{ required: true, message: 'Введите пароль' }]}
       >
         <Input.Password size="large" placeholder="Введите пароль" />
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" size="large" block loading={isPending}>
+        <Button data-cy="login-submit" type="primary" htmlType="submit" size="large" block loading={isPending}>
           Войти
         </Button>
       </Form.Item>

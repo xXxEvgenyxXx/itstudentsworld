@@ -29,14 +29,14 @@ export function RegisterForm(){
 
   return (
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
-      {errorMsg && <Alert message={errorMsg} type="error" showIcon style={{ marginBottom: 16 }} />}
+      {errorMsg && <Alert data-cy="error-alert" message={errorMsg} type="error" showIcon style={{ marginBottom: 16 }} />}
 
       <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
-        <Input size="large" />
+        <Input data-cy="reg-name" size="large" />
       </Form.Item>
 
       <Form.Item label="Фамилия" name="surname" rules={[{ required: true, message: 'Введите фамилию' }]}>
-        <Input size="large" />
+        <Input data-cy="reg-surname" size="large" />
       </Form.Item>
 
       <Form.Item label="Отчество (опционально)" name="patronymic">
@@ -44,7 +44,7 @@ export function RegisterForm(){
       </Form.Item>
 
       <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Введите email' }, { type: 'email', message: 'Неверный формат' }]}>
-        <Input size="large" />
+        <Input data-cy="reg-email" size="large" />
       </Form.Item>
 
       <Form.Item 
@@ -52,11 +52,11 @@ export function RegisterForm(){
         name="login" 
         rules={[{ required: true, message: 'Введите логин' }]}
       >
-        <Input size="large" placeholder="Steve" />
+        <Input data-cy="reg-login" size="large" placeholder="Steve" />
       </Form.Item>
 
       <Form.Item label="Пароль" name="password" rules={[{ required: true, message: 'Введите пароль' }]}>
-        <Input.Password size="large" />
+        <Input.Password data-cy="reg-password" size="large" />
       </Form.Item>
 
       <Form.Item 
@@ -73,11 +73,11 @@ export function RegisterForm(){
           }),
         ]}
       >
-        <Input.Password size="large" />
+        <Input.Password data-cy="reg-password-confirm" size="large" />
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" size="large" block loading={isPending}>
+        <Button data-cy="reg-submit" type="primary" htmlType="submit" size="large" block loading={isPending}>
           Зарегистрироваться
         </Button>
       </Form.Item>

@@ -6,6 +6,13 @@
 .DS_Store
 Thumbs.db
 
+# Cypress
+cypress/
+cypress.config.ts
+cypress.env.json
+cypress/screenshots/
+cypress/videos/
+
 # Окружение
 .env
 .env.*

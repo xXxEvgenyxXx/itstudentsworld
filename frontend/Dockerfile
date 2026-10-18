@@ -1,6 +1,9 @@
 # --- Этап 1: Сборка ---
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
+
+# Отключаем скачивание бинарника Cypress внутри Docker
+ENV CYPRESS_INSTALL_BINARY=0
 
 # Копируем package.json и lock-файл для кэширования слоев
 COPY package*.json ./

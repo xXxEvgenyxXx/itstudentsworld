@@ -25,8 +25,8 @@ export function Header() {
       <Space size="large">
         {isAuthenticated ? (
           <>
-            <Text style={{ color: 'white' }}>Привет, {user?.login}!</Text>
-            <Button onClick={() => logout()}>Выйти</Button>
+            <Text data-cy="header-username" style={{ color: 'white' }}>Привет, {user?.login}!</Text>
+            <Button data-cy="header-logout" onClick={() => logout()}>Выйти</Button>
           </>
         ) : (
           <>
