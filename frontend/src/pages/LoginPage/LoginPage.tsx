@@ -1,3 +1,9 @@
+import { LoginForm } from "@/features/store/auth/ui";
+
 export function LoginPage() {
-  return <div>Логин</div>;
+  return (
+    <div>
+      <LoginForm/>
+    </div>
+  );
 }

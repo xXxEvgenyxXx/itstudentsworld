@@ -1,3 +1,44 @@
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth, useLogout } from '@/entities/user';
+import { Button, Space, Typography } from 'antd';
+
+const { Text } = Typography;
+
 export function Header() {
-  return <header>Шапка</header>;
-}
+  const { user, isAuthenticated } = useAuth();
+  const { mutate: logout } = useLogout();
+  const navigate = useNavigate();
+
+  return (
+    <header style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center', 
+      padding: '16px 24px', 
+      background: '#001529',
+      color: 'white'
+    }}>
+      <Link to="/" style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
+        IT Students World
+      </Link>
+
+      <Space size="large">
+        {isAuthenticated ? (
+          <>
+            <Text style={{ color: 'white' }}>Привет, {user?.login}!</Text>
+            <Button onClick={() => logout()}>Выйти</Button>
+          </>
+        ) : (
+          <>
+            <Button type="text" style={{ color: 'white' }} onClick={() => navigate('/login')}>
+              Войти
+            </Button>
+            <Button type="primary" onClick={() => navigate('/register')}>
+              Регистрация
+            </Button>
+          </>
+        )}
+      </Space>
+    </header>
+  );
+};
