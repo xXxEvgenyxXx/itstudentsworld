@@ -1,4 +1,4 @@
-import type { useAuthStore } from '@/entities/user';
+import type { useAuthStore } from "@/entities/user";
 
 declare global {
   interface Window {

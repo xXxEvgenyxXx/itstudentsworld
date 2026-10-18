@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { persist, devtools } from 'zustand/middleware';
-import { AUTH_TOKEN_KEY } from '@/shared/api';
-import type { User } from '../model';
+import { create } from "zustand";
+import { persist, devtools } from "zustand/middleware";
+import { AUTH_TOKEN_KEY } from "@/shared/api";
+import type { User } from "../model";
 
 interface AuthState {
   user: User | null;
@@ -21,18 +21,18 @@ export const useAuthStore = create<AuthState>()(
 
         setAuth: (user, token) => {
           localStorage.setItem(AUTH_TOKEN_KEY, token);
-          set({ user, token }, false, 'setAuth');
+          set({ user, token }, false, "setAuth");
         },
 
-        setUser: (user) => set({ user }, false, 'setUser'),
+        setUser: (user) => set({ user }, false, "setUser"),
 
         clearAuth: () => {
           localStorage.removeItem(AUTH_TOKEN_KEY);
-          set({ user: null, token: null }, false, 'clearAuth');
+          set({ user: null, token: null }, false, "clearAuth");
         },
       }),
       {
-        name: 'itsw_auth',
+        name: "itsw_auth",
         partialize: (state) => ({ user: state.user, token: state.token }),
         onRehydrateStorage: () => (state) => {
           if (state?.token) {
@@ -42,7 +42,7 @@ export const useAuthStore = create<AuthState>()(
       },
     ),
     {
-      name: 'AuthStore',
+      name: "AuthStore",
       enabled: import.meta.env.DEV,
     },
   ),

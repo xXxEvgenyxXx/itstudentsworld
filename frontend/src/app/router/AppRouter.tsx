@@ -14,10 +14,10 @@ export function AppRouter() {
           {allRoutes
             .filter((route) => route.access === "public")
             .map((route) => (
-              <Route 
-                key={route.path} 
-                path={route.path} 
-                element={<route.element />} 
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.element />}
               />
             ))}
         </Route>
@@ -28,10 +28,10 @@ export function AppRouter() {
             {allRoutes
               .filter((route) => route.access === "user")
               .map((route) => (
-                <Route 
-                  key={route.path} 
-                  path={route.path} 
-                  element={<route.element />} 
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={<route.element />}
                 />
               ))}
           </Route>
@@ -43,23 +43,23 @@ export function AppRouter() {
             {allRoutes
               .filter((route) => route.access === "admin")
               .map((route) => (
-                <Route 
-                  key={route.path} 
-                  path={route.path} 
-                  element={<route.element />} 
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={<route.element />}
                 />
               ))}
           </Route>
         </Route>
 
         {/* Страница 404 */}
-        <Route 
-          path="*" 
+        <Route
+          path="*"
           element={
             <div style={{ padding: 50, textAlign: "center" }}>
               <h1>404 - Страница не найдена</h1>
             </div>
-          } 
+          }
         />
       </Routes>
     </Router>

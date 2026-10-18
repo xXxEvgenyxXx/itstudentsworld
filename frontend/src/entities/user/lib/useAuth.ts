@@ -1,5 +1,5 @@
-import { useAuthStore } from '../store';
-import { useIsAdmin, useIsAuthenticated, useIsOwner } from '../store/selectors';
+import { useAuthStore } from "../store";
+import { useIsAdmin, useIsAuthenticated, useIsOwner } from "../store/selectors";
 
 export function useAuth() {
   const user = useAuthStore((s) => s.user);
@@ -12,7 +12,13 @@ export function useAuth() {
   const clearAuth = useAuthStore((s) => s.clearAuth);
 
   return {
-    user, token, isAuthenticated, isAdmin, isOwner,
-    setAuth, setUser, clearAuth,
+    user,
+    token,
+    isAuthenticated,
+    isAdmin,
+    isOwner,
+    setAuth,
+    setUser,
+    clearAuth,
   };
 }

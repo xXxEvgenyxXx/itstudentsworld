@@ -1,9 +1,8 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider } from 'antd';
-import { AppRouter } from './router/AppRouter';
-import { AuthProvider } from './providers/AuthProvider';
-import {queryClient} from './providers/QueryProvider';
-
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ConfigProvider } from "antd";
+import { AppRouter } from "./router/AppRouter";
+import { AuthProvider } from "./providers/AuthProvider";
+import { queryClient } from "./providers/QueryProvider";
 
 function App() {
   return (

@@ -1,10 +1,10 @@
-import { api, API } from '@/shared/api';
+import { api, API } from "@/shared/api";
 import type {
   AuthResponse,
   LoginPayload,
   RegisterPayload,
   User,
-} from '../model';
+} from "../model";
 
 export const authApi = {
   register: async (payload: RegisterPayload): Promise<AuthResponse> => {

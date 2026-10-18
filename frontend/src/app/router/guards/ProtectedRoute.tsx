@@ -1,9 +1,9 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '@/entities/user';
-import { Result, Button } from 'antd';
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from "@/entities/user";
+import { Result, Button } from "antd";
 
 interface ProtectedRouteProps {
-  allowedRoles?: Array<'user' | 'admin' | 'owner'>;
+  allowedRoles?: Array<"user" | "admin" | "owner">;
 }
 
 export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
@@ -34,7 +34,11 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
         status="403"
         title="403"
         subTitle="У вас нет прав для доступа к этой странице."
-        extra={<Button type="primary" href="/">На главную</Button>}
+        extra={
+          <Button type="primary" href="/">
+            На главную
+          </Button>
+        }
       />
     );
   }

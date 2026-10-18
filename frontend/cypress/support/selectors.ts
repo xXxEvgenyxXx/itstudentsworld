@@ -3,7 +3,7 @@ export const SELECTORS = {
     loginEmail: '[data-cy="login-email"]',
     loginPassword: '[data-cy="login-password"]',
     loginSubmit: '[data-cy="login-submit"]',
-    
+
     regName: '[data-cy="reg-name"]',
     regSurname: '[data-cy="reg-surname"]',
     regEmail: '[data-cy="reg-email"]',
@@ -18,5 +18,5 @@ export const SELECTORS = {
   },
   common: {
     errorAlert: '[data-cy="error-alert"]',
-  }
+  },
 };

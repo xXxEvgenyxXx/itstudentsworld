@@ -1,12 +1,12 @@
 export interface Role {
   id: number;
   name: string;
-  alias: 'user' | 'admin' | 'owner';
+  alias: "user" | "admin" | "owner";
 }
 
 export interface Wallet {
   user_id: number;
-  balance: string;   // Laravel decimal приходит строкой - поэтому string
+  balance: string; // Laravel decimal приходит строкой - поэтому string
 }
 
 export interface User {

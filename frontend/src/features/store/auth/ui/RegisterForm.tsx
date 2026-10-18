@@ -1,14 +1,14 @@
-import { Button, Form, Input, Alert } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useRegister } from '@/entities/user';
-import { registerSchema, type RegisterFormData } from '../model/schemas';
-import { parseApiError } from '@/shared/api';
-import { useState } from 'react';
+import { Button, Form, Input, Alert } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useRegister } from "@/entities/user";
+import { registerSchema, type RegisterFormData } from "../model/schemas";
+import { parseApiError } from "@/shared/api";
+import { useState } from "react";
 
-export function RegisterForm(){
+export function RegisterForm() {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  
+
   const { mutate: register, isPending } = useRegister();
 
   const onFinish = (values: RegisterFormData) => {
@@ -18,7 +18,7 @@ export function RegisterForm(){
 
     register(values, {
       onSuccess: () => {
-        navigate('/profile'); // После регистрации сразу летим на профиль
+        navigate("/profile"); // После регистрации сразу летим на профиль
       },
       onError: (error) => {
         const apiError = parseApiError(error);
@@ -29,13 +29,29 @@ export function RegisterForm(){
 
   return (
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
-      {errorMsg && <Alert data-cy="error-alert" message={errorMsg} type="error" showIcon style={{ marginBottom: 16 }} />}
+      {errorMsg && (
+        <Alert
+          data-cy="error-alert"
+          message={errorMsg}
+          type="error"
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
+      )}
 
-      <Form.Item label="Имя" name="name" rules={[{ required: true, message: 'Введите имя' }]}>
+      <Form.Item
+        label="Имя"
+        name="name"
+        rules={[{ required: true, message: "Введите имя" }]}
+      >
         <Input data-cy="reg-name" size="large" />
       </Form.Item>
 
-      <Form.Item label="Фамилия" name="surname" rules={[{ required: true, message: 'Введите фамилию' }]}>
+      <Form.Item
+        label="Фамилия"
+        name="surname"
+        rules={[{ required: true, message: "Введите фамилию" }]}
+      >
         <Input data-cy="reg-surname" size="large" />
       </Form.Item>
 
@@ -43,32 +59,44 @@ export function RegisterForm(){
         <Input size="large" />
       </Form.Item>
 
-      <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Введите email' }, { type: 'email', message: 'Неверный формат' }]}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[
+          { required: true, message: "Введите email" },
+          { type: "email", message: "Неверный формат" },
+        ]}
+      >
         <Input data-cy="reg-email" size="large" />
       </Form.Item>
 
-      <Form.Item 
-        label="Игровой логин (нельзя будет изменить)" 
-        name="login" 
-        rules={[{ required: true, message: 'Введите логин' }]}
+      <Form.Item
+        label="Игровой логин (нельзя будет изменить)"
+        name="login"
+        rules={[{ required: true, message: "Введите логин" }]}
       >
         <Input data-cy="reg-login" size="large" placeholder="Steve" />
       </Form.Item>
 
-      <Form.Item label="Пароль" name="password" rules={[{ required: true, message: 'Введите пароль' }]}>
+      <Form.Item
+        label="Пароль"
+        name="password"
+        rules={[{ required: true, message: "Введите пароль" }]}
+      >
         <Input.Password data-cy="reg-password" size="large" />
       </Form.Item>
 
-      <Form.Item 
-        label="Повторите пароль" 
-        name="password_confirmation" 
-        dependencies={['password']}
+      <Form.Item
+        label="Повторите пароль"
+        name="password_confirmation"
+        dependencies={["password"]}
         rules={[
-          { required: true, message: 'Повторите пароль' },
+          { required: true, message: "Повторите пароль" },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('password') === value) return Promise.resolve();
-              return Promise.reject(new Error('Пароли не совпадают'));
+              if (!value || getFieldValue("password") === value)
+                return Promise.resolve();
+              return Promise.reject(new Error("Пароли не совпадают"));
             },
           }),
         ]}
@@ -77,10 +105,17 @@ export function RegisterForm(){
       </Form.Item>
 
       <Form.Item>
-        <Button data-cy="reg-submit" type="primary" htmlType="submit" size="large" block loading={isPending}>
+        <Button
+          data-cy="reg-submit"
+          type="primary"
+          htmlType="submit"
+          size="large"
+          block
+          loading={isPending}
+        >
           Зарегистрироваться
         </Button>
       </Form.Item>
     </Form>
   );
-};
+}

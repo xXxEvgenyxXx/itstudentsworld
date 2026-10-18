@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authApi } from '../api';
-import { useAuthStore } from '../store';
-import type { LoginPayload, RegisterPayload } from '../model';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { authApi } from "../api";
+import { useAuthStore } from "../store";
+import type { LoginPayload, RegisterPayload } from "../model";
 
 export function useLogin() {
   const setAuth = useAuthStore((s) => s.setAuth);

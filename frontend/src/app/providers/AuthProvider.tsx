@@ -1,6 +1,6 @@
-import { ReactNode, useEffect } from 'react';
-import { Spin } from 'antd';
-import { useMe, useAuthStore } from '@/entities/user';
+import { ReactNode, useEffect } from "react";
+import { Spin } from "antd";
+import { useMe, useAuthStore } from "@/entities/user";
 
 interface Props {
   children: ReactNode;
@@ -24,11 +24,11 @@ export function AuthProvider({ children }: Props) {
     return (
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          background: '#141414', // Темный фон под стиль Minecraft
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          background: "#141414", // Темный фон под стиль Minecraft
         }}
       >
         <Spin size="large" />

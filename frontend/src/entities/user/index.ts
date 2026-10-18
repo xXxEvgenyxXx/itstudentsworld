@@ -1,10 +1,15 @@
 export type {
-  User, Role, Wallet, AuthResponse,
-  RegisterPayload, LoginPayload,
-  UpdateProfilePayload, ChangePasswordPayload,
-} from './model';
+  User,
+  Role,
+  Wallet,
+  AuthResponse,
+  RegisterPayload,
+  LoginPayload,
+  UpdateProfilePayload,
+  ChangePasswordPayload,
+} from "./model";
 
-export {authApi} from './api'
-export { useAuthStore } from './store';
-export { useAuth, useMe } from './lib';
-export { useLogin, useRegister, useLogout } from './lib/useAuthMutations';
+export { authApi } from "./api";
+export { useAuthStore } from "./store";
+export { useAuth, useMe } from "./lib";
+export { useLogin, useRegister, useLogout } from "./lib/useAuthMutations";
