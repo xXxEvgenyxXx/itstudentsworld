@@ -11,6 +11,9 @@ describe("Auth Flow & Security", () => {
   it("Успешная регистрация, редирект в профиль и логаут", () => {
     cy.visit("/register");
 
+    // Перехватываем запрос на регистрацию
+    cy.intercept("POST", "**/api/auth/register").as("registerRequest");
+
     cy.get(SELECTORS.auth.regName).type("Иван");
     cy.get(SELECTORS.auth.regSurname).type("Иванов");
     cy.get(SELECTORS.auth.regEmail).type(testUser.email);
@@ -20,10 +23,17 @@ describe("Auth Flow & Security", () => {
 
     cy.get(SELECTORS.auth.regSubmit).click();
 
+    // Ждем, пока сервер ответит, что регистрация успешна
+    cy.wait("@registerRequest").its("response.statusCode").should("eq", 201);
+
     cy.url().should("include", "/profile");
     cy.get(SELECTORS.header.username).should("contain", testUser.login);
 
+    // Перехватываем логаут
+    cy.intercept("POST", "**/api/auth/logout").as("logoutRequest");
     cy.get(SELECTORS.header.logoutBtn).click();
+    cy.wait("@logoutRequest");
+
     cy.url().should("include", "/login");
   });
 
@@ -34,7 +44,9 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.loginPassword).type("' OR '1'='1");
     cy.get(SELECTORS.auth.loginSubmit).click();
 
-    // Проверяем, что сработала клиентская валидация (AntD)
+    // Никаких cy.intercept и cy.wait!
+    // Просто проверяем, что AntD вывел ошибку валидации, 
+    // а мы остались на странице логина.
     cy.contains("Неверный формат").should("be.visible");
     cy.url().should("include", "/login");
   });
@@ -42,6 +54,8 @@ describe("Auth Flow & Security", () => {
   it("Защита от XSS-инъекций", () => {
     cy.visit("/register");
     const xssPayload = '<script>alert("hacked")</script>';
+
+    cy.intercept("POST", "**/api/auth/register").as("xssRegisterRequest");
 
     cy.get(SELECTORS.auth.regName).type(xssPayload, {
       parseSpecialCharSequences: false,
@@ -54,41 +68,56 @@ describe("Auth Flow & Security", () => {
 
     cy.get(SELECTORS.auth.regSubmit).click();
 
+    // Ждем ответ, что регистрация прошла (201), скрипт сохранился как строка
+    cy.wait("@xssRegisterRequest").its("response.statusCode").should("eq", 201);
+
+    // Если alert не сработал, значит, React экранировал данные
     cy.on("window:alert", (str) => {
       throw new Error("Уязвимость XSS! Сработал alert: " + str);
     });
 
-    // Если мы попали в профиль и alert не сработал — мы в безопасности
     cy.url().should("include", "/profile");
   });
+
   it("Ошибка при дублировании ТОЛЬКО логина", () => {
     cy.visit("/register");
 
+    // Перехватываем запрос
+    cy.intercept("POST", "**/api/auth/register").as("registerRequest");
+
     cy.get(SELECTORS.auth.regName).type("Тест");
     cy.get(SELECTORS.auth.regSurname).type("Тест");
-    cy.get(SELECTORS.auth.regEmail).type(`unique-${uniqueId}@test.com`); // Уникальный email
+    cy.get(SELECTORS.auth.regEmail).type(`unique-${uniqueId}@test.com`);
     cy.get(SELECTORS.auth.regLogin).type("owner"); // Существующий логин
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
 
     cy.get(SELECTORS.auth.regSubmit).click();
 
-    // Ожидаем появление ошибки от API
+    // Ждем ответ 422 (ошибка валидации)
+    cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
+
     cy.get(SELECTORS.common.errorAlert).should("be.visible");
-    cy.url().should("include", "/register"); // Остаемся на странице
+    cy.url().should("include", "/register");
   });
 
   it("Ошибка при дублировании ТОЛЬКО почты", () => {
     cy.visit("/register");
 
+    // Перехватываем запрос
+    cy.intercept("POST", "**/api/auth/register").as("registerRequest");
+
     cy.get(SELECTORS.auth.regName).type("Тест");
     cy.get(SELECTORS.auth.regSurname).type("Тест");
     cy.get(SELECTORS.auth.regEmail).type("itswowner@example.com"); // Существующий email
-    cy.get(SELECTORS.auth.regLogin).type(`unique_login_${uniqueId}`); // Уникальный логин
+    cy.get(SELECTORS.auth.regLogin).type(`unique_login_${uniqueId}`);
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
 
     cy.get(SELECTORS.auth.regSubmit).click();
+
+    // Ждем ответ 422
+    cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
 
     cy.get(SELECTORS.common.errorAlert).should("be.visible");
     cy.url().should("include", "/register");
@@ -97,14 +126,20 @@ describe("Auth Flow & Security", () => {
   it("Ошибка при дублировании и почты, и логина", () => {
     cy.visit("/register");
 
+    // Перехватываем запрос
+    cy.intercept("POST", "**/api/auth/register").as("registerRequest");
+
     cy.get(SELECTORS.auth.regName).type("Тест");
     cy.get(SELECTORS.auth.regSurname).type("Тест");
-    cy.get(SELECTORS.auth.regEmail).type("itswowner@example.com"); // Существующий email
-    cy.get(SELECTORS.auth.regLogin).type("owner"); // Существующий логин
+    cy.get(SELECTORS.auth.regEmail).type("itswowner@example.com");
+    cy.get(SELECTORS.auth.regLogin).type("owner");
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
 
     cy.get(SELECTORS.auth.regSubmit).click();
+
+    // Ждем ответ 422
+    cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
 
     cy.get(SELECTORS.common.errorAlert).should("be.visible");
     cy.url().should("include", "/register");
