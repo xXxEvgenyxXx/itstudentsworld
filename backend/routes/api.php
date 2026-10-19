@@ -29,3 +29,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{user}/cosmetics', [UserController::class, 'cosmetics']);
     Route::get('/users/{user}/transactions', [UserController::class, 'transactions']);
 });
+
+Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);
