@@ -345,4 +345,19 @@ class PurchaseTest extends TestCase
         // Баланс не должен увеличиться (остается 1000)
         $this->assertDatabaseHas('user_wallet', ['user_id' => $user->id, 'balance' => 1000]);
     }
+    public function test_purchase_protected_against_sql_injection(): void
+    {
+        $user = $this->createUserWithBalance(1000);
+
+        // Пытаемся передать SQL-инъекцию вместо ID предмета
+        $response = $this->actingAs($user)->postJson('/api/wallet/purchase', [
+            'cosmetic_item_id' => "1 OR 1=1",
+        ]);
+
+        // Laravel (eloquent + валидация integer) должен вернуть 422
+        $response->assertStatus(422);
+
+        // Баланс не должен измениться
+        $this->assertDatabaseHas('user_wallet', ['user_id' => $user->id, 'balance' => 1000]);
+    }
 }

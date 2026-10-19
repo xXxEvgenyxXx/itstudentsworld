@@ -45,7 +45,16 @@ class AuthController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout($request->user());
+        // Находим реальный токен в БД по Bearer-строке и удаляем его
+        if ($request->bearerToken()) {
+            $token = \Laravel\Sanctum\PersonalAccessToken::findToken($request->bearerToken());
+            if ($token) {
+                $token->delete();
+            }
+        }
+
+        // Также разлогиниваем сессию (на случай Stateful режима)
+        auth('web')->logout();
 
         return response()->json(['message' => 'Вы вышли из системы']);
     }
