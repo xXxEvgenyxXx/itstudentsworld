@@ -71,6 +71,8 @@ describe("Auth Flow & Security", () => {
     // Ждем ответ, что регистрация прошла (201), скрипт сохранился как строка
     cy.wait("@xssRegisterRequest").its("response.statusCode").should("eq", 201);
 
+    cy.url({ timeout: 10000 }).should("include", "/profile");
+
     // Если alert не сработал, значит, React экранировал данные
     cy.on("window:alert", (str) => {
       throw new Error("Уязвимость XSS! Сработал alert: " + str);
