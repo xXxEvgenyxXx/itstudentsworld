@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{user}/wallet', [UserController::class, 'wallet']);
     Route::get('/users/{user}/cosmetics', [UserController::class, 'cosmetics']);
     Route::get('/users/{user}/transactions', [UserController::class, 'transactions']);
+
+    Route::post('/wallet/purchase', [\App\Http\Controllers\Api\WalletController::class, 'purchase']);
 });
 
 Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);
