@@ -14,7 +14,7 @@ class CosmeticItem extends Model
     protected $table = 'cosmetic_item';
     public $timestamps = false;
 
-    protected $fillable = ['name', 'type_id', 'price'];
+    protected $fillable = ['name', 'type_id', 'price', 'image_url'];
 
     protected $casts = [
         'price' => 'decimal:2',

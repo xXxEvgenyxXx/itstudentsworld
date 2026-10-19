@@ -11,7 +11,7 @@ class Transaction extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'amount', 'type_id', 'status_id', 'created_at',
+        'user_id', 'amount', 'type_id', 'status_id', 'comment', 'created_at',
     ];
 
     protected $casts = [
