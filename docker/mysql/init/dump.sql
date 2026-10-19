@@ -90,6 +90,7 @@ CREATE TABLE `transaction` (
   `amount` decimal(10,2) NOT NULL,
   `type_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
+  `comment` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
