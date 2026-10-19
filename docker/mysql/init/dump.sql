@@ -32,6 +32,7 @@ CREATE TABLE `cosmetic_item` (
   `name` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type_id` int(11) NOT NULL,
   `price` decimal(10,2) NOT NULL,
+  `image_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '/images/default.png',
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
