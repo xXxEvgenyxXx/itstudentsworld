@@ -15,6 +15,16 @@ class WalletController extends Controller
 
     public function purchase(Request $request): JsonResponse
     {
+        // Проверяем, не забанен ли пользователь
+        if ($request->user()->is_banned) {
+            return response()->json(['message' => 'Ваш аккаунт заблокирован.'], 403);
+        }
+
+        // Валидация входящих данных
+        $validated = $request->validate([
+            'cosmetic_item_id' => ['required', 'integer', 'exists:cosmetic_item,id'],
+        ]);
+
         // Валидация входящих данных (защита от подмены типов)
         $validated = $request->validate([
             'cosmetic_item_id' => ['required', 'integer', 'exists:cosmetic_item,id'],

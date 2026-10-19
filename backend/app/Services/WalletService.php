@@ -16,7 +16,14 @@ class WalletService
         // 1. Проверяем, существует ли предмет (и не удален ли он soft-delete)
         $item = CosmeticItem::findOrFail($cosmeticId);
 
-        // 2. Проверяем, не куплен ли уже предмет
+        // 2. Защита от отрицательной (Data Integrity)
+        if ($item->price <= 0) {
+            throw ValidationException::withMessages([
+                'cosmetic_item_id' => ['Некорректная цена предмета. Покупка невозможна.'],
+            ]);
+        }
+
+        // 3. Проверяем, не куплен ли уже предмет
         $alreadyBought = DB::table('user_cosmetic')
             ->where('user_id', $user->id)
             ->where('cosmetic_id', $item->id)
@@ -28,25 +35,25 @@ class WalletService
             ]);
         }
 
-        // 3. Открываем транзакцию БД
+        // 4. Открываем транзакцию БД
         return DB::transaction(function () use ($user, $item) {
 
-            // 4. Блокируем кошелек (защита от Race Condition)
+            // 5. Блокируем кошелек (защита от Race Condition)
             // lockForUpdate() ставит блокировку строки до конца транзакции
             $wallet = UserWallet::where('user_id', $user->id)->lockForUpdate()->first();
 
-            // 5. Проверяем баланс
+            // 6. Проверяем баланс
             if ($wallet->balance < $item->price) {
                 throw ValidationException::withMessages([
                     'balance' => ['Недостаточно средств на балансе.'],
                 ]);
             }
 
-            // 6. Списание средств
+            // 7. Списание средств
             $wallet->balance -= $item->price;
             $wallet->save();
 
-            // 7. Создание записи в журнале транзакций
+            // 8. Создание записи в журнале транзакций
             $transaction = new Transaction();
             $transaction->user_id = $user->id;
             $transaction->amount = $item->price;
@@ -56,7 +63,7 @@ class WalletService
             $transaction->created_at = now();
             $transaction->save();
 
-            // 8. Выдача предмета пользователю
+            // 9. Выдача предмета пользователю
             DB::table('user_cosmetic')->insert([
                 'user_id' => $user->id,
                 'cosmetic_id' => $item->id,
