@@ -55,7 +55,7 @@ CREATE TABLE `cosmetic_type` (
 INSERT INTO `cosmetic_type` (`id`, `name`, `alias`) VALUES
 (1, 'Плащ', 'cape'),
 (2, 'Головной убор', 'hat'),
-(3, 'Крылья', 'wings'),
+(3, 'Крылья', 'wings');
 
 -- --------------------------------------------------------
 
