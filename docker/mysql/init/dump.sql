@@ -325,6 +325,19 @@ ALTER TABLE `user_cosmetic`
 --
 ALTER TABLE `user_wallet`
   ADD CONSTRAINT `user_wallet_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+CREATE TABLE `user_wishlist` (
+  `user_id` int(11) NOT NULL,
+  `cosmetic_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `user_wishlist`
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `cosmetic_id` (`cosmetic_id`),
+  ADD CONSTRAINT `user_wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `user_wishlist_ibfk_2` FOREIGN KEY (`cosmetic_id`) REFERENCES `cosmetic_item` (`id`);
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
