@@ -1,3 +1,5 @@
+import type { CosmeticItem } from "@/entities/cosmetic";
+
 export interface Role {
   id: number;
   name: string;
@@ -20,6 +22,8 @@ export interface User {
   created_at: string;
   role: Role;
   wallet: Wallet;
+  cosmetics?: CosmeticItem[];
+  wishlist?: CosmeticItem[]; 
 }
 
 export interface AuthResponse {

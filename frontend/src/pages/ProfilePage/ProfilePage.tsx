@@ -1,51 +1,81 @@
-import { Card, Descriptions, Tag, Typography, Row, Col, Statistic, Tabs, Empty, Button } from 'antd';
-import { UserOutlined, WalletOutlined, HistoryOutlined, SkinOutlined } from '@ant-design/icons';
+import { Card, Descriptions, Tag, Typography, Row, Col, Statistic, Tabs, Empty, Button, List } from 'antd';
+import { 
+  UserOutlined, 
+  WalletOutlined, 
+  HistoryOutlined, 
+  SkinOutlined, 
+  HeartOutlined 
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/entities/user';
-import { allRoutes } from '@/app/router/routes'; // Импортируем наши роуты
+import type { CosmeticItem } from '@/entities/cosmetic'; // <--- ИМПОРТ ТИПА
+import { allRoutes } from '@/app/router/routes';
 
 const { Title, Text } = Typography;
 
-export const ProfilePage = () => {
+export function ProfilePage() {
   const { user } = useAuth();
 
   if (!user) return null;
 
-  // Цвета для бейджиков ролей
   const roleColors: Record<string, string> = {
     owner: 'purple',
     admin: 'red',
     user: 'blue',
   };
 
-  // Человекочитаемые названия ролей
   const roleNames: Record<string, string> = {
     owner: 'Владелец',
     admin: 'Администратор',
     user: 'Пользователь',
   };
 
-  // Ищем путь к магазину в конфиге роутов (защита от хардкода)
   const shopRoute = allRoutes.find((r) => r.path.includes('shop'))?.path || '/shop';
+
+  // Строгая типизация параметра item
+  const renderCosmeticItem = (item: CosmeticItem) => (
+    <List.Item>
+      <Card size="small" title={item.name} style={{ width: '100%' }}>
+        <Tag color="blue">{item.type?.name || 'Косметика'}</Tag>
+      </Card>
+    </List.Item>
+  );
 
   const tabItems = [
     {
       key: 'cosmetics',
-      label: (
-        <span>
-          <SkinOutlined /> Моя косметика
-        </span>
+      label: <span><SkinOutlined /> Моя косметика</span>,
+      children: user.cosmetics && user.cosmetics.length > 0 ? (
+        <List
+          grid={{ gutter: 16, column: 4 }}
+          dataSource={user.cosmetics}
+          renderItem={renderCosmeticItem}
+        />
+      ) : (
+        <Empty description="У вас пока нет купленной косметики">
+          <Link to={shopRoute}><Button type="primary">Перейти в магазин</Button></Link>
+        </Empty>
       ),
-      children: <Empty description="У вас пока нет купленной косметики" />,
+    },
+    {
+      key: 'wishlist',
+      label: <span><HeartOutlined /> Список желаемого</span>,
+      children: user.wishlist && user.wishlist.length > 0 ? (
+        <List
+          grid={{ gutter: 16, column: 4 }}
+          dataSource={user.wishlist}
+          renderItem={renderCosmeticItem}
+        />
+      ) : (
+        <Empty description="Ваш список желаемого пуст">
+          <Link to={shopRoute}><Button type="primary">Перейти в магазин</Button></Link>
+        </Empty>
+      ),
     },
     {
       key: 'transactions',
-      label: (
-        <span>
-          <HistoryOutlined /> История транзакций
-        </span>
-      ),
-      children: <Empty description="История пуста" />,
+      label: <span><HistoryOutlined /> История транзакций</span>,
+      children: <Empty description="История пока не реализована на фронте" />,
     },
   ];
 
@@ -97,16 +127,13 @@ export const ProfilePage = () => {
               valueStyle={{ color: '#3f8600', fontWeight: 'bold' }}
             />
             
-            {/* Кнопки действий: используем Link для навигации */}
             <div style={{ marginTop: 24, display: 'flex', gap: 10 }}>
-              {/* Пополнение пока заглушка (в никуда) */}
               <Link to="#" style={{ flex: 1 }}>
                 <Button type="default" block>
                   Пополнить
                 </Button>
               </Link>
               
-              {/* Переход в магазин через найденный роут */}
               <Link to={shopRoute} style={{ flex: 1 }}>
                 <Button type="primary" block>
                   В магазин
@@ -117,7 +144,7 @@ export const ProfilePage = () => {
         </Col>
       </Row>
 
-      {/* НИЖНЯЯ ЧАСТЬ: Вкладки с косметикой и историей */}
+      {/* НИЖНЯЯ ЧАСТЬ: Вкладки */}
       <div style={{ marginTop: 24 }}>
         <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
           <Tabs defaultActiveKey="cosmetics" items={tabItems} size="large" />
@@ -125,4 +152,4 @@ export const ProfilePage = () => {
       </div>
     </div>
   );
-};
+}

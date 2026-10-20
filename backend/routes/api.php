@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{user}/cosmetics', [UserController::class, 'cosmetics']);
     Route::get('/users/{user}/transactions', [UserController::class, 'transactions']);
 
+    Route::post('/wishlist/toggle', [\App\Http\Controllers\Api\WishlistController::class, 'toggle']);
+
     Route::post('/wallet/purchase', [\App\Http\Controllers\Api\WalletController::class, 'purchase']);
 });
 
