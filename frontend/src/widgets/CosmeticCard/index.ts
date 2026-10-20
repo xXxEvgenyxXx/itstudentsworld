@@ -1,1 +1,1 @@
-export { CosmeticCard } from './ui/CosmeticCard';
+export { CosmeticCard } from "./ui/CosmeticCard";

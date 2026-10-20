@@ -45,7 +45,7 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.loginSubmit).click();
 
     // Никаких cy.intercept и cy.wait!
-    // Просто проверяем, что AntD вывел ошибку валидации, 
+    // Просто проверяем, что AntD вывел ошибку валидации,
     // а мы остались на странице логина.
     cy.contains("Неверный формат").should("be.visible");
     cy.url().should("include", "/login");

@@ -31,7 +31,12 @@ export function Header() {
       {/* ЛЕВАЯ ЧАСТЬ: Логотип */}
       <Link
         to="/"
-        style={{ color: "white", fontSize: 20, fontWeight: "bold", textDecoration: "none" }}
+        style={{
+          color: "white",
+          fontSize: 20,
+          fontWeight: "bold",
+          textDecoration: "none",
+        }}
       >
         IT Students World
       </Link>

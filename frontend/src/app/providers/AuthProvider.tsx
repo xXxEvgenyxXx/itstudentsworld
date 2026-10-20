@@ -1,6 +1,6 @@
-import { ReactNode, useEffect } from 'react';
-import { Spin } from 'antd';
-import { useMe, useAuthStore } from '@/entities/user';
+import { ReactNode, useEffect } from "react";
+import { Spin } from "antd";
+import { useMe, useAuthStore } from "@/entities/user";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +21,14 @@ export function AuthProvider({ children }: Props) {
 
   if (token && isLoading && !user) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <Spin size="large" />
       </div>
     );

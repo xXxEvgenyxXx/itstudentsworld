@@ -23,7 +23,7 @@ export interface User {
   role: Role;
   wallet: Wallet;
   cosmetics?: CosmeticItem[];
-  wishlist?: CosmeticItem[]; 
+  wishlist?: CosmeticItem[];
 }
 
 export interface AuthResponse {

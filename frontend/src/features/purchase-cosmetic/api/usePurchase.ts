@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, API, ApiException } from '@/shared/api';
-import { message } from 'antd';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api, API, ApiException } from "@/shared/api";
+import { message } from "antd";
 
 // Описываем структуру транзакции, которая приходит с бэкенда
 interface Transaction {
@@ -30,18 +30,20 @@ export function usePurchase() {
       return data;
     },
     onSuccess: (data) => {
-      message.success(`Покупка успешна! Новый баланс: ${Number(data.new_balance)} монет.`);
-      
+      message.success(
+        `Покупка успешна! Новый баланс: ${Number(data.new_balance)} монет.`,
+      );
+
       // Инвалидируем кэш профиля (чтобы обновился баланс)
-      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
-      
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+
       // Если у нас будет кэш купленной косметики, его тоже инвалидируем
       // queryClient.invalidateQueries({ queryKey: ['user', 'cosmetics'] });
     },
     // Типизируем ошибку нашим кастомным классом
     onError: (error: ApiException) => {
       // Благодаря ApiException, мы можем просто взять message
-      const errorMsg = error.message || 'Ошибка при покупке';
+      const errorMsg = error.message || "Ошибка при покупке";
       message.error(errorMsg);
     },
   });
