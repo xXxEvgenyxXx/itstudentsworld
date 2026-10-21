@@ -13,37 +13,9 @@ class WishlistTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // Вспомогательный метод для создания юзера
-    private function createUser(): User
-    {
-        $user = new User();
-        $user->name = 'Тест';
-        $user->surname = 'Тестов';
-        $user->email = 'wishlist_' . uniqid() . '@example.com';
-        $user->login = 'wishlist_' . uniqid();
-        $user->password_hash = Hash::make('password123');
-        $user->role_id = 1;
-        $user->is_banned = false;
-        $user->created_at = now();
-        $user->save();
-        return $user;
-    }
-
-    // Вспомогательный метод для создания предмета
-    private function createItem(): CosmeticItem
-    {
-        $item = new CosmeticItem();
-        $item->name = 'Тестовый предмет';
-        $item->type_id = 1;
-        $item->price = 100;
-        $item->image_url = '/test.png';
-        $item->save();
-        return $item;
-    }
-
     public function test_user_can_add_item_to_wishlist(): void
     {
-        $user = $this->createUser();
+        $user = $this->createUserWithBalance();
         $item = $this->createItem();
 
         $response = $this->actingAs($user)->postJson('/api/wishlist/toggle', [
@@ -62,7 +34,7 @@ class WishlistTest extends TestCase
 
     public function test_user_can_remove_item_from_wishlist(): void
     {
-        $user = $this->createUser();
+        $user = $this->createUserWithBalance();
         $item = $this->createItem();
 
         // Сначала вручную добавляем предмет в избранное
@@ -100,7 +72,7 @@ class WishlistTest extends TestCase
 
     public function test_user_cannot_add_non_existent_item_to_wishlist(): void
     {
-        $user = $this->createUser();
+        $user = $this->createUserWithBalance();
 
         $response = $this->actingAs($user)->postJson('/api/wishlist/toggle', [
             'cosmetic_item_id' => 9999, // Несуществующий ID

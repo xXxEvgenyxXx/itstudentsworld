@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/wishlist/toggle', [\App\Http\Controllers\Api\WishlistController::class, 'toggle']);
 
     Route::post('/wallet/purchase', [\App\Http\Controllers\Api\WalletController::class, 'purchase']);
+    Route::post('/wallet/deposit', [\App\Http\Controllers\Api\WalletController::class, 'deposit']);
 });
 
 Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);

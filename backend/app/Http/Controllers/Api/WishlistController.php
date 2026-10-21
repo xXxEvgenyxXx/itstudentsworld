@@ -11,6 +11,11 @@ class WishlistController extends Controller
 {
     public function toggle(Request $request): JsonResponse
     {
+
+        if ($request->user()->is_banned) {
+            return response()->json(['message' => 'Аккаунт заблокирован.'], 403);
+        }
+
         $validated = $request->validate([
             'cosmetic_item_id' => ['required', 'integer', 'exists:cosmetic_item,id'],
         ]);

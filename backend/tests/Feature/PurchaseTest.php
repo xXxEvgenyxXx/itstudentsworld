@@ -13,28 +13,6 @@ class PurchaseTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // Вспомогательный метод, чтобы не дублировать код создания юзера и кошелька
-    private function createUserWithBalance(float $balance): User
-    {
-        $user = new User();
-        $user->name = 'Покупатель';
-        $user->surname = 'Тестов';
-        $user->email = 'buyer_' . uniqid() . '@example.com';
-        $user->login = 'buyer_' . uniqid();
-        $user->password_hash = Hash::make('password123');
-        $user->role_id = 1; // user
-        $user->is_banned = false;
-        $user->created_at = now();
-        $user->save();
-
-        $wallet = new UserWallet();
-        $wallet->user_id = $user->id;
-        $wallet->balance = $balance;
-        $wallet->save();
-
-        return $user;
-    }
-
     public function test_user_can_purchase_cosmetic_item(): void
     {
         // 1. Создаем юзера с балансом 1000
@@ -359,5 +337,23 @@ class PurchaseTest extends TestCase
 
         // Баланс не должен измениться
         $this->assertDatabaseHas('user_wallet', ['user_id' => $user->id, 'balance' => 1000]);
+    }
+    public function test_race_condition_on_balance(): void
+    {
+        // Юзер с балансом ровно на 1 предмет (500)
+        $user = $this->createUserWithBalance(500);
+        $item = $this->createItem(500);
+
+        // Делаем первый запрос (успешный)
+        $this->actingAs($user)->postJson('/api/wallet/purchase', ['cosmetic_item_id' => $item->id])->assertStatus(201);
+
+        // Делаем второй запрос (должен упасть, так как баланс уже 0)
+        $response = $this->actingAs($user)->postJson('/api/wallet/purchase', ['cosmetic_item_id' => $item->id]);
+
+        // Ожидаем ошибку 422, так как на балансе 0, а предмет уже куплен
+        $response->assertStatus(422);
+
+        // Баланс не ушел в минус
+        $this->assertDatabaseHas('user_wallet', ['user_id' => $user->id, 'balance' => 0]);
     }
 }

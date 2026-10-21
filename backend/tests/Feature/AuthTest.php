@@ -13,19 +13,22 @@ class AuthTest extends TestCase
     public function test_user_can_register(): void
     {
         $response = $this->postJson('/api/auth/register', [
-            'name' => 'Иван',
-            'surname' => 'Иванов',
+            'name' => 'Иван', 'surname' => 'Иванов',
             'email' => 'test_phpunit@example.com',
             'login' => 'test_phpunit_login',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
+            'password' => 'password123', 'password_confirmation' => 'password123',
         ]);
 
-        $response->assertStatus(201)
-                 ->assertJsonStructure(['user', 'token']);
+        $response->assertStatus(201)->assertJsonStructure(['user', 'token']);
 
         $this->assertDatabaseHas('user', ['email' => 'test_phpunit@example.com']);
-        $this->assertDatabaseHas('user_wallet', ['balance' => 0]);
+
+        // ФИКС: Достаем ID из ответа и проверяем кошелек ИМЕННО этого юзера
+        $userId = $response->json('user.id');
+        $this->assertDatabaseHas('user_wallet', [
+            'user_id' => $userId,
+            'balance' => 0
+        ]);
     }
 
     public function test_user_can_login(): void

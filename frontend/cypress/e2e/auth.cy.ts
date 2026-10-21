@@ -52,33 +52,34 @@ describe("Auth Flow & Security", () => {
   });
 
   it("Защита от XSS-инъекций", () => {
-    cy.visit("/register");
-    const xssPayload = '<script>alert("hacked")</script>';
+    const xssPayload = '<script>alert("hacked")</script>'
+    
+    // Перехватываем alert ДО загрузки страницы
+    cy.visit("/register", {
+      onBeforeLoad(win) {
+        cy.stub(win, "alert").as("alertStub");
+      },
+    });
 
     cy.intercept("POST", "**/api/auth/register").as("xssRegisterRequest");
 
-    cy.get(SELECTORS.auth.regName).type(xssPayload, {
-      parseSpecialCharSequences: false,
-    });
+    cy.get(SELECTORS.auth.regName).type(xssPayload, { parseSpecialCharSequences: false });
     cy.get(SELECTORS.auth.regSurname).type("Тестов");
-    cy.get(SELECTORS.auth.regEmail).type(`xss-${uniqueId}@test.com`);
-    cy.get(SELECTORS.auth.regLogin).type(`xss_${uniqueId}`);
+    cy.get(SELECTORS.auth.regEmail).type(`xss-${Date.now()}@test.com`);
+    cy.get(SELECTORS.auth.regLogin).type(`xss_${Date.now()}`);
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
 
     cy.get(SELECTORS.auth.regSubmit).click();
 
-    // Ждем ответ, что регистрация прошла (201), скрипт сохранился как строка
     cy.wait("@xssRegisterRequest").its("response.statusCode").should("eq", 201);
-
     cy.url({ timeout: 10000 }).should("include", "/profile");
 
-    // Если alert не сработал, значит, React экранировал данные
-    cy.on("window:alert", (str) => {
-      throw new Error("Уязвимость XSS! Сработал alert: " + str);
-    });
-
-    cy.url().should("include", "/profile");
+    // Проверяем, что alert НЕ БЫЛ ВЫЗВАН
+    cy.get("@alertStub").should("not.have.been.called");
+    
+    // Проверяем, что React экранировал скрипт и он вывелся как текст
+    cy.contains(xssPayload).should("be.visible");
   });
 
   it("Ошибка при дублировании ТОЛЬКО логина", () => {

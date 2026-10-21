@@ -72,4 +72,27 @@ class WalletService
             return $transaction;
         });
     }
+    public function deposit(User $user, float $amount): Transaction
+    {
+        return DB::transaction(function () use ($user, $amount) {
+            // Блокируем кошелек (защита от Race Condition)
+            $wallet = UserWallet::where('user_id', $user->id)->lockForUpdate()->first();
+
+            // Увеличиваем баланс
+            $wallet->balance += $amount;
+            $wallet->save();
+
+            // Создаем запись в истории транзакций
+            $transaction = new Transaction();
+            $transaction->user_id = $user->id;
+            $transaction->amount = $amount;
+            $transaction->type_id = 1; // 1 = deposit (Пополнение)
+            $transaction->status_id = 2; // 2 = success (Успешно)
+            $transaction->comment = 'Пополнение баланса';
+            $transaction->created_at = now();
+            $transaction->save();
+
+            return $transaction;
+        });
+    }
 }

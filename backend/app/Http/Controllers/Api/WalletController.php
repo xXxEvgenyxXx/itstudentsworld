@@ -42,4 +42,23 @@ class WalletController extends Controller
             'new_balance' => $request->user()->wallet->balance,
         ], 201);
     }
+    public function deposit(Request $request): JsonResponse
+    {
+        if ($request->user()->is_banned) {
+            return response()->json(['message' => 'Аккаунт заблокирован.'], 403);
+        }
+
+        // Защита от отрицательных значений и нуля!
+        $validated = $request->validate([
+            'amount' => ['required', 'numeric', 'min:1'],
+        ]);
+
+        $transaction = $this->wallet->deposit($request->user(), $validated['amount']);
+
+        return response()->json([
+            'message' => 'Баланс успешно пополнен',
+            'transaction' => $transaction,
+            'new_balance' => $request->user()->wallet()->first()->balance,
+        ], 200);
+    }
 }

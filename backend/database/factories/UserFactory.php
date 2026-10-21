@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\Role;
@@ -12,32 +13,13 @@ class UserFactory extends Factory
         return [
             'name' => fake()->firstName(),
             'surname' => fake()->lastName(),
-            'patronymic' => fake()->optional()->firstNameMale(),
+            'patronymic' => null,
             'email' => fake()->unique()->safeEmail(),
             'login' => fake()->unique()->userName(),
-            'password_hash' => Hash::make('password'),
+            'password_hash' => Hash::make('password123'),
             'role_id' => Role::where('alias', 'user')->first()?->id ?? 1,
             'is_banned' => false,
             'created_at' => now(),
         ];
-    }
-
-    public function admin(): static
-    {
-        return $this->state([
-            'role_id' => Role::where('alias', 'admin')->first()?->id ?? 2,
-        ]);
-    }
-
-    public function owner(): static
-    {
-        return $this->state([
-            'role_id' => Role::where('alias', 'owner')->first()?->id ?? 3,
-        ]);
-    }
-
-    public function banned(): static
-    {
-        return $this->state(['is_banned' => true]);
     }
 }
