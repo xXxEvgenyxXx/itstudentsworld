@@ -58,7 +58,7 @@ export function ProfilePage() {
     {
       key: "cosmetics",
       label: (
-        <span>
+        <span data-cy="tab-cosmetics">
           <SkinOutlined /> Моя косметика
         </span>
       ),
@@ -80,7 +80,7 @@ export function ProfilePage() {
     {
       key: "wishlist",
       label: (
-        <span>
+        <span data-cy="tab-wishlist">
           <HeartOutlined /> Список желаемого
         </span>
       ),
@@ -102,7 +102,7 @@ export function ProfilePage() {
     {
       key: "transactions",
       label: (
-        <span>
+        <span data-cy="tab-transactions">
           <HistoryOutlined /> История транзакций
         </span>
       ),

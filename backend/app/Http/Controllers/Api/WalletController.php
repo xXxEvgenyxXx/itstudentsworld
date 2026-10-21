@@ -25,11 +25,6 @@ class WalletController extends Controller
             'cosmetic_item_id' => ['required', 'integer', 'exists:cosmetic_item,id'],
         ]);
 
-        // Валидация входящих данных (защита от подмены типов)
-        $validated = $request->validate([
-            'cosmetic_item_id' => ['required', 'integer', 'exists:cosmetic_item,id'],
-        ]);
-
         // Вызов бизнес-логики
         $transaction = $this->walletService->purchase(
             $request->user(),
@@ -42,18 +37,20 @@ class WalletController extends Controller
             'new_balance' => $request->user()->wallet->balance,
         ], 201);
     }
+
     public function deposit(Request $request): JsonResponse
     {
+        // Тоже добавим проверку на бан, как в покупке (для безопасности)
         if ($request->user()->is_banned) {
-            return response()->json(['message' => 'Аккаунт заблокирован.'], 403);
+            return response()->json(['message' => 'Ваш аккаунт заблокирован.'], 403);
         }
 
-        // Защита от отрицательных значений и нуля!
         $validated = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
         ]);
 
-        $transaction = $this->wallet->deposit($request->user(), $validated['amount']);
+        // ИСПРАВЛЕНО: $this->walletService вместо $this->wallet
+        $transaction = $this->walletService->deposit($request->user(), $validated['amount']);
 
         return response()->json([
             'message' => 'Баланс успешно пополнен',

@@ -25,6 +25,7 @@ export function PurchaseModal({ item, isOpen, onClose }: PurchaseModalProps) {
 
   return (
     <Modal
+      okButtonProps={{ id: 'confirm-purchase-btn' }}
       title="Подтверждение покупки"
       open={isOpen}
       onOk={handleOk}

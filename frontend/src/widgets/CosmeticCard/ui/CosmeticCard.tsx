@@ -15,7 +15,7 @@ const { Meta } = Card;
 interface CosmeticCardProps {
   item: CosmeticItem;
   isWishlisted: boolean;
-  isOwned: boolean; // <-- Новый пропс
+  isOwned: boolean;
   onBuyClick: (item: CosmeticItem) => void;
   onWishlistToggle: (item: CosmeticItem) => void;
 }
@@ -39,6 +39,7 @@ export function CosmeticCard({
       }
       actions={[
         <Button 
+          data-cy={`buy-btn-${item.id}`}
           type={isOwned ? 'default' : 'primary'}
           icon={isOwned ? <CheckCircleOutlined /> : <ShoppingCartOutlined />} 
           key="buy"
@@ -63,6 +64,7 @@ export function CosmeticCard({
               </Tag>
               
               <Button 
+                data-cy={`wishlist-btn-${item.id}`}
                 type="text" 
                 disabled={!isAuthenticated}
                 onClick={() => onWishlistToggle(item)}
