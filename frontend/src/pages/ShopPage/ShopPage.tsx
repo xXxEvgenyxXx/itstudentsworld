@@ -1,27 +1,29 @@
-import { useState } from "react";
-import { Row, Col, Typography, Spin, Empty } from "antd";
-import { useCosmetics, type CosmeticItem } from "@/entities/cosmetic";
-import { useAuth } from "@/entities/user";
-import { CosmeticCard } from "@/widgets/CosmeticCard";
-import { PurchaseModal } from "@/features/purchase-cosmetic/ui/PurchaseModal";
-import { useWishlist } from "@/features/purchase-cosmetic/api/useWishlist";
+import { useState } from 'react';
+import { Row, Col, Typography, Spin, Empty } from 'antd';
+import { useCosmetics, type CosmeticItem } from '@/entities/cosmetic';
+import { useAuth } from '@/entities/user';
+import { CosmeticCard } from '@/widgets/CosmeticCard';
+import { PurchaseModal } from '@/features/purchase-cosmetic/ui/PurchaseModal';
+import { useWishlist } from '@/features/purchase-cosmetic/api/useWishlist';
 
 const { Title } = Typography;
 
 export function ShopPage() {
   const { data, isLoading, isError } = useCosmetics();
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const { mutate: toggleWishlist } = useWishlist();
-
-  // Состояние для модалки покупки
+  
   const [selectedItem, setSelectedItem] = useState<CosmeticItem | null>(null);
 
-  // Получаем массив ID предметов, которые сейчас в избранном
+  // Массив ID предметов в избранном
   const wishlistIds = user?.wishlist?.map((item) => item.id) || [];
+  
+  // Массив ID купленных предметов
+  const ownedIds = user?.cosmetics?.map((item) => item.id) || [];
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", padding: 50 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 50 }}>
         <Spin size="large" />
       </div>
     );
@@ -32,7 +34,7 @@ export function ShopPage() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
+    <div style={{ padding: '20px', maxWidth: 1200, margin: '0 auto' }}>
       <Title level={2} style={{ marginBottom: 24 }}>
         Магазин косметики
       </Title>
@@ -43,9 +45,10 @@ export function ShopPage() {
         <Row gutter={[24, 24]}>
           {data.data.map((item) => (
             <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
-              <CosmeticCard
-                item={item}
+              <CosmeticCard 
+                item={item} 
                 isWishlisted={wishlistIds.includes(item.id)}
+                isOwned={ownedIds.includes(item.id)}
                 onBuyClick={setSelectedItem}
                 onWishlistToggle={() => toggleWishlist(item.id)}
               />
@@ -54,10 +57,10 @@ export function ShopPage() {
         </Row>
       )}
 
-      <PurchaseModal
-        item={selectedItem}
-        isOpen={!!selectedItem}
-        onClose={() => setSelectedItem(null)}
+      <PurchaseModal 
+        item={selectedItem} 
+        isOpen={!!selectedItem} 
+        onClose={() => setSelectedItem(null)} 
       />
     </div>
   );
