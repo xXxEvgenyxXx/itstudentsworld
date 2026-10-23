@@ -19,12 +19,14 @@ const roleColors: Record<string, string> = {
 };
 
 export function AdminUsersPage() {
+  const [searchInput, setSearchInput] = useState(''); // То, что печатаем
+  const [searchQuery, setSearchQuery] = useState(''); // То, что уходит в API
+
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('');
   
   const { user: currentUser } = useAuth(); 
-  const { data, isLoading } = useAdminUsers(page, search, roleFilter);
+  const { data, isLoading } = useAdminUsers(page, searchQuery, roleFilter); 
   const { mutate: toggleBan } = useToggleBan();
   const { mutate: changeRole } = useChangeRole();
 
@@ -41,11 +43,25 @@ export function AdminUsersPage() {
 
     return false;
   };
+  const handleSearch = () => {
+    setSearchQuery(searchInput);
+    setPage(1);
+  };
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', width: 80 },
-    { title: 'Логин', dataIndex: 'login', key: 'login' },
-    { title: 'Email', dataIndex: 'email', key: 'email' },
+    { 
+      title: 'Логин', 
+      dataIndex: 'login', 
+      key: 'login',
+      render: (text: string, record: User) => <span data-cy={`login-${record.id}`}>{text}</span>
+    },
+    { 
+      title: 'Email', 
+      dataIndex: 'email', 
+      key: 'email',
+      render: (text: string, record: User) => <span data-cy={`email-${record.id}`}>{text}</span>
+    },
     {
       title: 'Роль',
       key: 'role',
@@ -53,6 +69,7 @@ export function AdminUsersPage() {
         if (isOwner && record.role.alias !== 'owner' && record.id !== currentUser?.id) {
           return (
             <Select
+             data-cy={`role-select-${record.id}`}
               value={record.role.alias}
               style={{ width: 150 }}
               onChange={(value) => changeRole({ userId: record.id, role: value })}
@@ -63,15 +80,16 @@ export function AdminUsersPage() {
             />
           );
         }
-
-        return <Tag color={roleColors[record.role.alias]}>{roleNames[record.role.alias]}</Tag>;
+        return <Tag data-cy={`role-tag-${record.id}`} color={roleColors[record.role.alias]}>{roleNames[record.role.alias]}</Tag>;
       },
     },
     {
       title: 'Статус',
       key: 'status',
       render: (_: unknown, record: User) => (
-        record.is_banned ? <Tag color="error">Забанен</Tag> : <Tag color="success">Активен</Tag>
+        record.is_banned 
+          ? <Tag data-cy={`status-tag-${record.id}`} color="error">Забанен</Tag> 
+          : <Tag data-cy={`status-tag-${record.id}`} color="success">Активен</Tag>
       ),
     },
     {
@@ -84,6 +102,7 @@ export function AdminUsersPage() {
         if (!isBanAllowed) {
           return (
             <Button 
+              data-cy={`ban-btn-${record.id}`}
               type="default" 
               disabled 
               icon={<StopOutlined />}
@@ -105,6 +124,7 @@ export function AdminUsersPage() {
             <Button 
               type={record.is_banned ? 'default' : 'primary'} 
               danger={!record.is_banned}
+              data-cy={`ban-btn-${record.id}`}
               icon={record.is_banned ? <CheckCircleOutlined /> : <StopOutlined />}
             >
               {record.is_banned ? 'Разбанить' : 'Забанить'}
@@ -120,26 +140,39 @@ export function AdminUsersPage() {
       <h1>Управление пользователями</h1>
       
       <Space style={{ marginBottom: 16 }} wrap>
-        <Input 
-          placeholder="Поиск по логину или email" 
-          prefix={<SearchOutlined />} 
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          style={{ width: 300 }}
-        />
+        <Space.Compact style={{ width: 350 }}>
+          <Input
+            data-cy="admin-users-search"
+            placeholder="Поиск по логину или email"
+            prefix={<SearchOutlined />}
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+              if (e.target.value === '') {
+                setSearchQuery('');
+                setPage(1);
+              }
+            }}
+            onPressEnter={handleSearch}
+            allowClear
+          />
+          <Button
+            data-cy="admin-users-search-btn"
+            type="primary"
+            icon={<SearchOutlined />}
+            onClick={handleSearch}
+          />
+        </Space.Compact>
         
-        {/* ФИЛЬТР ПО РОЛИ */}
         <Select
           placeholder="Фильтр по роли"
+          data-cy="admin-users-search-filter"
           allowClear
           style={{ width: 200 }}
           value={roleFilter || undefined}
           onChange={(value) => {
             setRoleFilter(value || '');
-            setPage(1); // Сбрасываем страницу при смене фильтра
+            setPage(1);
           }}
           options={[
             { value: 'user', label: roleNames['user'] },

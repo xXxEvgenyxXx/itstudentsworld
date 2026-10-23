@@ -11,6 +11,7 @@ export interface CosmeticItem {
   price: string; // Laravel decimal возвращает строкой
   image_url: string;
   type: CosmeticType;
+  deleted_at: string | null;
 }
 
 // Laravel пагинация

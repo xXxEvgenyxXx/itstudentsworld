@@ -66,4 +66,41 @@ class CosmeticController extends Controller
 
         return response()->json(['message' => 'Предмет удален из магазина']);
     }
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', \App\Models\User::class);
+
+        $query = CosmeticItem::with('type');
+
+        // Фильтр по статусу (активные, удаленные, все)
+        $status = $request->query('status', 'active');
+        if ($status === 'deleted') {
+            $query->onlyTrashed();
+        } elseif ($status === 'all') {
+            $query->withTrashed();
+        }
+
+        // Поиск по названию
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->query('search') . '%');
+        }
+
+        // Фильтр по типу
+        if ($request->filled('type')) {
+            $query->whereHas('type', fn($q) => $q->where('alias', $request->query('type')));
+        }
+
+        $query->orderBy('id', 'desc'); // Сначала новые
+
+        return response()->json($query->paginate(15));
+    }
+    public function restore(int $id): JsonResponse
+    {
+        $this->authorize('viewAny', \App\Models\User::class);
+
+        $item = CosmeticItem::withTrashed()->findOrFail($id);
+        $item->restore();
+
+        return response()->json(['message' => 'Предмет восстановлен', 'item' => $item->load('type')]);
+    }
 }

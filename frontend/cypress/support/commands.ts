@@ -1,37 +1,76 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+/* eslint-disable @typescript-eslint/no-namespace */
+import type { User } from '@/entities/user';
+
+const setAuthData = (user: User, token: string) => {
+  window.localStorage.setItem('itsw_token', token);
+  window.localStorage.setItem('itsw_auth', JSON.stringify({
+    state: { user, token }, version: 0
+  }));
+};
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      loginAsOwner(): Chainable<void>;
+      loginAsAdmin(): Chainable<void>;
+    }
+  }
+}
+
+Cypress.Commands.add('loginAsOwner', () => {
+  cy.env(['OWNER_PASSWORD']).then((env) => {
+    const password = (env.OWNER_PASSWORD as string) || 'owner12345';
+    
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:8000/api/auth/login',
+      body: { email: 'itswowner@example.com', password: password }
+    }).then((response) => {
+      setAuthData(response.body.user, response.body.token);
+      cy.wrap(response.body.token).as('ownerToken'); // <-- Сохраняем токен владельца
+    });
+  });
+});
+
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.env(['OWNER_PASSWORD']).then((env) => {
+    const password = (env.OWNER_PASSWORD as string) || 'owner12345';
+
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:8000/api/auth/login',
+      body: { email: 'itswowner@example.com', password: password }
+    }).then((ownerResponse) => {
+      const ownerToken = ownerResponse.body.token;
+      const email = `admin_${Date.now()}@example.com`;
+      
+      cy.request({
+        method: 'POST',
+        url: 'http://localhost:8000/api/auth/register',
+        body: {
+          name: 'Админ', surname: 'Тестов', email: email, login: `admin_${Date.now()}`,
+          password: 'password123', password_confirmation: 'password123'
+        }
+      }).then((userResponse) => {
+        const newUserId = userResponse.body.user.id;
+
+        cy.request({
+          method: 'PATCH',
+          url: `http://localhost:8000/api/admin/users/${newUserId}/role`,
+          headers: { Authorization: `Bearer ${ownerToken}` },
+          body: { role_alias: 'admin' }
+        }).then(() => {
+          const updatedUser = {
+            ...userResponse.body.user,
+            role: { ...userResponse.body.user.role, alias: 'admin' }
+          };
+          setAuthData(updatedUser, userResponse.body.token);
+          cy.wrap(userResponse.body.token).as('adminToken'); // <-- Сохраняем токен админа
+        });
+      });
+    });
+  });
+});
+
+export {};

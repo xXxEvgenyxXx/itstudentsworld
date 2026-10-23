@@ -40,7 +40,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'store']);
         Route::patch('/cosmetic-items/{cosmeticItem}', [\App\Http\Controllers\Api\CosmeticController::class, 'update']);
         Route::delete('/cosmetic-items/{cosmeticItem}', [\App\Http\Controllers\Api\CosmeticController::class, 'destroy']);
+        Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'adminIndex']);
+        Route::patch('/cosmetic-items/{id}/restore', [\App\Http\Controllers\Api\CosmeticController::class, 'restore']);
     });
 });
 
 Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);
+Route::get('/cosmetic-types', fn() => response()->json(\App\Models\CosmeticType::all()));
