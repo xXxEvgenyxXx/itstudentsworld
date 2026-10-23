@@ -79,10 +79,10 @@ describe('Shop & Wishlist Flow', () => {
   });
 
   it('Ошибка при попытке покупки без денег', () => {
-    // Для этого теста мы создадим пустого юзера (обойдем beforeEach)
     cy.clearLocalStorage();
     const poorUserEmail = `poor_${Date.now()}@example.com`;
     
+    // Создаем юзера без денег
     cy.request('POST', 'http://localhost:8000/api/auth/register', {
       name: 'Бедняк', surname: 'Тест', email: poorUserEmail, login: `poor_${Date.now()}`,
       password: 'password123', password_confirmation: 'password123',
@@ -94,11 +94,17 @@ describe('Shop & Wishlist Flow', () => {
       }));
     });
 
+    // ПЕРЕХВАТЫВАЕМ ЗАПРОС НА ПОКУПКУ
+    cy.intercept('POST', '**/api/wallet/purchase').as('purchaseRequest');
+
     cy.visit('/shop');
     cy.get('[data-cy^="buy-btn-"]').first().click();
     cy.get('#confirm-purchase-btn').click();
 
-    // Проверяем, что вылезла ошибка "Недостаточно средств"
-    cy.get('.ant-message-error').should('contain', 'Недостаточно средств');
+    // ЖДЕМ ОТВЕТ 422 ОТ СЕРВЕРА
+    cy.wait('@purchaseRequest').its('response.statusCode').should('eq', 422);
+
+    // ПРОВЕРЯЕМ ТЕКСТ ОШИБКИ (это надежнее любых классов)
+    cy.contains('Недостаточно средств').should('be.visible');
   });
 });
