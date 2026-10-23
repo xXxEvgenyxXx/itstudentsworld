@@ -37,6 +37,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'users']);
         Route::patch('/users/{user}/ban', [\App\Http\Controllers\Api\AdminController::class, 'toggleBan']);
         Route::patch('/users/{user}/role', [\App\Http\Controllers\Api\AdminController::class, 'changeRole']);
+        Route::post('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'store']);
+        Route::patch('/cosmetic-items/{cosmeticItem}', [\App\Http\Controllers\Api\CosmeticController::class, 'update']);
+        Route::delete('/cosmetic-items/{cosmeticItem}', [\App\Http\Controllers\Api\CosmeticController::class, 'destroy']);
     });
 });
 
