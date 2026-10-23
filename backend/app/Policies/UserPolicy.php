@@ -11,7 +11,8 @@ class UserPolicy
      */
     public function viewAny(User $actor): bool
     {
-        return $actor->isAdmin();
+        // Список видят админы и владельцы
+        return in_array($actor->role->alias, ['admin', 'owner']);
     }
 
     /**
@@ -43,10 +44,13 @@ class UserPolicy
      */
     public function changeRole(User $actor, User $target): bool
     {
+        // Менять роли может ТОЛЬКО владелец
         if (!$actor->isOwner()) return false;
+
+        // Себе роль менять нельзя (защита от потери прав)
         if ($actor->id === $target->id) return false;
 
-        // Нельзя менять роль owner
+        // Нельзя менять роль другого владельца (он один)
         return $target->role->alias !== 'owner';
     }
 
@@ -57,17 +61,20 @@ class UserPolicy
      */
     public function ban(User $actor, User $target): bool
     {
+        // Себя забанить нельзя
         if ($actor->id === $target->id) return false;
 
+        // Владелец может банить админов и юзеров, но не других владельцев
         if ($actor->isOwner()) {
             return $target->role->alias !== 'owner';
         }
 
+        // Админ может банить только обычных юзеров
         if ($actor->role->alias === 'admin') {
             return $target->role->alias === 'user';
         }
 
-        return false;
+        return false; // Обычный юзер никого не банит
     }
 
     /**
