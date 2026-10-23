@@ -33,6 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/wallet/purchase', [\App\Http\Controllers\Api\WalletController::class, 'purchase']);
     Route::post('/wallet/deposit', [\App\Http\Controllers\Api\WalletController::class, 'deposit']);
+    Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'users']);
+        Route::patch('/users/{user}/ban', [\App\Http\Controllers\Api\AdminController::class, 'toggleBan']);
+        Route::patch('/users/{user}/role', [\App\Http\Controllers\Api\AdminController::class, 'changeRole']);
+    });
 });
 
 Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);
