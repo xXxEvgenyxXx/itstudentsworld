@@ -58,3 +58,11 @@ export interface ChangePasswordPayload {
   password: string;
   password_confirmation: string;
 }
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+}
