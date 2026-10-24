@@ -241,4 +241,54 @@ class AuthTest extends TestCase
         $this->assertNotEquals('password123', $user->password_hash);
         $this->assertTrue(Hash::check('password123', $user->password_hash));
     }
+    public function test_all_text_fields_handle_xss_safely(): void
+    {
+        $xssPayload = '<script>alert("hacked")</script>';
+        $uniqueId = uniqid();
+
+        $response = $this->postJson('/api/auth/register', [
+            'name' => $xssPayload, // XSS в имя
+            'surname' => $xssPayload, // XSS в фамилию
+            'patronymic' => $xssPayload, // XSS в отчество
+            'email' => "xss_all_{$uniqueId}@example.com",
+            'login' => "xss_all_{$uniqueId}",
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        $response->assertStatus(201);
+
+        // Проверяем, что все поля сохранились как безопасные строки
+        $this->assertDatabaseHas('user', [
+            'email' => "xss_all_{$uniqueId}@example.com",
+            'name' => $xssPayload,
+            'surname' => $xssPayload,
+            'patronymic' => $xssPayload,
+        ]);
+    }
+
+    public function test_all_text_fields_handle_sqli_safely(): void
+    {
+        $sqliPayload = "' OR 1=1 --";
+        $uniqueId = uniqid();
+
+        $response = $this->postJson('/api/auth/register', [
+            'name' => $sqliPayload,
+            'surname' => $sqliPayload,
+            'patronymic' => $sqliPayload,
+            'email' => "sqli_all_{$uniqueId}@example.com",
+            'login' => "sqli_all_{$uniqueId}",
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ]);
+
+        // Если бы SQLi сработала, база данных упала бы или вернула 500-ю ошибку.
+        // Если 201 — значит Eloquent безопасно сохранил это как обычный текст.
+        $response->assertStatus(201);
+
+        $this->assertDatabaseHas('user', [
+            'email' => "sqli_all_{$uniqueId}@example.com",
+            'name' => $sqliPayload, // Строка сохранилась в БД как есть
+        ]);
+    }
 }

@@ -66,3 +66,20 @@ export interface PaginatedResponse<T> {
   per_page: number;
   total: number;
 }
+
+export interface TransactionType {
+  id: number;
+  name: string;
+  alias: string;
+}
+
+export interface Transaction {
+  id: number;
+  user_id: number;
+  amount: string;
+  type_id: number;
+  status_id: number;
+  comment: string | null;
+  created_at: string;
+  type: TransactionType;
+}

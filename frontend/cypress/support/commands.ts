@@ -18,6 +18,7 @@ declare global {
     interface Chainable {
       loginAsOwner(): Chainable<void>;
       loginAsAdmin(): Chainable<void>;
+      loginAsUser(): Chainable<void>;
     }
   }
 }
@@ -78,6 +79,24 @@ Cypress.Commands.add("loginAsAdmin", () => {
         });
       });
     });
+  });
+});
+
+Cypress.Commands.add('loginAsUser', () => {
+  const uniqueId = Date.now();
+  const email = `user_${uniqueId}@test.com`;
+  const login = `user_${uniqueId}`;
+
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:8000/api/auth/register',
+    body: {
+      name: 'Юзер', surname: 'Тестов', email: email, login: login,
+      password: 'password123', password_confirmation: 'password123'
+    }
+  }).then((response) => {
+    setAuthData(response.body.user, response.body.token);
+    cy.wrap(response.body.token).as('userToken');
   });
 });
 

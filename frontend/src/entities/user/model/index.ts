@@ -7,4 +7,6 @@ export type {
   LoginPayload,
   UpdateProfilePayload,
   ChangePasswordPayload,
+  Transaction,
+  TransactionType
 } from "./types";

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { adminApi } from "../api/adminApi";
+import { adminApi } from "../api";
 import { message } from "antd";
 import type { ApiException } from "@/shared/api";
 
