@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use App\Services\WalletService;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function __construct(
+        private readonly WalletService $walletService
+    ) {}
     public function users(Request $request): JsonResponse
     {
         $this->authorize('viewAny', User::class);
@@ -71,6 +75,30 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'Роль успешно изменена',
             'user' => $user->load('role')
+        ]);
+    }
+    public function adjustBalance(Request $request, User $user): JsonResponse
+    {
+        // Только админ или владелец могут менять баланс
+        $this->authorize('viewAny', User::class);
+
+        $validated = $request->validate([
+            'amount' => ['required', 'numeric', 'min:0.01'], // Строго положительное число
+            'type' => ['required', 'string', 'in:accrual,deduction'],
+            'comment' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $transaction = $this->walletService->adjustBalance(
+            $user,
+            $validated['amount'],
+            $validated['type'],
+            $validated['comment'] ?? null
+        );
+
+        return response()->json([
+            'message' => 'Баланс успешно скорректирован',
+            'transaction' => $transaction,
+            'new_balance' => $user->wallet()->first()->balance,
         ]);
     }
 }

@@ -95,4 +95,40 @@ class WalletService
             return $transaction;
         });
     }
+    public function adjustBalance(User $user, float $amount, string $type, ?string $comment = null): Transaction
+    {
+        // Валидация на всякий случай - сумма должна быть >=0
+        if ($amount <= 0) {
+            throw ValidationException::withMessages(['amount' => 'Сумма должна быть больше нуля.']);
+        }
+
+        return DB::transaction(function () use ($user, $amount, $type, $comment) {
+            // Блокируем кошелек от Race Condition (гонки данных)
+            $wallet = UserWallet::where('user_id', $user->id)->lockForUpdate()->first();
+
+            // Определяем ID типа транзакции
+            // 4 - admin_accrual (начисление), 5 - admin_deduction (списание)
+            $typeId = $type === 'accrual' ? 4 : 5;
+
+            // Меняем баланс
+            if ($type === 'accrual') {
+                $wallet->balance += $amount;
+            } else {
+                $wallet->balance -= $amount;
+            }
+            $wallet->save();
+
+            // Пишем в журнал транзакций
+            $transaction = new Transaction();
+            $transaction->user_id = $user->id;
+            $transaction->amount = $amount;
+            $transaction->type_id = $typeId;
+            $transaction->status_id = 2;
+            $transaction->comment = $comment ?? ($type === 'accrual' ? 'Начисление администратором' : 'Списание администратором');
+            $transaction->created_at = now();
+            $transaction->save();
+
+            return $transaction;
+        });
+    }
 }

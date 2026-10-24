@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/cosmetic-items/{cosmeticItem}', [\App\Http\Controllers\Api\CosmeticController::class, 'destroy']);
         Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'adminIndex']);
         Route::patch('/cosmetic-items/{id}/restore', [\App\Http\Controllers\Api\CosmeticController::class, 'restore']);
+        Route::post('/users/{user}/wallet/adjust', [\App\Http\Controllers\Api\AdminController::class, 'adjustBalance']);
     });
 });
 
