@@ -10,6 +10,8 @@ import {
   useToggleBan,
   useChangeRole,
 } from "@/entities/user/lib/useAdmin";
+import { AdjustBalanceModal } from "@/features/admin-adjust-balance/ui/AdjustBalanceModal";
+import { WalletOutlined } from "@ant-design/icons";
 import { useAuth } from "@/entities/user";
 import type { User } from "@/entities/user";
 
@@ -37,6 +39,8 @@ export function AdminUsersPage() {
   const { data, isLoading } = useAdminUsers(page, searchQuery, roleFilter);
   const { mutate: toggleBan } = useToggleBan();
   const { mutate: changeRole } = useChangeRole();
+
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const isOwner = currentUser?.role.alias === "owner";
   const canBanUser = (targetUser: User) => {
@@ -110,6 +114,15 @@ export function AdminUsersPage() {
       },
     },
     {
+      title: 'Баланс',
+      key: 'balance',
+      render: (_: unknown, record: User) => (
+        <span data-cy={`balance-${record.id}`} style={{ fontWeight: 'bold', color: '#3f8600' }}>
+          {Number(record.wallet?.balance || 0).toFixed(2)} монет
+        </span>
+      ),
+    },
+    {
       title: "Статус",
       key: "status",
       render: (_: unknown, record: User) =>
@@ -129,44 +142,52 @@ export function AdminUsersPage() {
       render: (_: unknown, record: User) => {
         const isBanAllowed = canBanUser(record);
 
-        // Если действие недоступно, показываем неактивную кнопку с подсказкой
-        if (!isBanAllowed) {
-          return (
-            <Button
-              data-cy={`ban-btn-${record.id}`}
-              type="default"
-              disabled
-              icon={<StopOutlined />}
-              title="Недостаточно прав или действие недоступно"
-            >
-              Забанить
-            </Button>
-          );
-        }
-
-        // Если доступно, показываем рабочую кнопку
         return (
-          <Popconfirm
-            title={
-              record.is_banned
-                ? "Разбанить пользователя?"
-                : "Забанить пользователя?"
-            }
-            onConfirm={() => toggleBan(record.id)}
-            okText="Да"
-            cancelText="Нет"
-          >
-            <Button
-              type={record.is_banned ? "default" : "primary"}
-              danger={!record.is_banned}
-              data-cy={`ban-btn-${record.id}`}
-              icon={
-                record.is_banned ? <CheckCircleOutlined /> : <StopOutlined />
-              }
-            >
-              {record.is_banned ? "Разбанить" : "Забанить"}
-            </Button>
-          </Popconfirm>
+          <Space>
+            {!record.is_banned && (
+              <Button
+                data-cy={`wallet-btn-${record.id}`}
+                icon={<WalletOutlined />}
+                onClick={() => setSelectedUser(record)}
+              >
+                Баланс
+              </Button>
+            )}
+
+            {!isBanAllowed ? (
+              <Button
+                data-cy={`ban-btn-${record.id}`}
+                type="default"
+                disabled
+                icon={<StopOutlined />}
+                title="Недостаточно прав или действие недоступно"
+              >
+                Забанить
+              </Button>
+            ) : (
+              <Popconfirm
+                title={
+                  record.is_banned
+                    ? "Разбанить пользователя?"
+                    : "Забанить пользователя?"
+                }
+                onConfirm={() => toggleBan(record.id)}
+                okText="Да"
+                cancelText="Нет"
+              >
+                <Button
+                  type={record.is_banned ? "default" : "primary"}
+                  danger={!record.is_banned}
+                  data-cy={`ban-btn-${record.id}`}
+                  icon={
+                    record.is_banned ? <CheckCircleOutlined /> : <StopOutlined />
+                  }
+                >
+                  {record.is_banned ? "Разбанить" : "Забанить"}
+                </Button>
+              </Popconfirm>
+            )}
+          </Space>
         );
       },
     },
@@ -230,6 +251,11 @@ export function AdminUsersPage() {
           pageSize: 15,
           onChange: (newPage) => setPage(newPage),
         }}
+      />
+      <AdjustBalanceModal
+        user={selectedUser}
+        isOpen={!!selectedUser}
+        onClose={() => setSelectedUser(null)}
       />
     </div>
   );
