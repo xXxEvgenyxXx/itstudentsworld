@@ -42,7 +42,7 @@ describe("Auth Flow & Security", () => {
 
   it("Защита от XSS-инъекций", () => {
     const xssPayload = '<script>alert("hacked")</script>';
-    
+
     cy.visit("/register", {
       onBeforeLoad(win) {
         cy.stub(win, "alert").as("alertStub");
@@ -51,7 +51,9 @@ describe("Auth Flow & Security", () => {
 
     cy.intercept("POST", "**/api/auth/register").as("xssRegisterRequest");
 
-    cy.get(SELECTORS.auth.regName).type(xssPayload, { parseSpecialCharSequences: false });
+    cy.get(SELECTORS.auth.regName).type(xssPayload, {
+      parseSpecialCharSequences: false,
+    });
     cy.get(SELECTORS.auth.regSurname).type("Тестов");
     cy.get(SELECTORS.auth.regEmail).type(`xss-${Date.now()}@test.com`);
     cy.get(SELECTORS.auth.regLogin).type(`xss_${Date.now()}`);
