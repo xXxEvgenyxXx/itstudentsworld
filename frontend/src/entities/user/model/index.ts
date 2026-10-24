@@ -8,5 +8,5 @@ export type {
   UpdateProfilePayload,
   ChangePasswordPayload,
   Transaction,
-  TransactionType
+  TransactionType,
 } from "./types";

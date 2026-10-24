@@ -114,10 +114,13 @@ export function AdminUsersPage() {
       },
     },
     {
-      title: 'Баланс',
-      key: 'balance',
+      title: "Баланс",
+      key: "balance",
       render: (_: unknown, record: User) => (
-        <span data-cy={`balance-${record.id}`} style={{ fontWeight: 'bold', color: '#3f8600' }}>
+        <span
+          data-cy={`balance-${record.id}`}
+          style={{ fontWeight: "bold", color: "#3f8600" }}
+        >
           {Number(record.wallet?.balance || 0).toFixed(2)} монет
         </span>
       ),
@@ -180,7 +183,11 @@ export function AdminUsersPage() {
                   danger={!record.is_banned}
                   data-cy={`ban-btn-${record.id}`}
                   icon={
-                    record.is_banned ? <CheckCircleOutlined /> : <StopOutlined />
+                    record.is_banned ? (
+                      <CheckCircleOutlined />
+                    ) : (
+                      <StopOutlined />
+                    )
                   }
                 >
                   {record.is_banned ? "Разбанить" : "Забанить"}

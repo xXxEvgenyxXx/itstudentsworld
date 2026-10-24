@@ -8,7 +8,7 @@ export type {
   UpdateProfilePayload,
   ChangePasswordPayload,
   Transaction,
-  TransactionType
+  TransactionType,
 } from "./model";
 
 export { authApi } from "./api";

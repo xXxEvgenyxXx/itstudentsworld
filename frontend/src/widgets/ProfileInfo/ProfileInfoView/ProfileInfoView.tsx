@@ -1,18 +1,18 @@
-import { Descriptions, Tag, Typography } from 'antd';
-import type { User } from '@/entities/user';
+import { Descriptions, Tag, Typography } from "antd";
+import type { User } from "@/entities/user";
 
 const { Text } = Typography;
 
 const roleNames: Record<string, string> = {
-  owner: 'Владелец',
-  admin: 'Администратор',
-  user: 'Пользователь',
+  owner: "Владелец",
+  admin: "Администратор",
+  user: "Пользователь",
 };
 
 const roleColors: Record<string, string> = {
-  owner: 'purple',
-  admin: 'red',
-  user: 'blue',
+  owner: "purple",
+  admin: "red",
+  user: "blue",
 };
 
 export function ProfileInfoView({ user }: { user: User }) {
@@ -35,7 +35,7 @@ export function ProfileInfoView({ user }: { user: User }) {
         <span data-cy="profile-email">{user.email}</span>
       </Descriptions.Item>
       <Descriptions.Item label="Дата регистрации">
-        {new Date(user.created_at).toLocaleDateString('ru-RU')}
+        {new Date(user.created_at).toLocaleDateString("ru-RU")}
       </Descriptions.Item>
     </Descriptions>
   );

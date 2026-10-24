@@ -1,1 +1,1 @@
-export {ProfileInfoView} from './ProfileInfoView.tsx'
+export { ProfileInfoView } from "./ProfileInfoView.tsx";
