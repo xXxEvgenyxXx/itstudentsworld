@@ -1,14 +1,18 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth, useLogout } from "@/entities/user";
 import { Button, Space } from "antd";
 import { DATA_CY } from "@/shared/config";
+//import { allRoutes } from "@/app/router/routes";
 
 //const { Text } = Typography;
 
 export function Header() {
   const { user, isAuthenticated } = useAuth();
+  const isAdmin = user?.role.alias === "admin" || user?.role.alias === "owner";
   const { mutate: logout } = useLogout();
   //const navigate = useNavigate();
+
+  const location = useLocation();
 
   // Стили для NavLink (чтобы не писать инлайн-функции в каждом теге)
   const navLinkStyle = ({ isActive }: { isActive: boolean }) => ({
@@ -50,6 +54,18 @@ export function Header() {
         <NavLink to="/about" style={navLinkStyle}>
           О сервере
         </NavLink>
+        {isAdmin && (
+          <NavLink 
+            to="/admin/dashboard" 
+            style={({ isActive }) => 
+              navLinkStyle({ 
+                isActive: isActive || location.pathname.startsWith("/admin") 
+              })
+            }
+          >
+            Управление
+          </NavLink>
+        )}
       </div>
 
       {/* ПРАВАЯ ЧАСТЬ: Авторизация / Профиль */}

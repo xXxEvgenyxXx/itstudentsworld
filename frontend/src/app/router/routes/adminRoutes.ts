@@ -5,13 +5,13 @@ import { AdminUsersPage } from "@/pages/AdminUsersPage";
 
 export const adminRoutes = [
   {
-    path: "/admin/cosmetics",
-    element: AdminCosmeticsPage,
+    path: "/admin/dashboard",
+    element: AdminDashboardPage,
     access: "admin",
   },
   {
-    path: "/admin/dashboard",
-    element: AdminDashboardPage,
+    path: "/admin/users",
+    element: AdminUsersPage,
     access: "admin",
   },
   {
@@ -20,8 +20,8 @@ export const adminRoutes = [
     access: "admin",
   },
   {
-    path: "/admin/users",
-    element: AdminUsersPage,
+    path: "/admin/cosmetics",
+    element: AdminCosmeticsPage,
     access: "admin",
   },
 ];
