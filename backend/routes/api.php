@@ -46,6 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'adminIndex']);
         Route::patch('/cosmetic-items/{id}/restore', [\App\Http\Controllers\Api\CosmeticController::class, 'restore']);
         Route::post('/users/{user}/wallet/adjust', [\App\Http\Controllers\Api\AdminController::class, 'adjustBalance']);
+        Route::get('/dashboard', [\App\Http\Controllers\Api\AdminController::class, 'dashboard']);
+        Route::get('/transactions', [\App\Http\Controllers\Api\AdminController::class, 'transactions']);
     });
 });
 

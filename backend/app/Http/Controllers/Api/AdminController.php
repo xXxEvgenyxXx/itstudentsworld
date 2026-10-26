@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -99,6 +101,56 @@ class AdminController extends Controller
             'message' => 'Баланс успешно скорректирован',
             'transaction' => $transaction,
             'new_balance' => $user->wallet()->first()->balance,
+        ]);
+    }
+    public function dashboard(): JsonResponse
+    {
+        $this->authorize('viewAny', User::class);
+
+        // 1. Статистика по пользователям
+        $totalUsers = User::count();
+        $bannedUsers = User::where('is_banned', true)->count();
+
+        // Считаем админов и владельцев (вдруг их несколько)
+        $totalAdmins = User::whereHas('role', function($q) {
+            $q->whereIn('alias', ['admin', 'owner']);
+        })->count();
+
+        // 2. Статистика по транзакциям
+        $totalTransactions = Transaction::count();
+        $failedTransactions = Transaction::whereHas('status', fn($q) => $q->where('alias', 'failed'))->count();
+        $pendingTransactions = Transaction::whereHas('status', fn($q) => $q->where('alias', 'pending'))->count();
+
+        // Сумма всех успешных пополнений
+        $totalRevenue = Transaction::whereHas('type', fn($q) => $q->where('alias', 'deposit'))
+            ->whereHas('status', fn($q) => $q->where('alias', 'success'))
+            ->sum('amount');
+
+        // 3. Статистика по магазину
+        $totalCosmetics = \App\Models\CosmeticItem::count();
+
+        return response()->json([
+            'stats' => [
+                'users' => [
+                    'total' => $totalUsers,
+                    'banned' => $bannedUsers,
+                    'admins' => $totalAdmins,
+                ],
+                'transactions' => [
+                    'total' => $totalTransactions,
+                    'failed' => $failedTransactions,
+                    'pending' => $pendingTransactions,
+                    'revenue' => $totalRevenue,
+                ],
+                'shop' => [
+                    'total_cosmetics' => $totalCosmetics,
+                ]
+            ],
+            // Последние 5 транзакций (для быстрой ленты событий)
+            'recent_transactions' => Transaction::with('user', 'type', 'status')
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get()
         ]);
     }
 }
