@@ -153,4 +153,26 @@ class AdminController extends Controller
                 ->get()
         ]);
     }
+    // Список всех транзакций с фильтрами (Админка)
+    public function transactions(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', User::class);
+
+        $query = Transaction::with('user', 'type', 'status');
+
+        // Фильтр по статусу (например, ?status=failed)
+        if ($request->filled('status')) {
+            $query->whereHas('status', fn($q) => $q->where('alias', $request->query('status')));
+        }
+
+        // Фильтр по типу (например, ?type=deposit)
+        if ($request->filled('type')) {
+            $query->whereHas('type', fn($q) => $q->where('alias', $request->query('type')));
+        }
+
+        // Сортировка: сначала новые
+        $query->orderBy('created_at', 'desc');
+
+        return response()->json($query->paginate(15));
+    }
 }

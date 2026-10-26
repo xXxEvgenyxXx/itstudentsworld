@@ -51,5 +51,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
+Route::get('/transaction-types', [\App\Http\Controllers\Api\TransactionController::class, 'types']);
+Route::get('/transaction-statuses', [\App\Http\Controllers\Api\TransactionController::class, 'statuses']);
+
 Route::get('/cosmetic-items', [\App\Http\Controllers\Api\CosmeticController::class, 'index']);
 Route::get('/cosmetic-types', fn() => response()->json(\App\Models\CosmeticType::all()));
