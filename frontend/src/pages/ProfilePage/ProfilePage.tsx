@@ -14,9 +14,6 @@ export function ProfilePage() {
 
   if (!user) return null;
 
-  const shopRoute =
-    allRoutes.find((r) => r.path.includes("shop"))?.path || "/shop";
-
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "20px" }}>
       <h1 style={{ marginBottom: 24 }}>Личный кабинет</h1>
@@ -28,13 +25,13 @@ export function ProfilePage() {
         <Col xs={24} md={10}>
           <WalletCard
             wallet={user.wallet}
-            shopRoute={shopRoute}
+            shopRoute={allRoutes.publicRoutes.SHOP_PAGE.path}
             onDepositClick={() => setIsDepositOpen(true)}
           />
         </Col>
       </Row>
 
-      <ProfileTabs user={user} shopRoute={shopRoute} />
+      <ProfileTabs user={user} shopRoute={allRoutes.publicRoutes.SHOP_PAGE.path} />
 
       {/* Рендерим модалку */}
       <DepositModal

@@ -17,9 +17,7 @@ export function AdminLayout() {
   const navigate = useNavigate();
 
   // Формируем элементы меню из констант
-  const menuItems = allRoutes
-              .filter((route) => route.access === "admin")
-              .map((route) => ({
+  const menuItems = Object.values(allRoutes.adminRoutes).map((route) => ({
     key: route.path,
     label: routeLabels[route.path] || route.path,
   }));

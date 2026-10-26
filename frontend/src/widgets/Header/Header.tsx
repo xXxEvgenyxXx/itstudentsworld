@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth, useLogout } from "@/entities/user";
 import { Button, Space } from "antd";
 import { DATA_CY } from "@/shared/config";
-//import { allRoutes } from "@/app/router/routes";
+import { allRoutes } from "@/app/router/routes";
 
 //const { Text } = Typography;
 
@@ -35,7 +35,7 @@ export function Header() {
     >
       {/* ЛЕВАЯ ЧАСТЬ: Логотип */}
       <Link
-        to="/"
+        to={allRoutes.publicRoutes.MAIN_PAGE.path}
         style={{
           color: "white",
           fontSize: 20,
@@ -48,15 +48,15 @@ export function Header() {
 
       {/* ЦЕНТРАЛЬНАЯ ЧАСТЬ: Публичные ссылки */}
       <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-        <NavLink to="/shop" style={navLinkStyle}>
+        <NavLink to={allRoutes.publicRoutes.SHOP_PAGE.path} style={navLinkStyle}>
           Магазин
         </NavLink>
-        <NavLink to="/about" style={navLinkStyle}>
+        <NavLink to={allRoutes.publicRoutes.ABOUT_PAGE.path} style={navLinkStyle}>
           О сервере
         </NavLink>
         {isAdmin && (
           <NavLink 
-            to="/admin/dashboard" 
+            to={allRoutes.adminRoutes.ADMIN_DASHBOARD_PAGE.path} 
             style={({ isActive }) => 
               navLinkStyle({ 
                 isActive: isActive || location.pathname.startsWith("/admin") 
@@ -73,7 +73,7 @@ export function Header() {
         {isAuthenticated ? (
           <>
             <NavLink
-              to="/profile"
+              to={allRoutes.userRoutes.PROFILE_PAGE.path}
               data-cy={DATA_CY.header.USERNAME}
               style={({ isActive }) => ({
                 color: isActive ? "#4096ff" : "white",
@@ -92,12 +92,12 @@ export function Header() {
           </>
         ) : (
           <>
-            <Link to="/login">
+            <Link to={allRoutes.publicRoutes.LOGIN_PAGE.path}>
               <Button type="text" style={{ color: "white" }}>
                 Войти
               </Button>
             </Link>
-            <Link to="/register">
+            <Link to={allRoutes.publicRoutes.REGISTER_PAGE.path}>
               <Button type="primary">Регистрация</Button>
             </Link>
           </>

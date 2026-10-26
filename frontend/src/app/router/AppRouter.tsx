@@ -11,9 +11,7 @@ export function AppRouter() {
       <Routes>
         {/* Доступные всем маршруты */}
         <Route element={<PublicLayout />}>
-          {allRoutes
-            .filter((route) => route.access === "public")
-            .map((route) => (
+          {Object.values(allRoutes.publicRoutes).map((route) => (
               <Route
                 key={route.path}
                 path={route.path}
@@ -25,30 +23,26 @@ export function AppRouter() {
         {/* Маршруты для авторизованных пользователей */}
         <Route element={<ProtectedRoute />}>
           <Route element={<UserLayout />}>
-            {allRoutes
-              .filter((route) => route.access === "user")
-              .map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={<route.element />}
-                />
-              ))}
+            {Object.values(allRoutes.userRoutes).map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.element />}
+              />
+            ))}
           </Route>
         </Route>
 
         {/* Маршруты для администратора и владельца */}
         <Route element={<ProtectedRoute allowedRoles={["admin", "owner"]} />}>
           <Route element={<AdminLayout />}>
-            {allRoutes
-              .filter((route) => route.access === "admin")
-              .map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={<route.element />}
-                />
-              ))}
+            {Object.values(allRoutes.adminRoutes).map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={<route.element />}
+              />
+            ))}
           </Route>
         </Route>
 
