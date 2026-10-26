@@ -2,6 +2,7 @@ import { Card, Statistic, Button, Space } from "antd";
 import { WalletOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import type { Wallet } from "@/entities/user";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   wallet: Wallet;
@@ -19,7 +20,7 @@ export function WalletCard({ wallet, shopRoute, onDepositClick }: Props) {
         prefix={<WalletOutlined />}
         suffix="монет"
         valueStyle={{ color: "#3f8600", fontWeight: "bold" }}
-        data-cy="wallet-balance"
+        data-cy={DATA_CY.wallet.BALANCE}
       />
 
       <Space style={{ marginTop: 24, width: "100%" }} size="middle">
@@ -27,7 +28,7 @@ export function WalletCard({ wallet, shopRoute, onDepositClick }: Props) {
           type="default"
           block
           onClick={onDepositClick}
-          data-cy="open-deposit-btn"
+          data-cy={DATA_CY.wallet.OPEN_DEPOSIT_BTN}
         >
           Пополнить
         </Button>

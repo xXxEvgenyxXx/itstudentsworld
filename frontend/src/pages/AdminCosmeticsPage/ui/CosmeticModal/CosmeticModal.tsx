@@ -6,6 +6,7 @@ import {
   useCreateCosmetic,
   useUpdateCosmetic,
 } from "@/entities/cosmetic/lib/useAdminCosmetics";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   isOpen: boolean;
@@ -55,10 +56,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
       confirmLoading={isCreating || isUpdating}
       okText="Сохранить"
       cancelText="Отмена"
-      okButtonProps={{
-        id: "save-cosmetic-btn",
-        "data-cy": "save-cosmetic-btn",
-      }}
+      okButtonProps={{ 'data-cy': DATA_CY.admin.cosmetics.SAVE_BTN }}
     >
       <Form form={form} layout="vertical">
         <Form.Item
@@ -66,7 +64,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
           label="Название"
           rules={[{ required: true, message: "Введите название" }]}
         >
-          <Input id="form-name" data-cy="form-name" />
+          <Input id="form-name" data-cy={DATA_CY.admin.cosmetics.FORM_NAME} />
         </Form.Item>
 
         <Form.Item
@@ -74,7 +72,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
           label="Тип"
           rules={[{ required: true, message: "Выберите тип" }]}
         >
-          <Select id="form-type" data-cy="form-type" placeholder="Выберите тип">
+          <Select id="form-type" data-cy={DATA_CY.admin.cosmetics.FORM_TYPE} placeholder="Выберите тип">
             {types?.map((type) => (
               <Select.Option key={type.id} value={type.id}>
                 {type.name}
@@ -90,7 +88,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
         >
           <InputNumber
             id="form-price"
-            data-cy="form-price"
+            data-cy={DATA_CY.admin.cosmetics.FORM_PRICE}
             min={0.01}
             step={0.01}
             style={{ width: "100%" }}
@@ -104,7 +102,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
         >
           <Input
             id="form-image"
-            data-cy="form-image"
+            data-cy={DATA_CY.admin.cosmetics.FORM_IMAGE}
             placeholder="/images/cosmetics/example.png"
           />
         </Form.Item>

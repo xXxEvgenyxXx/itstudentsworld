@@ -1,3 +1,5 @@
+import { SELECTORS } from "../support/selectors";
+
 describe("Admin Users Management", () => {
   let targetUserLogin: string;
   let targetUserEmail: string;
@@ -36,38 +38,30 @@ describe("Admin Users Management", () => {
     cy.visit("/admin/users");
     cy.wait("@getUsers");
 
-    cy.intercept("GET", "**/api/admin/users?*search=itsw_owner*").as(
-      "searchOwner",
-    );
+    cy.intercept("GET", "**/api/admin/users?*search=itsw_owner*").as("searchOwner");
 
-    cy.get('[data-cy="admin-users-search"]').type("itsw_owner");
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type("itsw_owner");
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@searchOwner");
 
     cy.get('[data-cy^="ban-btn-"]').should("be.disabled");
   });
 
   it("Владелец может менять роли", () => {
-    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as(
-      "searchTarget",
-    );
-    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/role`).as(
-      "changeRole",
-    );
+    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as("searchTarget");
+    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/role`).as("changeRole");
 
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@searchTarget");
 
-    cy.get(`[data-cy="role-select-${targetUserId}"]`).click({ force: true });
-    cy.contains(".ant-select-item-option", "Администратор").click({
-      force: true,
-    });
+    cy.get(SELECTORS.admin.users.roleSelect(targetUserId)).click({ force: true });
+    cy.contains(".ant-select-item-option", "Администратор").click({ force: true });
 
     cy.wait("@changeRole").its("response.statusCode").should("eq", 200);
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="role-select-${targetUserId}"]`, {
+    cy.get(SELECTORS.admin.users.roleSelect(targetUserId), {
       timeout: 10000,
     }).should("contain", "Администратор");
   });
@@ -77,24 +71,20 @@ describe("Admin Users Management", () => {
     cy.visit("/admin/users");
     cy.wait("@getUsers");
 
-    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as(
-      "searchTarget",
-    );
-    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/ban`).as(
-      "banUser",
-    );
+    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as("searchTarget");
+    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/ban`).as("banUser");
 
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@searchTarget");
 
-    cy.get(`[data-cy="ban-btn-${targetUserId}"]`).click();
+    cy.get(SELECTORS.admin.users.banBtn(targetUserId)).click();
     cy.get(".ant-popconfirm-buttons button.ant-btn-primary").click();
 
     cy.wait("@banUser").its("response.statusCode").should("eq", 200);
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="status-tag-${targetUserId}"]`, { timeout: 10000 }).should(
+    cy.get(SELECTORS.admin.users.statusTag(targetUserId), { timeout: 10000 }).should(
       "contain",
       "Забанен",
     );
@@ -103,16 +93,16 @@ describe("Admin Users Management", () => {
 
     cy.visit("/login");
 
-    cy.get('[data-cy="login-email"]').type(targetUserEmail);
-    cy.get('[data-cy="login-password"]').type(targetUserPassword);
+    cy.get(SELECTORS.auth.loginEmail).type(targetUserEmail);
+    cy.get(SELECTORS.auth.loginPassword).type(targetUserPassword);
 
     cy.intercept("POST", "**/api/auth/login").as("bannedLoginAttempt");
 
-    cy.get('[data-cy="login-submit"]').click();
+    cy.get(SELECTORS.auth.loginSubmit).click();
 
     cy.wait("@bannedLoginAttempt").its("response.statusCode").should("eq", 422);
 
-    cy.get('[data-cy="error-alert"]')
+    cy.get(SELECTORS.auth.errorAlert)
       .should("be.visible")
       .and("contain", "заблокирован");
 

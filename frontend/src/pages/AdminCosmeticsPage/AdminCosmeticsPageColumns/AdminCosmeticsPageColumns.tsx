@@ -2,6 +2,7 @@ import { Tag, Button, Popconfirm, Space, Image } from "antd";
 import { EditOutlined, DeleteOutlined, UndoOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import type { CosmeticItem } from "@/entities/cosmetic";
+import { DATA_CY } from "@/shared/config";
 
 interface GetColumnsProps {
   onEdit: (item: CosmeticItem) => void;
@@ -78,7 +79,7 @@ export function getAdminCosmeticsColumns({
               cancelText="Нет"
             >
               <Button
-                data-cy={`restore-cosmetic-${record.id}`}
+                data-cy={DATA_CY.admin.cosmetics.RESTORE_BTN(record.id)}
                 type="dashed"
                 icon={<UndoOutlined />}
               >
@@ -88,7 +89,7 @@ export function getAdminCosmeticsColumns({
           ) : (
             <>
               <Button
-                data-cy={`edit-cosmetic-${record.id}`}
+                data-cy={DATA_CY.admin.cosmetics.EDIT_BTN(record.id)}
                 type="primary"
                 icon={<EditOutlined />}
                 onClick={() => onEdit(record)}
@@ -102,7 +103,7 @@ export function getAdminCosmeticsColumns({
                 cancelText="Нет"
               >
                 <Button
-                  data-cy={`delete-cosmetic-${record.id}`}
+                  data-cy={DATA_CY.admin.cosmetics.DELETE_BTN(record.id)}
                   danger
                   icon={<DeleteOutlined />}
                 >

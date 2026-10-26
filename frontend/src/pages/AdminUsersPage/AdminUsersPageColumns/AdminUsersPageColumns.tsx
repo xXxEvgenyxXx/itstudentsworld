@@ -6,6 +6,7 @@ import {
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import type { User } from "@/entities/user";
+import { DATA_CY } from "@/shared/config";
 
 const roleNames: Record<string, string> = {
   user: "Пользователь",
@@ -43,7 +44,7 @@ export function getAdminUsersColumns({
       dataIndex: "login",
       key: "login",
       render: (text: string, record: User) => (
-        <span data-cy={`login-${record.id}`}>{text}</span>
+        <span data-cy={DATA_CY.admin.users.LOGIN(record.id)}>{text}</span>
       ),
     },
     {
@@ -51,7 +52,7 @@ export function getAdminUsersColumns({
       dataIndex: "email",
       key: "email",
       render: (text: string, record: User) => (
-        <span data-cy={`email-${record.id}`}>{text}</span>
+        <span data-cy={DATA_CY.admin.users.EMAIL(record.id)}>{text}</span>
       ),
     },
     {
@@ -65,7 +66,7 @@ export function getAdminUsersColumns({
         ) {
           return (
             <Select
-              data-cy={`role-select-${record.id}`}
+              data-cy={DATA_CY.admin.users.ROLE_SELECT(record.id)}
               value={record.role.alias}
               style={{ width: 150 }}
               onChange={(value) =>
@@ -80,7 +81,7 @@ export function getAdminUsersColumns({
         }
         return (
           <Tag
-            data-cy={`role-tag-${record.id}`}
+            data-cy={DATA_CY.admin.users.ROLE_TAG(record.id)}
             color={roleColors[record.role.alias]}
           >
             {roleNames[record.role.alias]}
@@ -93,7 +94,7 @@ export function getAdminUsersColumns({
       key: "balance",
       render: (_: unknown, record: User) => (
         <span
-          data-cy={`balance-${record.id}`}
+          data-cy={DATA_CY.admin.users.BALANCE(record.id)}
           style={{ fontWeight: "bold", color: "#3f8600" }}
         >
           {Number(record.wallet?.balance || 0).toFixed(2)} монет
@@ -105,11 +106,11 @@ export function getAdminUsersColumns({
       key: "status",
       render: (_: unknown, record: User) =>
         record.is_banned ? (
-          <Tag data-cy={`status-tag-${record.id}`} color="error">
+          <Tag data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)} color="error">
             Забанен
           </Tag>
         ) : (
-          <Tag data-cy={`status-tag-${record.id}`} color="success">
+          <Tag data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)} color="success">
             Активен
           </Tag>
         ),
@@ -124,7 +125,7 @@ export function getAdminUsersColumns({
           <Space>
             {!record.is_banned && (
               <Button
-                data-cy={`wallet-btn-${record.id}`}
+                data-cy={DATA_CY.admin.users.WALLET_BTN(record.id)}
                 icon={<WalletOutlined />}
                 onClick={() => onBalanceClick(record)}
               >
@@ -134,7 +135,7 @@ export function getAdminUsersColumns({
 
             {!isBanAllowed ? (
               <Button
-                data-cy={`ban-btn-${record.id}`}
+                data-cy={DATA_CY.admin.users.BAN_BTN(record.id)}
                 type="default"
                 disabled
                 icon={<StopOutlined />}
@@ -156,7 +157,7 @@ export function getAdminUsersColumns({
                 <Button
                   type={record.is_banned ? "default" : "primary"}
                   danger={!record.is_banned}
-                  data-cy={`ban-btn-${record.id}`}
+                  data-cy={DATA_CY.admin.users.BAN_BTN(record.id)}
                   icon={
                     record.is_banned ? (
                       <CheckCircleOutlined />

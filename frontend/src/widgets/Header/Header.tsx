@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth, useLogout } from "@/entities/user";
 import { Button, Space } from "antd";
+import { DATA_CY } from "@/shared/config";
 
 //const { Text } = Typography;
 
@@ -57,7 +58,7 @@ export function Header() {
           <>
             <NavLink
               to="/profile"
-              data-cy="header-username"
+              data-cy={DATA_CY.header.USERNAME}
               style={({ isActive }) => ({
                 color: isActive ? "#4096ff" : "white",
                 textDecoration: "none",
@@ -66,7 +67,7 @@ export function Header() {
             >
               {user?.login}
             </NavLink>
-            <Button data-cy="header-logout" onClick={() => logout()}>
+            <Button data-cy={DATA_CY.header.LOGOUT_BTN} onClick={() => logout()}>
               Выйти
             </Button>
           </>

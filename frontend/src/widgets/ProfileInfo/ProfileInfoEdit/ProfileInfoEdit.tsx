@@ -1,6 +1,7 @@
 import { Form, Input } from "antd";
 import type { FormInstance } from "antd";
 import type { User } from "@/entities/user";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   user: User;
@@ -15,7 +16,7 @@ export function ProfileInfoEdit({ user, form }: Props) {
         label="Имя"
         rules={[{ required: true, message: "Введите имя" }]}
       >
-        <Input data-cy="edit-name" />
+        <Input data-cy={DATA_CY.profile.EDIT_NAME} />
       </Form.Item>
 
       <Form.Item
@@ -23,11 +24,11 @@ export function ProfileInfoEdit({ user, form }: Props) {
         label="Фамилия"
         rules={[{ required: true, message: "Введите фамилию" }]}
       >
-        <Input data-cy="edit-surname" />
+        <Input data-cy={DATA_CY.profile.EDIT_SURNAME} />
       </Form.Item>
 
       <Form.Item name="patronymic" label="Отчество">
-        <Input data-cy="edit-patronymic" />
+        <Input data-cy={DATA_CY.profile.EDIT_PATRONYMIC} />
       </Form.Item>
 
       <Form.Item
@@ -37,7 +38,7 @@ export function ProfileInfoEdit({ user, form }: Props) {
           { required: true, type: "email", message: "Некорректный email" },
         ]}
       >
-        <Input data-cy="edit-email" />
+        <Input data-cy={DATA_CY.profile.EDIT_EMAIL} />
       </Form.Item>
     </Form>
   );

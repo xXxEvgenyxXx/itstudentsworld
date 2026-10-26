@@ -1,6 +1,7 @@
 import { Modal, Typography } from "antd";
 import { usePurchase } from "../api/usePurchase";
 import type { CosmeticItem } from "@/entities/cosmetic";
+import { DATA_CY } from "@/shared/config";
 
 const { Text } = Typography;
 
@@ -25,7 +26,7 @@ export function PurchaseModal({ item, isOpen, onClose }: PurchaseModalProps) {
 
   return (
     <Modal
-      okButtonProps={{ id: "confirm-purchase-btn" }}
+      okButtonProps={{ 'data-cy': DATA_CY.shop.CONFIRM_PURCHASE }}
       title="Подтверждение покупки"
       open={isOpen}
       onOk={handleOk}

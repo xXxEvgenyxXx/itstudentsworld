@@ -11,6 +11,7 @@ import {
 import { AdminPageLayout } from "@/widgets/AdminPageLayout";
 import { getAdminCosmeticsColumns } from "./AdminCosmeticsPageColumns";
 import { CosmeticModal } from "./ui";
+import { DATA_CY } from "@/shared/config";
 
 export function AdminCosmeticsPage() {
   const [page, setPage] = useState(1);
@@ -48,7 +49,8 @@ export function AdminCosmeticsPage() {
     <>
       <AdminPageLayout
         title="Управление косметикой"
-        data-cy="add-cosmetic-btn"
+        data-cy={DATA_CY.admin.cosmetics.ADD_BTN}
+        searchDataCy={DATA_CY.admin.cosmetics.SEARCH}
         actionButton={
           <Button
             type="primary"

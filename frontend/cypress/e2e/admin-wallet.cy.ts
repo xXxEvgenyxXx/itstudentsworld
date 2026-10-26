@@ -1,3 +1,5 @@
+import { SELECTORS } from "../support/selectors";
+
 describe("Admin Wallet Management", () => {
   let targetUserLogin: string;
   let targetUserId: number;
@@ -7,7 +9,6 @@ describe("Admin Wallet Management", () => {
     const uniqueId = Date.now();
     targetUserLogin = `wallet_target_${uniqueId}`;
 
-    // Создаем юзера через API (с нулевым балансом)
     cy.request({
       method: "POST",
       url: "http://localhost:8000/api/auth/register",
@@ -29,41 +30,27 @@ describe("Admin Wallet Management", () => {
   });
 
   it("Админ может начислить баланс и увидеть обновление в таблице", () => {
-    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as(
-      "adjustBalance",
-    );
+    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as("adjustBalance");
 
-    // Ищем нашего юзера
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@getUsers");
 
-    // Изначально баланс 0.00
-    cy.get(`[data-cy="balance-${targetUserId}"]`).should("contain", "0.00");
+    cy.get(SELECTORS.admin.users.balance(targetUserId)).should("contain", "0.00");
+    cy.get(SELECTORS.admin.users.walletBtn(targetUserId)).click();
 
-    // Открываем модалку баланса
-    cy.get(`[data-cy="wallet-btn-${targetUserId}"]`).click();
-
-    // Заполняем форму
-    cy.get('[data-cy="balance-type-select"]').click({ force: true });
+    cy.get(SELECTORS.admin.wallet.typeSelect).click({ force: true });
     cy.contains(".ant-select-item-option", "Начислить").click({ force: true });
 
-    cy.get('[data-cy="balance-amount-input"]').type("500");
-    cy.get('[data-cy="balance-comment-input"]').type("Тестовое начисление");
+    cy.get(SELECTORS.admin.wallet.amountInput).type("500");
+    cy.get(SELECTORS.admin.wallet.commentInput).type("Тестовое начисление");
 
-    // Отправляем
-    cy.get("#adjust-balance-submit").click();
+    cy.get(SELECTORS.admin.wallet.submitBtn).click();
 
-    // Ждем ответа сервера
     cy.wait("@adjustBalance").its("response.statusCode").should("eq", 200);
-
-    // Ждем обновления таблицы (invalidateQueries)
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="balance-${targetUserId}"]`, { timeout: 10000 }).should(
-      "contain",
-      "500.00",
-    );
+    cy.get(SELECTORS.admin.users.balance(targetUserId), { timeout: 10000 }).should("contain", "500.00");
   });
 
   it("Кнопка Баланс скрыта для забаненных пользователей", () => {
@@ -78,11 +65,11 @@ describe("Admin Wallet Management", () => {
     cy.visit("/admin/users");
     cy.wait("@getUsers");
 
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="wallet-btn-${targetUserId}"]`).should("not.exist");
+    cy.get(SELECTORS.admin.users.walletBtn(targetUserId)).should("not.exist");
   });
 
   it("Защита от XSS-инъекций в поле Комментарий", () => {
@@ -93,52 +80,44 @@ describe("Admin Wallet Management", () => {
     });
     cy.wait("@getUsers");
 
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="wallet-btn-${targetUserId}"]`).click();
+    cy.get(SELECTORS.admin.users.walletBtn(targetUserId)).click();
 
     const xssPayload = '<script>alert("hacked")</script>';
-    cy.get('[data-cy="balance-amount-input"]').type("100");
-    cy.get('[data-cy="balance-comment-input"]').type(xssPayload, {
+    cy.get(SELECTORS.admin.wallet.amountInput).type("100");
+    cy.get(SELECTORS.admin.wallet.commentInput).type(xssPayload, {
       parseSpecialCharSequences: false,
     });
 
-    cy.get("#adjust-balance-submit").click();
-
+    cy.get(SELECTORS.admin.wallet.submitBtn).click();
     cy.contains("Баланс успешно скорректирован").should("be.visible");
-
     cy.get("@alertStub").should("not.have.been.called");
   });
 
   it("Защита от SQL-инъекций (SQLi) в поле Комментарий", () => {
-    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as(
-      "adjustBalance",
-    );
+    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as("adjustBalance");
 
-    cy.get('[data-cy="admin-users-search"]').type(targetUserLogin);
-    cy.get('[data-cy="admin-users-search-btn"]').click();
+    cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
+    cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@getUsers");
 
-    cy.get(`[data-cy="wallet-btn-${targetUserId}"]`).click();
+    cy.get(SELECTORS.admin.users.walletBtn(targetUserId)).click();
 
     const sqliPayload = "' OR 1=1 --";
-    cy.get('[data-cy="balance-amount-input"]').type("100");
-    cy.get('[data-cy="balance-comment-input"]').type(sqliPayload, {
+    cy.get(SELECTORS.admin.wallet.amountInput).type("100");
+    cy.get(SELECTORS.admin.wallet.commentInput).type(sqliPayload, {
       parseSpecialCharSequences: false,
     });
 
-    cy.get("#adjust-balance-submit").click();
+    cy.get(SELECTORS.admin.wallet.submitBtn).click();
 
     cy.wait("@adjustBalance").its("response.statusCode").should("eq", 200);
-
     cy.contains("Баланс успешно скорректирован").should("be.visible");
 
     cy.wait("@getUsers");
-    cy.get(`[data-cy="balance-${targetUserId}"]`, { timeout: 10000 }).should(
-      "contain",
-      "100.00",
-    );
+    cy.get(SELECTORS.admin.users.balance(targetUserId), { timeout: 10000 }).should("contain", "100.00");
   });
 });

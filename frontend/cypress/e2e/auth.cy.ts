@@ -81,7 +81,7 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
-    cy.get(SELECTORS.common.errorAlert).should("be.visible");
+    cy.get(SELECTORS.auth.errorAlert).should("be.visible");
     cy.url().should("include", "/register");
   });
 
@@ -98,7 +98,7 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
-    cy.get(SELECTORS.common.errorAlert).should("be.visible");
+    cy.get(SELECTORS.auth.errorAlert).should("be.visible");
     cy.url().should("include", "/register");
   });
 
@@ -115,7 +115,7 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
-    cy.get(SELECTORS.common.errorAlert).should("be.visible");
+    cy.get(SELECTORS.auth.errorAlert).should("be.visible");
     cy.url().should("include", "/register");
   });
 });

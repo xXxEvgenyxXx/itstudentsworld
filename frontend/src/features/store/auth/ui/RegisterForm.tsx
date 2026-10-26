@@ -4,6 +4,7 @@ import { useRegister } from "@/entities/user";
 import { registerSchema, type RegisterFormData } from "../model/schemas";
 import { parseApiError } from "@/shared/api";
 import { useState } from "react";
+import { DATA_CY } from "@/shared/config";
 
 export function RegisterForm() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export function RegisterForm() {
 
     register(values, {
       onSuccess: () => {
-        navigate("/profile"); // После регистрации сразу летим на профиль
+        navigate("/profile"); 
       },
       onError: (error) => {
         const apiError = parseApiError(error);
@@ -31,7 +32,7 @@ export function RegisterForm() {
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
       {errorMsg && (
         <Alert
-          data-cy="error-alert"
+          data-cy={DATA_CY.auth.ERROR_ALERT}
           message={errorMsg}
           type="error"
           showIcon
@@ -44,7 +45,7 @@ export function RegisterForm() {
         name="name"
         rules={[{ required: true, message: "Введите имя" }]}
       >
-        <Input data-cy="reg-name" size="large" />
+        <Input data-cy={DATA_CY.auth.REG_NAME} size="large" />
       </Form.Item>
 
       <Form.Item
@@ -52,10 +53,10 @@ export function RegisterForm() {
         name="surname"
         rules={[{ required: true, message: "Введите фамилию" }]}
       >
-        <Input data-cy="reg-surname" size="large" />
+        <Input data-cy={DATA_CY.auth.REG_SURNAME} size="large" />
       </Form.Item>
 
-      <Form.Item label="Отчество (опционально)" name="patronymic">
+      <Form.Item label="Отчество (при наличии)" name="patronymic">
         <Input size="large" />
       </Form.Item>
 
@@ -67,7 +68,7 @@ export function RegisterForm() {
           { type: "email", message: "Неверный формат" },
         ]}
       >
-        <Input data-cy="reg-email" size="large" />
+        <Input data-cy={DATA_CY.auth.REG_EMAIL} size="large" />
       </Form.Item>
 
       <Form.Item
@@ -75,7 +76,7 @@ export function RegisterForm() {
         name="login"
         rules={[{ required: true, message: "Введите логин" }]}
       >
-        <Input data-cy="reg-login" size="large" placeholder="Steve" />
+        <Input data-cy={DATA_CY.auth.REG_LOGIN} size="large" placeholder="Steve" />
       </Form.Item>
 
       <Form.Item
@@ -83,12 +84,12 @@ export function RegisterForm() {
         name="password"
         rules={[{ required: true, message: "Введите пароль" }]}
       >
-        <Input.Password data-cy="reg-password" size="large" />
+        <Input.Password data-cy={DATA_CY.auth.REG_PASSWORD} size="large" />
       </Form.Item>
 
       <Form.Item
         label="Повторите пароль"
-        name="password_confirmation"
+        name="password_confirmation" 
         dependencies={["password"]}
         rules={[
           { required: true, message: "Повторите пароль" },
@@ -101,12 +102,12 @@ export function RegisterForm() {
           }),
         ]}
       >
-        <Input.Password data-cy="reg-password-confirm" size="large" />
+        <Input.Password data-cy={DATA_CY.auth.REG_PASSWORD_CONFIRM} size="large" />
       </Form.Item>
 
       <Form.Item>
         <Button
-          data-cy="reg-submit"
+          data-cy={DATA_CY.auth.REG_SUBMIT}
           type="primary"
           htmlType="submit"
           size="large"

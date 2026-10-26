@@ -1,5 +1,6 @@
 import { Modal, Form, InputNumber } from "antd";
 import { useDeposit } from "../api/useDeposit";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   isOpen: boolean;
@@ -31,8 +32,8 @@ export function DepositModal({ isOpen, onClose }: Props) {
       cancelText="Отмена"
       confirmLoading={isPending}
       okButtonProps={{
-        id: "deposit-submit-btn",
-        "data-cy": "deposit-submit-btn",
+        id: DATA_CY.wallet.DEPOSIT_SUBMIT,
+        "data-cy": DATA_CY.wallet.DEPOSIT_SUBMIT,
       }}
     >
       <Form form={form} layout="vertical" initialValues={{ amount: 100 }}>
@@ -42,7 +43,7 @@ export function DepositModal({ isOpen, onClose }: Props) {
           rules={[{ required: true, message: "Введите сумму" }]}
         >
           <InputNumber
-            data-cy="deposit-amount-input"
+            data-cy={DATA_CY.wallet.DEPOSIT_AMOUNT}
             min={1}
             step={100}
             style={{ width: "100%" }}

@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useAuth } from "@/entities/user";
 import type { CosmeticItem } from "@/entities/cosmetic";
+import { DATA_CY } from "@/shared/config";
 
 const { Text } = Typography;
 const { Meta } = Card;
@@ -47,7 +48,7 @@ export function CosmeticCard({
       }
       actions={[
         <Button
-          data-cy={`buy-btn-${item.id}`}
+          data-cy={DATA_CY.shop.BUY_BTN(item.id)}
           type={isOwned ? "default" : "primary"}
           icon={isOwned ? <CheckCircleOutlined /> : <ShoppingCartOutlined />}
           key="buy"
@@ -88,7 +89,7 @@ export function CosmeticCard({
               </Tag>
 
               <Button
-                data-cy={`wishlist-btn-${item.id}`}
+                data-cy={DATA_CY.shop.WISHLIST_BTN(item.id)}
                 type="text"
                 disabled={!isAuthenticated}
                 onClick={() => onWishlistToggle(item)}

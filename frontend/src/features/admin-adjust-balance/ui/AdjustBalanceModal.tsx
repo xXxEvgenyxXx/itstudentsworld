@@ -1,6 +1,7 @@
 import { Modal, Form, InputNumber, Select, Input } from "antd";
 import { useAdjustBalance } from "../api/useAdjustBalance";
 import type { User } from "@/entities/user";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   user: User | null;
@@ -42,12 +43,15 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
       okText="Применить"
       cancelText="Отмена"
       confirmLoading={isPending}
-      okButtonProps={{ id: "adjust-balance-submit" }}
+      okButtonProps={{
+          id: DATA_CY.admin.wallet.SUBMIT_BTN,
+          "data-cy": DATA_CY.admin.wallet.SUBMIT_BTN,
+        }}
     >
       <Form form={form} layout="vertical" initialValues={{ type: "accrual" }}>
         <Form.Item name="type" label="Действие" rules={[{ required: true }]}>
           <Select
-            data-cy="balance-type-select"
+            data-cy={DATA_CY.admin.wallet.TYPE_SELECT} 
             options={[
               { value: "accrual", label: "Начислить (дать монеты)" },
               { value: "deduction", label: "Списать (забрать монеты)" },
@@ -61,7 +65,7 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
           rules={[{ required: true, message: "Введите сумму" }]}
         >
           <InputNumber
-            data-cy="balance-amount-input"
+            data-cy={DATA_CY.admin.wallet.AMOUNT_INPUT}
             min={0.01}
             step={0.01}
             style={{ width: "100%" }}
@@ -70,7 +74,7 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
 
         <Form.Item name="comment" label="Комментарий (причина)">
           <Input
-            data-cy="balance-comment-input"
+            data-cy={DATA_CY.admin.wallet.COMMENT_INPUT}
             placeholder="Например: компенсация за сбой или штраф"
           />
         </Form.Item>

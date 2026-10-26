@@ -4,6 +4,7 @@ import { useLogin } from "@/entities/user";
 import { loginSchema, type LoginFormData } from "../model";
 import { parseApiError } from "@/shared/api";
 import { useState } from "react";
+import { DATA_CY } from "@/shared/config";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export function LoginForm() {
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
       {errorMsg && (
         <Alert
-          data-cy="error-alert"
+          data-cy={DATA_CY.auth.ERROR_ALERT} 
           message={errorMsg}
           type="error"
           showIcon
@@ -46,7 +47,7 @@ export function LoginForm() {
       <Form.Item
         label="Email"
         name="email"
-        data-cy="login-email"
+        data-cy={DATA_CY.auth.LOGIN_EMAIL}
         rules={[
           { required: true, message: "Введите email" },
           { type: "email", message: "Неверный формат" },
@@ -58,7 +59,7 @@ export function LoginForm() {
       <Form.Item
         label="Пароль"
         name="password"
-        data-cy="login-password"
+        data-cy={DATA_CY.auth.LOGIN_PASSWORD}
         rules={[{ required: true, message: "Введите пароль" }]}
       >
         <Input.Password size="large" placeholder="Введите пароль" />
@@ -66,7 +67,7 @@ export function LoginForm() {
 
       <Form.Item>
         <Button
-          data-cy="login-submit"
+          data-cy={DATA_CY.auth.LOGIN_SUBMIT}
           type="primary"
           htmlType="submit"
           size="large"

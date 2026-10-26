@@ -1,5 +1,6 @@
 import { Descriptions, Tag, Typography } from "antd";
 import type { User } from "@/entities/user";
+import { DATA_CY } from "@/shared/config";
 
 const { Text } = Typography;
 
@@ -24,7 +25,7 @@ export function ProfileInfoView({ user }: { user: User }) {
         </Tag>
       </Descriptions.Item>
       <Descriptions.Item label="Игровой логин">
-        <Text data-cy="profile-login" strong copyable>
+        <Text data-cy={DATA_CY.profile.VIEW_LOGIN} strong copyable>
           {user.login}
         </Text>
       </Descriptions.Item>
@@ -32,7 +33,7 @@ export function ProfileInfoView({ user }: { user: User }) {
         {user.surname} {user.name} {user.patronymic}
       </Descriptions.Item>
       <Descriptions.Item label="Email">
-        <span data-cy="profile-email">{user.email}</span>
+        <span data-cy={DATA_CY.profile.VIEW_EMAIL}>{user.email}</span>
       </Descriptions.Item>
       <Descriptions.Item label="Дата регистрации">
         {new Date(user.created_at).toLocaleDateString("ru-RU")}

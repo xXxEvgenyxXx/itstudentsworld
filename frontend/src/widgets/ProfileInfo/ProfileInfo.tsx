@@ -10,6 +10,7 @@ import { useUpdateProfile } from "@/entities/user/lib/useUserProfile";
 import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
+import { DATA_CY } from "@/shared/config";
 
 export function ProfileInfo({ user }: { user: User }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -46,7 +47,7 @@ export function ProfileInfo({ user }: { user: User }) {
           <Button
             icon={<EditOutlined />}
             onClick={() => setIsEditing(true)}
-            data-cy="edit-profile-btn"
+            data-cy={DATA_CY.profile.EDIT_BTN}
           >
             Редактировать
           </Button>
@@ -57,14 +58,14 @@ export function ProfileInfo({ user }: { user: User }) {
               icon={<SaveOutlined />}
               onClick={handleSave}
               loading={isPending}
-              data-cy="save-profile-btn"
+              data-cy={DATA_CY.profile.SAVE_BTN}
             >
               Сохранить
             </Button>
             <Button
               icon={<CloseOutlined />}
               onClick={handleCancel}
-              data-cy="cancel-profile-btn"
+              data-cy={DATA_CY.profile.CANCEL_BTN}
             />
           </Space>
         )

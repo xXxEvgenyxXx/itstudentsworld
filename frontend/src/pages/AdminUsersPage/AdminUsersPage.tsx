@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Select } from "antd";
+import { DATA_CY } from "@/shared/config";
 import {
   useAdminUsers,
   useToggleBan,
@@ -48,7 +49,7 @@ export function AdminUsersPage() {
       <AdminPageLayout
         title="Управление пользователями"
         searchValue={searchInput}
-        searchDataCy="admin-users-search"
+        searchDataCy={DATA_CY.admin.users.SEARCH}
         onSearchChange={setSearchInput}
         onSearchSubmit={() => {
           setSearchQuery(searchInput);
