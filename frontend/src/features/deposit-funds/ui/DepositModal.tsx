@@ -1,5 +1,5 @@
-import { Modal, Form, InputNumber } from 'antd';
-import { useDeposit } from '../api/useDeposit';
+import { Modal, Form, InputNumber } from "antd";
+import { useDeposit } from "../api/useDeposit";
 
 interface Props {
   isOpen: boolean;
@@ -30,19 +30,22 @@ export function DepositModal({ isOpen, onClose }: Props) {
       okText="Пополнить"
       cancelText="Отмена"
       confirmLoading={isPending}
-      okButtonProps={{ id: 'deposit-submit-btn', 'data-cy': 'deposit-submit-btn' }}
+      okButtonProps={{
+        id: "deposit-submit-btn",
+        "data-cy": "deposit-submit-btn",
+      }}
     >
       <Form form={form} layout="vertical" initialValues={{ amount: 100 }}>
-        <Form.Item 
-          name="amount" 
-          label="Сумма пополнения (монет)" 
-          rules={[{ required: true, message: 'Введите сумму' }]}
+        <Form.Item
+          name="amount"
+          label="Сумма пополнения (монет)"
+          rules={[{ required: true, message: "Введите сумму" }]}
         >
-          <InputNumber 
+          <InputNumber
             data-cy="deposit-amount-input"
-            min={1} 
-            step={100} 
-            style={{ width: '100%' }} 
+            min={1}
+            step={100}
+            style={{ width: "100%" }}
           />
         </Form.Item>
       </Form>

@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { Table, Input, Button, Space, Typography } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
+import { ReactNode } from "react";
+import { Table, Input, Button, Space, Typography } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
 
 const { Title } = Typography;
 
@@ -31,7 +31,7 @@ export function AdminPageLayout<T extends object>({
   searchValue,
   onSearchChange,
   onSearchSubmit,
-  searchPlaceholder = 'Поиск',
+  searchPlaceholder = "Поиск",
   filters,
   actionButton,
   columns,
@@ -41,8 +41,14 @@ export function AdminPageLayout<T extends object>({
   pagination,
 }: AdminPageLayoutProps<T>) {
   return (
-    <div style={{ padding: '20px', maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
+    <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+        }}
+      >
         <Title level={2}>{title}</Title>
         {actionButton && <div>{actionButton}</div>}
       </div>
@@ -57,7 +63,7 @@ export function AdminPageLayout<T extends object>({
             value={searchValue}
             onChange={(e) => {
               onSearchChange(e.target.value);
-              if (e.target.value === '') {
+              if (e.target.value === "") {
                 onSearchSubmit(); // Сброс поиска при очистке
               }
             }}

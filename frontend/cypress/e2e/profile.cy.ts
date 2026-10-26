@@ -99,33 +99,42 @@ describe("User Profile Management", () => {
     // Проверяем, что интерфейс не сломался и отображает новое "имя"
     cy.contains(sqliPayload).should("be.visible");
   });
-  it('Пользователь может пополнить баланс', () => {
+  it("Пользователь может пополнить баланс", () => {
     cy.loginAsUser();
-    cy.visit('/profile');
+    cy.visit("/profile");
 
     // Запоминаем текущий баланс (скорее всего 0.00)
-    cy.get('[data-cy="wallet-balance"] .ant-statistic-content-value').invoke('text').then((initialBalance) => {
-      // Открываем модалку
-      cy.get('[data-cy="open-deposit-btn"]').click();
+    cy.get('[data-cy="wallet-balance"] .ant-statistic-content-value')
+      .invoke("text")
+      .then((initialBalance) => {
+        // Открываем модалку
+        cy.get('[data-cy="open-deposit-btn"]').click();
 
-      // Вводим сумму и подтверждаем
-      cy.get('[data-cy="deposit-amount-input"]').clear().type('500');
-      
-      cy.intercept('POST', '**/api/wallet/deposit').as('depositRequest');
-      cy.get('[data-cy="deposit-submit-btn"]').click();
+        // Вводим сумму и подтверждаем
+        cy.get('[data-cy="deposit-amount-input"]').clear().type("500");
 
-      // Ждем ответа сервера
-      cy.wait('@depositRequest').its('response.statusCode').should('eq', 200);
-      
-      // Проверяем уведомление
-      cy.contains('Баланс успешно пополнен').should('be.visible');
+        cy.intercept("POST", "**/api/wallet/deposit").as("depositRequest");
+        cy.get('[data-cy="deposit-submit-btn"]').click();
 
-      // Проверяем, что баланс на карточке обновился (стал больше начального)
-      cy.get('[data-cy="wallet-balance"] .ant-statistic-content-value', { timeout: 10000 }).should(($newBalance) => {
-        const newBalanceText = $newBalance.text().replace(/\s/g, '').replace(',', '');
-        const initialText = initialBalance.replace(/\s/g, '').replace(',', '');
-        expect(Number(newBalanceText)).to.be.greaterThan(Number(initialText));
+        // Ждем ответа сервера
+        cy.wait("@depositRequest").its("response.statusCode").should("eq", 200);
+
+        // Проверяем уведомление
+        cy.contains("Баланс успешно пополнен").should("be.visible");
+
+        // Проверяем, что баланс на карточке обновился (стал больше начального)
+        cy.get('[data-cy="wallet-balance"] .ant-statistic-content-value', {
+          timeout: 10000,
+        }).should(($newBalance) => {
+          const newBalanceText = $newBalance
+            .text()
+            .replace(/\s/g, "")
+            .replace(",", "");
+          const initialText = initialBalance
+            .replace(/\s/g, "")
+            .replace(",", "");
+          expect(Number(newBalanceText)).to.be.greaterThan(Number(initialText));
+        });
       });
-    });
   });
 });

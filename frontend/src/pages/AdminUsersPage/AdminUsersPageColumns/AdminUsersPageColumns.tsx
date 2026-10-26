@@ -1,7 +1,11 @@
-import { Tag, Button, Select, Popconfirm, Space } from 'antd';
-import { StopOutlined, CheckCircleOutlined, WalletOutlined } from '@ant-design/icons';
-import type { ColumnsType } from 'antd/es/table';
-import type { User } from '@/entities/user';
+import { Tag, Button, Select, Popconfirm, Space } from "antd";
+import {
+  StopOutlined,
+  CheckCircleOutlined,
+  WalletOutlined,
+} from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import type { User } from "@/entities/user";
 
 const roleNames: Record<string, string> = {
   user: "Пользователь",
@@ -54,13 +58,19 @@ export function getAdminUsersColumns({
       title: "Роль",
       key: "role",
       render: (_: unknown, record: User) => {
-        if (isOwner && record.role.alias !== "owner" && record.id !== currentUser?.id) {
+        if (
+          isOwner &&
+          record.role.alias !== "owner" &&
+          record.id !== currentUser?.id
+        ) {
           return (
             <Select
               data-cy={`role-select-${record.id}`}
               value={record.role.alias}
               style={{ width: 150 }}
-              onChange={(value) => changeRole({ userId: record.id, role: value })}
+              onChange={(value) =>
+                changeRole({ userId: record.id, role: value })
+              }
               options={[
                 { value: "user", label: roleNames["user"] },
                 { value: "admin", label: roleNames["admin"] },
@@ -69,7 +79,10 @@ export function getAdminUsersColumns({
           );
         }
         return (
-          <Tag data-cy={`role-tag-${record.id}`} color={roleColors[record.role.alias]}>
+          <Tag
+            data-cy={`role-tag-${record.id}`}
+            color={roleColors[record.role.alias]}
+          >
             {roleNames[record.role.alias]}
           </Tag>
         );
@@ -79,7 +92,10 @@ export function getAdminUsersColumns({
       title: "Баланс",
       key: "balance",
       render: (_: unknown, record: User) => (
-        <span data-cy={`balance-${record.id}`} style={{ fontWeight: "bold", color: "#3f8600" }}>
+        <span
+          data-cy={`balance-${record.id}`}
+          style={{ fontWeight: "bold", color: "#3f8600" }}
+        >
           {Number(record.wallet?.balance || 0).toFixed(2)} монет
         </span>
       ),
@@ -89,9 +105,13 @@ export function getAdminUsersColumns({
       key: "status",
       render: (_: unknown, record: User) =>
         record.is_banned ? (
-          <Tag data-cy={`status-tag-${record.id}`} color="error">Забанен</Tag>
+          <Tag data-cy={`status-tag-${record.id}`} color="error">
+            Забанен
+          </Tag>
         ) : (
-          <Tag data-cy={`status-tag-${record.id}`} color="success">Активен</Tag>
+          <Tag data-cy={`status-tag-${record.id}`} color="success">
+            Активен
+          </Tag>
         ),
     },
     {
@@ -124,7 +144,11 @@ export function getAdminUsersColumns({
               </Button>
             ) : (
               <Popconfirm
-                title={record.is_banned ? "Разбанить пользователя?" : "Забанить пользователя?"}
+                title={
+                  record.is_banned
+                    ? "Разбанить пользователя?"
+                    : "Забанить пользователя?"
+                }
                 onConfirm={() => toggleBan(record.id)}
                 okText="Да"
                 cancelText="Нет"
@@ -133,7 +157,13 @@ export function getAdminUsersColumns({
                   type={record.is_banned ? "default" : "primary"}
                   danger={!record.is_banned}
                   data-cy={`ban-btn-${record.id}`}
-                  icon={record.is_banned ? <CheckCircleOutlined /> : <StopOutlined />}
+                  icon={
+                    record.is_banned ? (
+                      <CheckCircleOutlined />
+                    ) : (
+                      <StopOutlined />
+                    )
+                  }
                 >
                   {record.is_banned ? "Разбанить" : "Забанить"}
                 </Button>

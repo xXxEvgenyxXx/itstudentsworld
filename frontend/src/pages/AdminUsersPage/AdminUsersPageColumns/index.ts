@@ -1,1 +1,1 @@
-export { getAdminUsersColumns } from './AdminUsersPageColumns';
+export { getAdminUsersColumns } from "./AdminUsersPageColumns";

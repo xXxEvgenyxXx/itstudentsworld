@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, API } from '@/shared/api';
-import { message } from 'antd';
-import type { ApiException } from '@/shared/api';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api, API } from "@/shared/api";
+import { message } from "antd";
+import type { ApiException } from "@/shared/api";
 
 export function useDeposit() {
   const queryClient = useQueryClient();
@@ -12,8 +12,10 @@ export function useDeposit() {
       return data;
     },
     onSuccess: (data) => {
-      message.success(`Баланс успешно пополнен на ${data.transaction.amount} монет!`);
-      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+      message.success(
+        `Баланс успешно пополнен на ${data.transaction.amount} монет!`,
+      );
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
     },
     onError: (error: ApiException) => {
       message.error(error.message);
