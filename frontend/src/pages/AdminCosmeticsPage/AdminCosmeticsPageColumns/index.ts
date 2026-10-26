@@ -1,0 +1,1 @@
+export { getAdminCosmeticsColumns } from './AdminCosmeticsPageColumns';

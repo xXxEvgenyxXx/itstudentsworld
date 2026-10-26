@@ -1,0 +1,1 @@
+export { CosmeticModal } from "./CosmeticModal/CosmeticModal";
