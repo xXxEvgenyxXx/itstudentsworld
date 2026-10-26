@@ -65,9 +65,6 @@ export function AdminPageLayout<T extends object>({
             value={searchValue}
             onChange={(e) => {
               onSearchChange(e.target.value);
-              if (e.target.value === "") {
-                onSearchSubmit(); // Сброс поиска при очистке
-              }
             }}
             onPressEnter={onSearchSubmit}
             allowClear
@@ -94,6 +91,7 @@ export function AdminPageLayout<T extends object>({
           total: pagination.total,
           pageSize: pagination.pageSize,
           onChange: pagination.onChange,
+          showSizeChanger: false
         }}
       />
     </div>

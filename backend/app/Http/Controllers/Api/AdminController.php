@@ -160,6 +160,14 @@ class AdminController extends Controller
 
         $query = Transaction::with('user', 'type', 'status');
 
+        if ($request->filled('search')) {
+            $search = $request->query('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                ->orWhereHas('user', fn($userQuery) => $userQuery->where('login', 'like', "%{$search}%"));
+            });
+        }
+
         // Фильтр по статусу (например, ?status=failed)
         if ($request->filled('status')) {
             $query->whereHas('status', fn($q) => $q->where('alias', $request->query('status')));
