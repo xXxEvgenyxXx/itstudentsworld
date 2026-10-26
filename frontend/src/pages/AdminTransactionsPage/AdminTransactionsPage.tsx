@@ -1,22 +1,25 @@
-import { useState } from "react";
 import { Select } from "antd";
+import { CloseCircleOutlined } from "@ant-design/icons";
 import { DATA_CY } from "@/shared/config";
+import { useAdminFilters } from "@/shared/lib/useAdminFilters"; // Импорт хука
 import { useAdminTransactions } from "@/entities/transaction";
 import { AdminPageLayout } from "@/widgets/AdminPageLayout";
 import { getAdminTransactionsColumns } from "./AdminTransactionsPageColumns";
 
 export function AdminTransactionsPage() {
-  const [searchInput, setSearchInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<string>("");
-  const [typeFilter, setTypeFilter] = useState<string>("");
+  const {
+    searchInput, setSearchInput,
+    searchQuery, handleSearchSubmit,
+    page, setPage,
+    filters, setFilter,
+    resetFilters, hasActiveFilters
+  } = useAdminFilters({ status: "", type: "" });
 
   const { data, isLoading } = useAdminTransactions({
     page,
     search: searchQuery || undefined,
-    status: statusFilter || undefined,
-    type: typeFilter || undefined,
+    status: filters.status || undefined,
+    type: filters.type || undefined,
   });
 
   const columns = getAdminTransactionsColumns();
@@ -27,22 +30,19 @@ export function AdminTransactionsPage() {
       searchValue={searchInput}
       searchDataCy={DATA_CY.admin.transactions.SEARCH}
       onSearchChange={setSearchInput}
-      onSearchSubmit={() => {
-        setSearchQuery(searchInput);
-        setPage(1);
-      }}
+      onSearchSubmit={handleSearchSubmit}
       searchPlaceholder="Поиск по ID или логину пользователя"
+      hasActiveFilters={hasActiveFilters}
+      onResetFilters={resetFilters}
       filters={
         <>
           <Select
             placeholder="Фильтр по статусу"
             allowClear
+            clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
             style={{ width: 200 }}
-            value={statusFilter || undefined}
-            onChange={(value) => {
-              setStatusFilter(value || "");
-              setPage(1);
-            }}
+            value={filters.status || undefined}
+            onChange={(val) => setFilter("status", val || "")}
             data-cy={DATA_CY.admin.transactions.STATUS_FILTER}
             options={[
               { value: "success", label: "Успешно" },
@@ -53,12 +53,10 @@ export function AdminTransactionsPage() {
           <Select
             placeholder="Фильтр по типу"
             allowClear
+            clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
             style={{ width: 200 }}
-            value={typeFilter || undefined}
-            onChange={(value) => {
-              setTypeFilter(value || "");
-              setPage(1);
-            }}
+            value={filters.type || undefined}
+            onChange={(val) => setFilter("type", val || "")}
             data-cy={DATA_CY.admin.transactions.TYPE_FILTER}
             options={[
               { value: "deposit", label: "Пополнение" },
@@ -72,12 +70,7 @@ export function AdminTransactionsPage() {
       data={data?.data}
       loading={isLoading}
       rowKey="id"
-      pagination={{
-        current: page,
-        total: data?.total,
-        pageSize: 15,
-        onChange: setPage,
-      }}
+      pagination={{ current: page, total: data?.total, pageSize: 15, onChange: setPage }}
     />
   );
 }

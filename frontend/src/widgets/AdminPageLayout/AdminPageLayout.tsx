@@ -1,11 +1,10 @@
 import { ReactNode } from "react";
 import { Table, Input, Button, Space, Typography } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 
 const { Title } = Typography;
 
-// Используем дженерик <T>, чтобы таблица была строго типизирована
 interface AdminPageLayoutProps<T> {
   title: string;
   searchValue: string;
@@ -25,6 +24,8 @@ interface AdminPageLayoutProps<T> {
     pageSize: number;
     onChange: (page: number) => void;
   };
+  hasActiveFilters?: boolean;
+  onResetFilters?: () => void;
 }
 
 export function AdminPageLayout<T extends object>({
@@ -41,33 +42,28 @@ export function AdminPageLayout<T extends object>({
   loading,
   rowKey,
   pagination,
+  hasActiveFilters = false,
+  onResetFilters,
 }: AdminPageLayoutProps<T>) {
   return (
     <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
         <Title level={2}>{title}</Title>
         {actionButton && <div>{actionButton}</div>}
       </div>
 
       <Space style={{ marginBottom: 16 }} wrap>
-        {/* Блок поиска */}
         <Space.Compact style={{ width: 350 }}>
           <Input
             data-cy={searchDataCy}
             placeholder={searchPlaceholder}
             prefix={<SearchOutlined />}
             value={searchValue}
-            onChange={(e) => {
-              onSearchChange(e.target.value);
-            }}
+            onChange={(e) => onSearchChange(e.target.value)}
             onPressEnter={onSearchSubmit}
-            allowClear
+            allowClear={{
+              clearIcon: <CloseCircleOutlined style={{ fontSize: 16 }} />,
+            }}
           />
           <Button
             data-cy={`${searchDataCy}-btn`}
@@ -77,8 +73,17 @@ export function AdminPageLayout<T extends object>({
           />
         </Space.Compact>
 
-        {/* Кастомные фильтры (Select и т.д.), передаваемые со страницы */}
         {filters}
+
+        {onResetFilters && (
+          <Button
+            disabled={!hasActiveFilters}
+            onClick={onResetFilters}
+            data-cy="admin-reset-filters-btn"
+          >
+            Сбросить фильтры
+          </Button>
+        )}
       </Space>
 
       <Table
@@ -91,7 +96,7 @@ export function AdminPageLayout<T extends object>({
           total: pagination.total,
           pageSize: pagination.pageSize,
           onChange: pagination.onChange,
-          showSizeChanger: false
+          showSizeChanger: false,
         }}
       />
     </div>

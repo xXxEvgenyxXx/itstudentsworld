@@ -1,35 +1,31 @@
 import { useState } from "react";
 import { Button, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import type { CosmeticItem } from "@/entities/cosmetic";
-import {
-  useAdminCosmetics,
-  useCosmeticTypes,
-  useDeleteCosmetic,
-  useRestoreCosmetic,
-} from "@/entities/cosmetic/lib/useAdminCosmetics";
+import { useAdminCosmetics, useCosmeticTypes, useDeleteCosmetic, useRestoreCosmetic } from "@/entities/cosmetic/lib/useAdminCosmetics";
 import { AdminPageLayout } from "@/widgets/AdminPageLayout";
+import { useAdminFilters } from "@/shared/lib/useAdminFilters";
 import { getAdminCosmeticsColumns } from "./AdminCosmeticsPageColumns";
 import { CosmeticModal } from "./ui";
 import { DATA_CY } from "@/shared/config";
 
 export function AdminCosmeticsPage() {
-  const [page, setPage] = useState(1);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<
-    "active" | "deleted" | "all"
-  >("active");
+  const {
+    searchInput, setSearchInput,
+    searchQuery, handleSearchSubmit,
+    page, setPage,
+    filters, setFilter,
+    resetFilters, hasActiveFilters
+  } = useAdminFilters({ type: "", status: "active" as "active" | "deleted" | "all" });
 
   const { data: cosmeticsData, isLoading } = useAdminCosmetics({
     page,
     search: searchQuery,
-    type: typeFilter,
-    status: statusFilter,
+    type: filters.type,
+    status: filters.status,
   });
+  
   const { data: types } = useCosmeticTypes();
-
   const { mutate: deleteItem } = useDeleteCosmetic();
   const { mutate: restoreItem } = useRestoreCosmetic();
 
@@ -37,10 +33,7 @@ export function AdminCosmeticsPage() {
   const [editingItem, setEditingItem] = useState<CosmeticItem | null>(null);
 
   const columns = getAdminCosmeticsColumns({
-    onEdit: (item) => {
-      setEditingItem(item);
-      setIsModalOpen(true);
-    },
+    onEdit: (item) => { setEditingItem(item); setIsModalOpen(true); },
     onDelete: deleteItem,
     onRestore: restoreItem,
   });
@@ -49,52 +42,36 @@ export function AdminCosmeticsPage() {
     <>
       <AdminPageLayout
         title="Управление косметикой"
-        data-cy={DATA_CY.admin.cosmetics.ADD_BTN}
         searchDataCy={DATA_CY.admin.cosmetics.SEARCH}
         actionButton={
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setEditingItem(null);
-              setIsModalOpen(true);
-            }}
-          >
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditingItem(null); setIsModalOpen(true); }}>
             Добавить предмет
           </Button>
         }
         searchValue={searchInput}
         onSearchChange={setSearchInput}
-        onSearchSubmit={() => {
-          setSearchQuery(searchInput);
-          setPage(1);
-        }}
+        onSearchSubmit={handleSearchSubmit}
         searchPlaceholder="Поиск по названию"
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={resetFilters}
         filters={
           <>
             <Select
               placeholder="Тип"
               allowClear
+              clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
               style={{ width: 150 }}
-              value={typeFilter || undefined}
-              onChange={(val) => {
-                setTypeFilter(val || "");
-                setPage(1);
-              }}
+              value={filters.type || undefined}
+              onChange={(val) => setFilter("type", val || "")}
             >
               {types?.map((t) => (
-                <Select.Option key={t.id} value={t.alias}>
-                  {t.name}
-                </Select.Option>
+                <Select.Option key={t.id} value={t.alias}>{t.name}</Select.Option>
               ))}
             </Select>
             <Select
               style={{ width: 180 }}
-              value={statusFilter}
-              onChange={(val) => {
-                setStatusFilter(val);
-                setPage(1);
-              }}
+              value={filters.status}
+              onChange={(val) => setFilter("status", val)}
             >
               <Select.Option value="active">Только активные</Select.Option>
               <Select.Option value="deleted">Только удаленные</Select.Option>
@@ -106,19 +83,9 @@ export function AdminCosmeticsPage() {
         data={cosmeticsData?.data}
         loading={isLoading}
         rowKey="id"
-        pagination={{
-          current: page,
-          total: cosmeticsData?.total,
-          pageSize: 15,
-          onChange: setPage,
-        }}
+        pagination={{ current: page, total: cosmeticsData?.total, pageSize: 15, onChange: setPage }}
       />
-
-      <CosmeticModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        editingItem={editingItem}
-      />
+      <CosmeticModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} editingItem={editingItem} />
     </>
   );
 }
