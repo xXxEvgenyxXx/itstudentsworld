@@ -44,14 +44,14 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
       cancelText="Отмена"
       confirmLoading={isPending}
       okButtonProps={{
-          id: DATA_CY.admin.wallet.SUBMIT_BTN,
-          "data-cy": DATA_CY.admin.wallet.SUBMIT_BTN,
-        }}
+        id: DATA_CY.admin.wallet.SUBMIT_BTN,
+        "data-cy": DATA_CY.admin.wallet.SUBMIT_BTN,
+      }}
     >
       <Form form={form} layout="vertical" initialValues={{ type: "accrual" }}>
         <Form.Item name="type" label="Действие" rules={[{ required: true }]}>
           <Select
-            data-cy={DATA_CY.admin.wallet.TYPE_SELECT} 
+            data-cy={DATA_CY.admin.wallet.TYPE_SELECT}
             options={[
               { value: "accrual", label: "Начислить (дать монеты)" },
               { value: "deduction", label: "Списать (забрать монеты)" },

@@ -106,11 +106,17 @@ export function getAdminUsersColumns({
       key: "status",
       render: (_: unknown, record: User) =>
         record.is_banned ? (
-          <Tag data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)} color="error">
+          <Tag
+            data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)}
+            color="error"
+          >
             Забанен
           </Tag>
         ) : (
-          <Tag data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)} color="success">
+          <Tag
+            data-cy={DATA_CY.admin.users.STATUS_TAG(record.id)}
+            color="success"
+          >
             Активен
           </Tag>
         ),

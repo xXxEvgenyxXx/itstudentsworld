@@ -30,13 +30,18 @@ describe("Admin Wallet Management", () => {
   });
 
   it("Админ может начислить баланс и увидеть обновление в таблице", () => {
-    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as("adjustBalance");
+    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as(
+      "adjustBalance",
+    );
 
     cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
     cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@getUsers");
 
-    cy.get(SELECTORS.admin.users.balance(targetUserId)).should("contain", "0.00");
+    cy.get(SELECTORS.admin.users.balance(targetUserId)).should(
+      "contain",
+      "0.00",
+    );
     cy.get(SELECTORS.admin.users.walletBtn(targetUserId)).click();
 
     cy.get(SELECTORS.admin.wallet.typeSelect).click({ force: true });
@@ -50,7 +55,9 @@ describe("Admin Wallet Management", () => {
     cy.wait("@adjustBalance").its("response.statusCode").should("eq", 200);
     cy.wait("@getUsers");
 
-    cy.get(SELECTORS.admin.users.balance(targetUserId), { timeout: 10000 }).should("contain", "500.00");
+    cy.get(SELECTORS.admin.users.balance(targetUserId), {
+      timeout: 10000,
+    }).should("contain", "500.00");
   });
 
   it("Кнопка Баланс скрыта для забаненных пользователей", () => {
@@ -98,7 +105,9 @@ describe("Admin Wallet Management", () => {
   });
 
   it("Защита от SQL-инъекций (SQLi) в поле Комментарий", () => {
-    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as("adjustBalance");
+    cy.intercept("POST", `**/api/admin/users/${targetUserId}/wallet/adjust`).as(
+      "adjustBalance",
+    );
 
     cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
     cy.get(SELECTORS.admin.users.searchBtn).click();
@@ -118,6 +127,8 @@ describe("Admin Wallet Management", () => {
     cy.contains("Баланс успешно скорректирован").should("be.visible");
 
     cy.wait("@getUsers");
-    cy.get(SELECTORS.admin.users.balance(targetUserId), { timeout: 10000 }).should("contain", "100.00");
+    cy.get(SELECTORS.admin.users.balance(targetUserId), {
+      timeout: 10000,
+    }).should("contain", "100.00");
   });
 });

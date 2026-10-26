@@ -26,7 +26,7 @@ export function PurchaseModal({ item, isOpen, onClose }: PurchaseModalProps) {
 
   return (
     <Modal
-      okButtonProps={{ 'data-cy': DATA_CY.shop.CONFIRM_PURCHASE }}
+      okButtonProps={{ "data-cy": DATA_CY.shop.CONFIRM_PURCHASE }}
       title="Подтверждение покупки"
       open={isOpen}
       onOk={handleOk}

@@ -56,7 +56,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
       confirmLoading={isCreating || isUpdating}
       okText="Сохранить"
       cancelText="Отмена"
-      okButtonProps={{ 'data-cy': DATA_CY.admin.cosmetics.SAVE_BTN }}
+      okButtonProps={{ "data-cy": DATA_CY.admin.cosmetics.SAVE_BTN }}
     >
       <Form form={form} layout="vertical">
         <Form.Item
@@ -72,7 +72,11 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
           label="Тип"
           rules={[{ required: true, message: "Выберите тип" }]}
         >
-          <Select id="form-type" data-cy={DATA_CY.admin.cosmetics.FORM_TYPE} placeholder="Выберите тип">
+          <Select
+            id="form-type"
+            data-cy={DATA_CY.admin.cosmetics.FORM_TYPE}
+            placeholder="Выберите тип"
+          >
             {types?.map((type) => (
               <Select.Option key={type.id} value={type.id}>
                 {type.name}

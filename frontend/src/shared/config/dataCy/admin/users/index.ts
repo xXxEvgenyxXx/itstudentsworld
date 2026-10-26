@@ -1,5 +1,5 @@
 export const ADMIN_USERS_DATA_CY = {
-  SEARCH: 'admin-users-search',
+  SEARCH: "admin-users-search",
   LOGIN: (id: number) => `login-${id}`,
   EMAIL: (id: number) => `email-${id}`,
   ROLE_SELECT: (id: number) => `role-select-${id}`,

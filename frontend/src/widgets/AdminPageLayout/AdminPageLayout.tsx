@@ -33,7 +33,7 @@ export function AdminPageLayout<T extends object>({
   onSearchChange,
   onSearchSubmit,
   searchPlaceholder = "Поиск",
-  searchDataCy = 'admin-search',
+  searchDataCy = "admin-search",
   filters,
   actionButton,
   columns,

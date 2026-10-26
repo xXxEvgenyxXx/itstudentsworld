@@ -67,7 +67,10 @@ export function Header() {
             >
               {user?.login}
             </NavLink>
-            <Button data-cy={DATA_CY.header.LOGOUT_BTN} onClick={() => logout()}>
+            <Button
+              data-cy={DATA_CY.header.LOGOUT_BTN}
+              onClick={() => logout()}
+            >
               Выйти
             </Button>
           </>

@@ -1,4 +1,4 @@
-import { DATA_CY } from '@/shared/config/dataCy';
+import { DATA_CY } from "@/shared/config/dataCy";
 
 // Хелпер для генерации CSS-селектора
 const cy = (value: string) => `[data-cy="${value}"]`;

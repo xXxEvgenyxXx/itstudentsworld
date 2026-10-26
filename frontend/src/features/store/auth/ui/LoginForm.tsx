@@ -36,7 +36,7 @@ export function LoginForm() {
     <Form layout="vertical" onFinish={onFinish} autoComplete="off">
       {errorMsg && (
         <Alert
-          data-cy={DATA_CY.auth.ERROR_ALERT} 
+          data-cy={DATA_CY.auth.ERROR_ALERT}
           message={errorMsg}
           type="error"
           showIcon

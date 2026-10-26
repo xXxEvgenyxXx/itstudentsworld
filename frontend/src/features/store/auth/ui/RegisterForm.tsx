@@ -19,7 +19,7 @@ export function RegisterForm() {
 
     register(values, {
       onSuccess: () => {
-        navigate("/profile"); 
+        navigate("/profile");
       },
       onError: (error) => {
         const apiError = parseApiError(error);
@@ -76,7 +76,11 @@ export function RegisterForm() {
         name="login"
         rules={[{ required: true, message: "Введите логин" }]}
       >
-        <Input data-cy={DATA_CY.auth.REG_LOGIN} size="large" placeholder="Steve" />
+        <Input
+          data-cy={DATA_CY.auth.REG_LOGIN}
+          size="large"
+          placeholder="Steve"
+        />
       </Form.Item>
 
       <Form.Item
@@ -89,7 +93,7 @@ export function RegisterForm() {
 
       <Form.Item
         label="Повторите пароль"
-        name="password_confirmation" 
+        name="password_confirmation"
         dependencies={["password"]}
         rules={[
           { required: true, message: "Повторите пароль" },
@@ -102,7 +106,10 @@ export function RegisterForm() {
           }),
         ]}
       >
-        <Input.Password data-cy={DATA_CY.auth.REG_PASSWORD_CONFIRM} size="large" />
+        <Input.Password
+          data-cy={DATA_CY.auth.REG_PASSWORD_CONFIRM}
+          size="large"
+        />
       </Form.Item>
 
       <Form.Item>

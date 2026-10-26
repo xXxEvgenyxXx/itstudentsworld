@@ -41,7 +41,9 @@ describe("User Profile Management", () => {
     });
 
     cy.get(SELECTORS.profile.editBtn).click();
-    cy.get(SELECTORS.profile.editName).clear().type(xssPayload, { parseSpecialCharSequences: false });
+    cy.get(SELECTORS.profile.editName)
+      .clear()
+      .type(xssPayload, { parseSpecialCharSequences: false });
 
     cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
@@ -56,7 +58,9 @@ describe("User Profile Management", () => {
     const sqliPayload = "' OR 1=1 --";
 
     cy.get(SELECTORS.profile.editBtn).click();
-    cy.get(SELECTORS.profile.editName).clear().type(sqliPayload, { parseSpecialCharSequences: false });
+    cy.get(SELECTORS.profile.editName)
+      .clear()
+      .type(sqliPayload, { parseSpecialCharSequences: false });
 
     cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
@@ -66,21 +70,32 @@ describe("User Profile Management", () => {
   });
 
   it("Пользователь может пополнить баланс", () => {
-    cy.get(SELECTORS.wallet.balance).invoke("text").then((initialBalance) => {
-      cy.get(SELECTORS.wallet.openDepositBtn).click();
-      cy.get(SELECTORS.wallet.depositAmount).clear().type("500");
+    cy.get(SELECTORS.wallet.balance)
+      .invoke("text")
+      .then((initialBalance) => {
+        cy.get(SELECTORS.wallet.openDepositBtn).click();
+        cy.get(SELECTORS.wallet.depositAmount).clear().type("500");
 
-      cy.intercept("POST", "**/api/wallet/deposit").as("depositRequest");
-      cy.get(SELECTORS.wallet.depositSubmit).click();
+        cy.intercept("POST", "**/api/wallet/deposit").as("depositRequest");
+        cy.get(SELECTORS.wallet.depositSubmit).click();
 
-      cy.wait("@depositRequest").its("response.statusCode").should("eq", 200);
-      cy.contains("Баланс успешно пополнен").should("be.visible");
+        cy.wait("@depositRequest").its("response.statusCode").should("eq", 200);
+        cy.contains("Баланс успешно пополнен").should("be.visible");
 
-      cy.get(SELECTORS.wallet.balance, { timeout: 10000 }).should(($newBalance) => {
-        const newBalanceText = $newBalance.text().replace(/\s/g, "").replace(",", "");
-        const initialText = initialBalance.replace(/\s/g, "").replace(",", "");
-        expect(Number(newBalanceText)).to.be.greaterThan(Number(initialText));
+        cy.get(SELECTORS.wallet.balance, { timeout: 10000 }).should(
+          ($newBalance) => {
+            const newBalanceText = $newBalance
+              .text()
+              .replace(/\s/g, "")
+              .replace(",", "");
+            const initialText = initialBalance
+              .replace(/\s/g, "")
+              .replace(",", "");
+            expect(Number(newBalanceText)).to.be.greaterThan(
+              Number(initialText),
+            );
+          },
+        );
       });
-    });
   });
 });

@@ -38,7 +38,9 @@ describe("Admin Users Management", () => {
     cy.visit("/admin/users");
     cy.wait("@getUsers");
 
-    cy.intercept("GET", "**/api/admin/users?*search=itsw_owner*").as("searchOwner");
+    cy.intercept("GET", "**/api/admin/users?*search=itsw_owner*").as(
+      "searchOwner",
+    );
 
     cy.get(SELECTORS.admin.users.search).type("itsw_owner");
     cy.get(SELECTORS.admin.users.searchBtn).click();
@@ -48,15 +50,23 @@ describe("Admin Users Management", () => {
   });
 
   it("Владелец может менять роли", () => {
-    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as("searchTarget");
-    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/role`).as("changeRole");
+    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as(
+      "searchTarget",
+    );
+    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/role`).as(
+      "changeRole",
+    );
 
     cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
     cy.get(SELECTORS.admin.users.searchBtn).click();
     cy.wait("@searchTarget");
 
-    cy.get(SELECTORS.admin.users.roleSelect(targetUserId)).click({ force: true });
-    cy.contains(".ant-select-item-option", "Администратор").click({ force: true });
+    cy.get(SELECTORS.admin.users.roleSelect(targetUserId)).click({
+      force: true,
+    });
+    cy.contains(".ant-select-item-option", "Администратор").click({
+      force: true,
+    });
 
     cy.wait("@changeRole").its("response.statusCode").should("eq", 200);
     cy.wait("@getUsers");
@@ -71,8 +81,12 @@ describe("Admin Users Management", () => {
     cy.visit("/admin/users");
     cy.wait("@getUsers");
 
-    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as("searchTarget");
-    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/ban`).as("banUser");
+    cy.intercept("GET", `**/api/admin/users?*search=${targetUserLogin}*`).as(
+      "searchTarget",
+    );
+    cy.intercept("PATCH", `**/api/admin/users/${targetUserId}/ban`).as(
+      "banUser",
+    );
 
     cy.get(SELECTORS.admin.users.search).type(targetUserLogin);
     cy.get(SELECTORS.admin.users.searchBtn).click();
@@ -84,10 +98,9 @@ describe("Admin Users Management", () => {
     cy.wait("@banUser").its("response.statusCode").should("eq", 200);
     cy.wait("@getUsers");
 
-    cy.get(SELECTORS.admin.users.statusTag(targetUserId), { timeout: 10000 }).should(
-      "contain",
-      "Забанен",
-    );
+    cy.get(SELECTORS.admin.users.statusTag(targetUserId), {
+      timeout: 10000,
+    }).should("contain", "Забанен");
 
     cy.clearLocalStorage();
 

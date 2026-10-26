@@ -58,7 +58,10 @@ describe("Shop & Wishlist Flow", () => {
     cy.wait("@wishlistRequest").its("response.statusCode").should("eq", 200);
     cy.reload();
 
-    cy.get('[data-cy^="wishlist-btn-"]').first().find(".anticon-heart").should("have.css", "color", "rgb(255, 77, 79)");
+    cy.get('[data-cy^="wishlist-btn-"]')
+      .first()
+      .find(".anticon-heart")
+      .should("have.css", "color", "rgb(255, 77, 79)");
 
     cy.visit("/profile");
     cy.get('[data-cy="tab-wishlist"]').click();
