@@ -48,6 +48,7 @@ export function AdminCosmeticsPage() {
     <>
       <AdminPageLayout
         title="Управление косметикой"
+        data-cy="add-cosmetic-btn"
         actionButton={
           <Button
             type="primary"

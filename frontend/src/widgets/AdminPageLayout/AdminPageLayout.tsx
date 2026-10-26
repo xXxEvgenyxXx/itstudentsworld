@@ -12,6 +12,7 @@ interface AdminPageLayoutProps<T> {
   onSearchChange: (value: string) => void;
   onSearchSubmit: () => void;
   searchPlaceholder?: string;
+  searchDataCy?: string;
   filters?: ReactNode;
   actionButton?: ReactNode;
   columns: ColumnsType<T>;
@@ -32,6 +33,7 @@ export function AdminPageLayout<T extends object>({
   onSearchChange,
   onSearchSubmit,
   searchPlaceholder = "Поиск",
+  searchDataCy = 'admin-search',
   filters,
   actionButton,
   columns,
@@ -57,7 +59,7 @@ export function AdminPageLayout<T extends object>({
         {/* Блок поиска */}
         <Space.Compact style={{ width: 350 }}>
           <Input
-            data-cy="admin-search-input"
+            data-cy={searchDataCy}
             placeholder={searchPlaceholder}
             prefix={<SearchOutlined />}
             value={searchValue}
@@ -71,7 +73,7 @@ export function AdminPageLayout<T extends object>({
             allowClear
           />
           <Button
-            data-cy="admin-search-btn"
+            data-cy={`${searchDataCy}-btn`}
             type="primary"
             icon={<SearchOutlined />}
             onClick={onSearchSubmit}

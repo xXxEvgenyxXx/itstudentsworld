@@ -48,6 +48,7 @@ export function AdminUsersPage() {
       <AdminPageLayout
         title="Управление пользователями"
         searchValue={searchInput}
+        searchDataCy="admin-users-search"
         onSearchChange={setSearchInput}
         onSearchSubmit={() => {
           setSearchQuery(searchInput);
