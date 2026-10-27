@@ -8,11 +8,16 @@ import { getAdminTransactionsColumns } from "./AdminTransactionsPageColumns";
 
 export function AdminTransactionsPage() {
   const {
-    searchInput, setSearchInput,
-    searchQuery, handleSearchSubmit,
-    page, setPage,
-    filters, setFilter,
-    resetFilters, hasActiveFilters
+    searchInput,
+    setSearchInput,
+    searchQuery,
+    handleSearchSubmit,
+    page,
+    setPage,
+    filters,
+    setFilter,
+    resetFilters,
+    hasActiveFilters,
   } = useAdminFilters({ status: "", type: "" });
 
   const { data, isLoading } = useAdminTransactions({
@@ -70,7 +75,12 @@ export function AdminTransactionsPage() {
       data={data?.data}
       loading={isLoading}
       rowKey="id"
-      pagination={{ current: page, total: data?.total, pageSize: 15, onChange: setPage }}
+      pagination={{
+        current: page,
+        total: data?.total,
+        pageSize: 15,
+        onChange: setPage,
+      }}
     />
   );
 }

@@ -26,7 +26,7 @@ export function useAdminFilters<T extends object>(initialFilters: T) {
   const hasActiveFilters =
     searchQuery !== "" ||
     (Object.keys(initialFilters) as Array<keyof T>).some(
-      (key) => filters[key] !== initialFilters[key]
+      (key) => filters[key] !== initialFilters[key],
     );
 
   return {

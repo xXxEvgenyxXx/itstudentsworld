@@ -47,7 +47,13 @@ export function AdminPageLayout<T extends object>({
 }: AdminPageLayoutProps<T>) {
   return (
     <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+        }}
+      >
         <Title level={2}>{title}</Title>
         {actionButton && <div>{actionButton}</div>}
       </div>

@@ -31,7 +31,10 @@ export function ProfilePage() {
         </Col>
       </Row>
 
-      <ProfileTabs user={user} shopRoute={allRoutes.publicRoutes.SHOP_PAGE.path} />
+      <ProfileTabs
+        user={user}
+        shopRoute={allRoutes.publicRoutes.SHOP_PAGE.path}
+      />
 
       {/* Рендерим модалку */}
       <DepositModal

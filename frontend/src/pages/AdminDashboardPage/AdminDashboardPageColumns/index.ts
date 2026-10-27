@@ -1,1 +1,1 @@
-export { getAdminDashboardRecentColumns } from './AdminDashboardPageColumns';
+export { getAdminDashboardRecentColumns } from "./AdminDashboardPageColumns";

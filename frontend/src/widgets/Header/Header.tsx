@@ -48,18 +48,24 @@ export function Header() {
 
       {/* ЦЕНТРАЛЬНАЯ ЧАСТЬ: Публичные ссылки */}
       <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-        <NavLink to={allRoutes.publicRoutes.SHOP_PAGE.path} style={navLinkStyle}>
+        <NavLink
+          to={allRoutes.publicRoutes.SHOP_PAGE.path}
+          style={navLinkStyle}
+        >
           Магазин
         </NavLink>
-        <NavLink to={allRoutes.publicRoutes.ABOUT_PAGE.path} style={navLinkStyle}>
+        <NavLink
+          to={allRoutes.publicRoutes.ABOUT_PAGE.path}
+          style={navLinkStyle}
+        >
           О сервере
         </NavLink>
         {isAdmin && (
-          <NavLink 
-            to={allRoutes.adminRoutes.ADMIN_DASHBOARD_PAGE.path} 
-            style={({ isActive }) => 
-              navLinkStyle({ 
-                isActive: isActive || location.pathname.startsWith("/admin") 
+          <NavLink
+            to={allRoutes.adminRoutes.ADMIN_DASHBOARD_PAGE.path}
+            style={({ isActive }) =>
+              navLinkStyle({
+                isActive: isActive || location.pathname.startsWith("/admin"),
               })
             }
           >

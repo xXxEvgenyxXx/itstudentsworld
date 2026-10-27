@@ -20,7 +20,13 @@ export function AdminDashboardPage() {
 
   return (
     <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+        }}
+      >
         <Title level={2}>Панель мониторинга</Title>
       </div>
 
@@ -33,11 +39,12 @@ export function AdminDashboardPage() {
               data-cy={DATA_CY.admin.dashboard.STAT_TOTAL_USERS}
             />
             <div style={{ marginTop: 8, fontSize: 12, color: "#8c8c8c" }}>
-              Забанено: {data.stats.users.banned} | Админов: {data.stats.users.admins}
+              Забанено: {data.stats.users.banned} | Админов:{" "}
+              {data.stats.users.admins}
             </div>
           </Card>
         </Col>
-        
+
         <Col xs={24} sm={8}>
           <Card>
             <Statistic
@@ -48,7 +55,8 @@ export function AdminDashboardPage() {
               data-cy={DATA_CY.admin.dashboard.STAT_REVENUE}
             />
             <div style={{ marginTop: 8, fontSize: 12, color: "#8c8c8c" }}>
-              Всего транзакций: {data.stats.transactions.total} | В ожидании: {data.stats.transactions.pending}
+              Всего транзакций: {data.stats.transactions.total} | В ожидании:{" "}
+              {data.stats.transactions.pending}
             </div>
           </Card>
         </Col>

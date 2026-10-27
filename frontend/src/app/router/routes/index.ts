@@ -3,7 +3,7 @@ import { userRoutes } from "./userRoutes";
 import { adminRoutes } from "./adminRoutes";
 
 export const allRoutes = {
-    publicRoutes: publicRoutes,
-    userRoutes: userRoutes,
-    adminRoutes: adminRoutes
-}
+  publicRoutes: publicRoutes,
+  userRoutes: userRoutes,
+  adminRoutes: adminRoutes,
+};

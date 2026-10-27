@@ -6,11 +6,11 @@ export function getAdminDashboardRecentColumns(): ColumnsType<RecentTransaction>
   return [
     { title: "ID", dataIndex: "id", key: "id", width: 80 },
     { title: "Пользователь", dataIndex: ["user", "login"], key: "user" },
-    { 
-      title: "Сумма", 
-      dataIndex: "amount", 
-      key: "amount", 
-      render: (val: number) => `${val} ₽` 
+    {
+      title: "Сумма",
+      dataIndex: "amount",
+      key: "amount",
+      render: (val: number) => `${val} ₽`,
     },
     {
       title: "Тип",
@@ -30,7 +30,8 @@ export function getAdminDashboardRecentColumns(): ColumnsType<RecentTransaction>
       dataIndex: ["status", "alias"],
       key: "status",
       render: (status: string) => {
-        const color = status === "success" ? "green" : status === "failed" ? "red" : "gold";
+        const color =
+          status === "success" ? "green" : status === "failed" ? "red" : "gold";
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
     },

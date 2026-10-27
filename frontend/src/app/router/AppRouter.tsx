@@ -12,12 +12,12 @@ export function AppRouter() {
         {/* Доступные всем маршруты */}
         <Route element={<PublicLayout />}>
           {Object.values(allRoutes.publicRoutes).map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={<route.element />}
-              />
-            ))}
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<route.element />}
+            />
+          ))}
         </Route>
 
         {/* Маршруты для авторизованных пользователей */}
