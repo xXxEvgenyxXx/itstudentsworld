@@ -5,6 +5,7 @@ import { loginSchema, type LoginFormData } from "../model";
 import { parseApiError } from "@/shared/api";
 import { useState } from "react";
 import { DATA_CY } from "@/shared/config";
+import { loginFields } from "@/shared/config";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ export function LoginForm() {
 
   const { mutate: login, isPending } = useLogin();
 
-  // Если пользователь пришел из ProtectedRoute, вернем его туда
   const from = location.state?.from?.pathname || "/profile";
 
   const onFinish = (values: LoginFormData) => {
@@ -22,9 +22,7 @@ export function LoginForm() {
     if (!result.success) return;
 
     login(values, {
-      onSuccess: () => {
-        navigate(from, { replace: true });
-      },
+      onSuccess: () => navigate(from, { replace: true }),
       onError: (error) => {
         const apiError = parseApiError(error);
         setErrorMsg(apiError.message);
@@ -44,26 +42,28 @@ export function LoginForm() {
         />
       )}
 
-      <Form.Item
-        label="Email"
-        name="email"
-        data-cy={DATA_CY.auth.LOGIN_EMAIL}
-        rules={[
-          { required: true, message: "Введите email" },
-          { type: "email", message: "Неверный формат" },
-        ]}
-      >
-        <Input size="large" placeholder="example@mail.com" />
-      </Form.Item>
-
-      <Form.Item
-        label="Пароль"
-        name="password"
-        data-cy={DATA_CY.auth.LOGIN_PASSWORD}
-        rules={[{ required: true, message: "Введите пароль" }]}
-      >
-        <Input.Password size="large" placeholder="Введите пароль" />
-      </Form.Item>
+      {loginFields.map((field) => (
+        <Form.Item
+          key={field.name}
+          label={field.label}
+          name={field.name}
+          rules={field.rules}
+        >
+          {field.isPassword ? (
+            <Input.Password
+              data-cy={field.dataCy}
+              size="large"
+              placeholder={field.placeholder}
+            />
+          ) : (
+            <Input
+              data-cy={field.dataCy}
+              size="large"
+              placeholder={field.placeholder}
+            />
+          )}
+        </Form.Item>
+      ))}
 
       <Form.Item>
         <Button
