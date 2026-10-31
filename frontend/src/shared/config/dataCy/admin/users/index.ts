@@ -8,4 +8,5 @@ export const ADMIN_USERS_DATA_CY = {
   STATUS_TAG: (id: number) => `status-tag-${id}`,
   WALLET_BTN: (id: number) => `wallet-btn-${id}`,
   BAN_BTN: (id: number) => `ban-btn-${id}`,
+  SEARCH_BTN: "admin-users-search-btn",
 } as const;

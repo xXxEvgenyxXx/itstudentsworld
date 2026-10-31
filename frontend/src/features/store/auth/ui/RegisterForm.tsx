@@ -46,6 +46,7 @@ export function RegisterForm() {
           name={field.name}
           rules={field.rules}
           dependencies={field.dependencies}
+          data-cy={`${field.dataCy}-wrapper`}
         >
           {field.isPassword ? (
             <Input.Password

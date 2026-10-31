@@ -9,4 +9,5 @@ export const ADMIN_COSMETICS_DATA_CY = {
   FORM_TYPE: "form-type",
   FORM_PRICE: "form-price",
   FORM_IMAGE: "form-image",
+  SEARCH_BTN: "admin-cosmetics-search-btn",
 } as const;

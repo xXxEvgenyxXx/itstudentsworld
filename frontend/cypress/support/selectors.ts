@@ -16,6 +16,7 @@ export const SELECTORS = {
     regPasswordConfirm: cy(DATA_CY.auth.REG_PASSWORD_CONFIRM),
     regSubmit: cy(DATA_CY.auth.REG_SUBMIT),
     errorAlert: cy(DATA_CY.auth.ERROR_ALERT),
+    regNameWrapper: cy(DATA_CY.auth.REG_NAME_WRAPPER),
   },
   header: {
     username: cy(DATA_CY.header.USERNAME),
@@ -45,7 +46,7 @@ export const SELECTORS = {
   admin: {
     users: {
       search: cy(DATA_CY.admin.users.SEARCH),
-      searchBtn: cy(`${DATA_CY.admin.users.SEARCH}-btn`),
+      searchBtn: cy(DATA_CY.admin.users.SEARCH_BTN),
       login: (id: number) => cy(DATA_CY.admin.users.LOGIN(id)),
       email: (id: number) => cy(DATA_CY.admin.users.EMAIL(id)),
       roleSelect: (id: number) => cy(DATA_CY.admin.users.ROLE_SELECT(id)),
@@ -57,7 +58,7 @@ export const SELECTORS = {
     },
     cosmetics: {
       search: cy(DATA_CY.admin.cosmetics.SEARCH),
-      searchBtn: cy(`${DATA_CY.admin.cosmetics.SEARCH}-btn`),
+      searchBtn: cy(DATA_CY.admin.cosmetics.SEARCH_BTN),
       addBtn: cy(DATA_CY.admin.cosmetics.ADD_BTN),
       editBtn: (id: number) => cy(DATA_CY.admin.cosmetics.EDIT_BTN(id)),
       deleteBtn: (id: number) => cy(DATA_CY.admin.cosmetics.DELETE_BTN(id)),

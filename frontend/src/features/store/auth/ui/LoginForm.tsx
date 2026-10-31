@@ -48,6 +48,7 @@ export function LoginForm() {
           label={field.label}
           name={field.name}
           rules={field.rules}
+          data-cy={`${field.dataCy}-wrapper`}
         >
           {field.isPassword ? (
             <Input.Password

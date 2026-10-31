@@ -10,4 +10,5 @@ export const AUTH_DATA_CY = {
   REG_PASSWORD_CONFIRM: "reg-password-confirm",
   REG_SUBMIT: "reg-submit",
   ERROR_ALERT: "error-alert",
+  REG_NAME_WRAPPER: "reg-name-wrapper",
 } as const;

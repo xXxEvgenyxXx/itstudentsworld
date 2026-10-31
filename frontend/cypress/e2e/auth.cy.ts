@@ -1,10 +1,11 @@
 import { SELECTORS } from "../support/selectors";
+import { generateLogin, generateEmail } from "../support/utils";
 
 describe("Auth Flow & Security", () => {
   const uniqueId = Date.now();
   const testUser = {
-    email: `test-${uniqueId}@example.com`,
-    login: `user_${uniqueId}`,
+    email: generateEmail('auth'),
+    login: generateLogin('aut'),
     password: "password123",
   };
 
@@ -40,32 +41,27 @@ describe("Auth Flow & Security", () => {
     cy.url().should("include", "/login");
   });
 
-  it("Защита от XSS-инъекций", () => {
+  it("Защита от XSS-инъекций (UI блокирует ввод)", () => {
     const xssPayload = '<script>alert("hacked")</script>';
+    
+    cy.visit("/register");
+    cy.intercept("POST", "**/api/auth/register").as("registerRequest");
 
-    cy.visit("/register", {
-      onBeforeLoad(win) {
-        cy.stub(win, "alert").as("alertStub");
-      },
-    });
-
-    cy.intercept("POST", "**/api/auth/register").as("xssRegisterRequest");
-
-    cy.get(SELECTORS.auth.regName).type(xssPayload, {
-      parseSpecialCharSequences: false,
-    });
+    cy.get(SELECTORS.auth.regName).type(xssPayload, { parseSpecialCharSequences: false });
     cy.get(SELECTORS.auth.regSurname).type("Тестов");
-    cy.get(SELECTORS.auth.regEmail).type(`xss-${Date.now()}@test.com`);
-    cy.get(SELECTORS.auth.regLogin).type(`xss_${Date.now()}`);
+    cy.get(SELECTORS.auth.regEmail).type(generateEmail('xss'));
+    cy.get(SELECTORS.auth.regLogin).type(generateLogin('xss'));
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
+    
     cy.get(SELECTORS.auth.regSubmit).click();
 
-    cy.wait("@xssRegisterRequest").its("response.statusCode").should("eq", 201);
-    cy.url({ timeout: 10000 }).should("include", "/profile");
+    cy.get(SELECTORS.auth.regNameWrapper)
+      .should('contain', 'Только кириллица, с заглавной буквы');
 
-    cy.get("@alertStub").should("not.have.been.called");
-    cy.contains(xssPayload).should("be.visible");
+    cy.get('@registerRequest.all').should('have.length', 0);
+    
+    cy.url().should("include", "/register");
   });
 
   it("Ошибка при дублировании ТОЛЬКО логина", () => {
@@ -86,13 +82,15 @@ describe("Auth Flow & Security", () => {
   });
 
   it("Ошибка при дублировании ТОЛЬКО почты", () => {
+    const uniqueLogin = generateLogin('unique');
+
     cy.visit("/register");
     cy.intercept("POST", "**/api/auth/register").as("registerRequest");
 
     cy.get(SELECTORS.auth.regName).type("Тест");
     cy.get(SELECTORS.auth.regSurname).type("Тест");
     cy.get(SELECTORS.auth.regEmail).type("itswowner@example.com");
-    cy.get(SELECTORS.auth.regLogin).type(`unique_login_${uniqueId}`);
+    cy.get(SELECTORS.auth.regLogin).type(uniqueLogin);
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
     cy.get(SELECTORS.auth.regSubmit).click();
