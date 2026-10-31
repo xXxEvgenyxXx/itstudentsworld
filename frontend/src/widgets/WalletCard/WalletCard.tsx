@@ -20,7 +20,9 @@ export function WalletCard({ wallet, shopRoute, onDepositClick }: Props) {
         prefix={<WalletOutlined />}
         suffix="монет"
         valueStyle={{ color: "#3f8600", fontWeight: "bold" }}
-        data-cy={DATA_CY.wallet.BALANCE}
+        formatter={(value) => (
+          <span data-cy={DATA_CY.wallet.BALANCE}>{value}</span>
+        )}
       />
 
       <Space style={{ marginTop: 24, width: "100%" }} size="middle">

@@ -7,10 +7,13 @@ describe("User Profile Management", () => {
   });
 
   it("Пользователь может успешно отредактировать свой профиль", () => {
+    const newName = "Новоеимя";
+    const newSurname = "Новаяфамилия";
+
     cy.get(SELECTORS.profile.editBtn).click();
 
-    cy.get(SELECTORS.profile.editName).clear().type("НовоеИмя");
-    cy.get(SELECTORS.profile.editSurname).clear().type("НоваяФамилия");
+    cy.get(SELECTORS.profile.editName).clear().type(newName);
+    cy.get(SELECTORS.profile.editSurname).clear().type(newSurname);
 
     cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
@@ -19,7 +22,7 @@ describe("User Profile Management", () => {
     cy.contains("Профиль успешно обновлен").should("be.visible");
 
     cy.get(SELECTORS.profile.editName).should("not.exist");
-    cy.contains("НовоеИмя").should("be.visible");
+    cy.contains(newName).should("be.visible");
   });
 
   it("Пользователь может отменить редактирование профиля", () => {
@@ -48,10 +51,11 @@ describe("User Profile Management", () => {
     cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
 
-    cy.wait("@updateProfile").its("response.statusCode").should("eq", 200);
-    cy.get("@alertStub").should("not.have.been.called");
-    cy.get(SELECTORS.profile.editName).should("not.exist");
-    cy.contains(xssPayload).should("be.visible");
+    cy.get("@updateProfile.all").should("have.length", 0);
+    
+    cy.contains("Только кириллица, с заглавной буквы").should("be.visible");
+    
+    cy.get(SELECTORS.profile.editName).should("be.visible");
   });
 
   it("Защита от SQL-инъекций при редактировании профиля (UI)", () => {
@@ -65,14 +69,17 @@ describe("User Profile Management", () => {
     cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
 
-    cy.wait("@updateProfile").its("response.statusCode").should("eq", 200);
-    cy.contains(sqliPayload).should("be.visible");
+    cy.get("@updateProfile.all").should("have.length", 0);
+    
+    cy.contains("Только кириллица, с заглавной буквы").should("be.visible");
   });
 
   it("Пользователь может пополнить баланс", () => {
     cy.get(SELECTORS.wallet.balance)
       .invoke("text")
       .then((initialBalance) => {
+        const initialText = initialBalance.replace(/\s/g, "").replace(",", "");
+        
         cy.get(SELECTORS.wallet.openDepositBtn).click();
         cy.get(SELECTORS.wallet.depositAmount).clear().type("500");
 
@@ -88,9 +95,7 @@ describe("User Profile Management", () => {
               .text()
               .replace(/\s/g, "")
               .replace(",", "");
-            const initialText = initialBalance
-              .replace(/\s/g, "")
-              .replace(",", "");
+            
             expect(Number(newBalanceText)).to.be.greaterThan(
               Number(initialText),
             );
