@@ -10,7 +10,8 @@
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "lint:frontend": "cd frontend && npm run lint",
-    "lint:backend": "cd backend && ./vendor/bin/pint --test"
+    "lint:backend": "cd backend && ./vendor/bin/pint --test",
+    "cy:open": "cd frontend && npm run cy:open"
   },
   "repository": {
     "type": "git",
