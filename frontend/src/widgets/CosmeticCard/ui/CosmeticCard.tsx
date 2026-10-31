@@ -90,7 +90,7 @@ export function CosmeticCard({
 
               <Button
                 data-cy={
-                  isWishlisted 
+                  isWishlisted
                     ? `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-active-${item.id}`
                     : `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-${item.id}`
                 }

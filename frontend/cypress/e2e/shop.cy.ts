@@ -61,7 +61,7 @@ describe("Shop & Wishlist Flow", () => {
     cy.get(SELECTORS.shop.anyWishlistActiveBtn).should("exist");
 
     cy.visit("/profile");
-    
+
     cy.get(SELECTORS.profile.tabWishlist).click();
     cy.get(SELECTORS.wishlist.item).should("have.length.at.least", 1);
   });

@@ -24,7 +24,11 @@ export function ProfileTabs({ user, shopRoute }: Props) {
   // Применяем DATA_CY.profile.WISHLIST_ITEM для избранного
   const renderCosmetic = (item: CosmeticItem, isWishlist = false) => (
     <List.Item
-      data-cy={isWishlist ? DATA_CY.profile.WISHLIST_ITEM : DATA_CY.profile.COSMETIC_ITEM}
+      data-cy={
+        isWishlist
+          ? DATA_CY.profile.WISHLIST_ITEM
+          : DATA_CY.profile.COSMETIC_ITEM
+      }
     >
       <Card size="small" title={item.name} style={{ width: "100%" }}>
         <Tag color="blue">{item.type?.name || "Косметика"}</Tag>

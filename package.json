@@ -11,6 +11,7 @@
     "build:frontend": "cd frontend && npm run build",
     "lint:frontend": "cd frontend && npm run lint",
     "lint:backend": "cd backend && ./vendor/bin/pint --test",
+    "format:frontend":"cd frontend && npm run format",
     "cy:open": "cd frontend && npm run cy:open"
   },
   "repository": {
