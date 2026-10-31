@@ -43,7 +43,10 @@ export const registerFields: AuthFieldConfig[] = [
     dataCy: DATA_CY.auth.REG_NAME,
     rules: [
       { required: true, message: "Введите имя" },
-      { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+      {
+        pattern: cyrillicCapitalizedRegex,
+        message: "Только кириллица, с заглавной буквы",
+      },
     ],
   },
   {
@@ -52,14 +55,20 @@ export const registerFields: AuthFieldConfig[] = [
     dataCy: DATA_CY.auth.REG_SURNAME,
     rules: [
       { required: true, message: "Введите фамилию" },
-      { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+      {
+        pattern: cyrillicCapitalizedRegex,
+        message: "Только кириллица, с заглавной буквы",
+      },
     ],
   },
   {
     name: "patronymic",
     label: "Отчество (при наличии)",
     rules: [
-      { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+      {
+        pattern: cyrillicCapitalizedRegex,
+        message: "Только кириллица, с заглавной буквы",
+      },
     ],
   },
   {
@@ -78,7 +87,10 @@ export const registerFields: AuthFieldConfig[] = [
     placeholder: "Steve",
     rules: [
       { required: true, message: "Введите логин" },
-      { pattern: minecraftLoginRegex, message: "3-16 символов: латиница, цифры, _" },
+      {
+        pattern: minecraftLoginRegex,
+        message: "3-16 символов: латиница, цифры, _",
+      },
     ],
   },
   {

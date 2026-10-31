@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /* eslint-disable @typescript-eslint/no-namespace */
 import type { User } from "@/entities/user";
-import { generateLogin, generateEmail } from './utils';
+import { generateLogin, generateEmail } from "./utils";
 
 const setAuthData = (user: User, token: string) => {
   window.localStorage.setItem("itsw_token", token);
@@ -39,62 +39,70 @@ Cypress.Commands.add("loginAsOwner", () => {
   });
 });
 
-Cypress.Commands.add('loginAsAdmin', () => {
-  cy.env(['OWNER_PASSWORD']).then((env) => {
-    const password = (env.OWNER_PASSWORD as string) || 'owner12345';
+Cypress.Commands.add("loginAsAdmin", () => {
+  cy.env(["OWNER_PASSWORD"]).then((env) => {
+    const password = (env.OWNER_PASSWORD as string) || "owner12345";
 
     cy.request({
-      method: 'POST',
-      url: 'http://localhost:8000/api/auth/login',
-      body: { email: 'itswowner@example.com', password: password }
+      method: "POST",
+      url: "http://localhost:8000/api/auth/login",
+      body: { email: "itswowner@example.com", password: password },
     }).then((ownerResponse) => {
       const ownerToken = ownerResponse.body.token;
-      
-      const email = generateEmail('admin');
-      const login = generateLogin('adm');
-      
+
+      const email = generateEmail("admin");
+      const login = generateLogin("adm");
+
       cy.request({
-        method: 'POST',
-        url: 'http://localhost:8000/api/auth/register',
+        method: "POST",
+        url: "http://localhost:8000/api/auth/register",
         body: {
-          name: 'Админ', surname: 'Тестов', email: email, login: login,
-          password: 'password123', password_confirmation: 'password123'
-        }
+          name: "Админ",
+          surname: "Тестов",
+          email: email,
+          login: login,
+          password: "password123",
+          password_confirmation: "password123",
+        },
       }).then((userResponse) => {
         const newUserId = userResponse.body.user.id;
 
         cy.request({
-          method: 'PATCH',
+          method: "PATCH",
           url: `http://localhost:8000/api/admin/users/${newUserId}/role`,
           headers: { Authorization: `Bearer ${ownerToken}` },
-          body: { role_alias: 'admin' }
+          body: { role_alias: "admin" },
         }).then(() => {
           const updatedUser = {
             ...userResponse.body.user,
-            role: { ...userResponse.body.user.role, alias: 'admin' }
+            role: { ...userResponse.body.user.role, alias: "admin" },
           };
           setAuthData(updatedUser, userResponse.body.token);
-          cy.wrap(userResponse.body.token).as('adminToken');
+          cy.wrap(userResponse.body.token).as("adminToken");
         });
       });
     });
   });
 });
 
-Cypress.Commands.add('loginAsUser', () => {
-  const email = generateEmail('user');
-  const login = generateLogin('usr');
+Cypress.Commands.add("loginAsUser", () => {
+  const email = generateEmail("user");
+  const login = generateLogin("usr");
 
   cy.request({
-    method: 'POST',
-    url: 'http://localhost:8000/api/auth/register',
+    method: "POST",
+    url: "http://localhost:8000/api/auth/register",
     body: {
-      name: 'Юзер', surname: 'Тестов', email: email, login: login,
-      password: 'password123', password_confirmation: 'password123'
-    }
+      name: "Юзер",
+      surname: "Тестов",
+      email: email,
+      login: login,
+      password: "password123",
+      password_confirmation: "password123",
+    },
   }).then((response) => {
     setAuthData(response.body.user, response.body.token);
-    cy.wrap(response.body.token).as('userToken');
+    cy.wrap(response.body.token).as("userToken");
   });
 });
 

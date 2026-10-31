@@ -52,9 +52,9 @@ describe("User Profile Management", () => {
     cy.get(SELECTORS.profile.saveBtn).click();
 
     cy.get("@updateProfile.all").should("have.length", 0);
-    
+
     cy.contains("Только кириллица, с заглавной буквы").should("be.visible");
-    
+
     cy.get(SELECTORS.profile.editName).should("be.visible");
   });
 
@@ -70,7 +70,7 @@ describe("User Profile Management", () => {
     cy.get(SELECTORS.profile.saveBtn).click();
 
     cy.get("@updateProfile.all").should("have.length", 0);
-    
+
     cy.contains("Только кириллица, с заглавной буквы").should("be.visible");
   });
 
@@ -79,7 +79,7 @@ describe("User Profile Management", () => {
       .invoke("text")
       .then((initialBalance) => {
         const initialText = initialBalance.replace(/\s/g, "").replace(",", "");
-        
+
         cy.get(SELECTORS.wallet.openDepositBtn).click();
         cy.get(SELECTORS.wallet.depositAmount).clear().type("500");
 
@@ -95,7 +95,7 @@ describe("User Profile Management", () => {
               .text()
               .replace(/\s/g, "")
               .replace(",", "");
-            
+
             expect(Number(newBalanceText)).to.be.greaterThan(
               Number(initialText),
             );

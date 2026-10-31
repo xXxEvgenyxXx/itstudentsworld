@@ -4,8 +4,8 @@ import { generateLogin, generateEmail } from "../support/utils";
 describe("Auth Flow & Security", () => {
   const uniqueId = Date.now();
   const testUser = {
-    email: generateEmail('auth'),
-    login: generateLogin('aut'),
+    email: generateEmail("auth"),
+    login: generateLogin("aut"),
     password: "password123",
   };
 
@@ -43,24 +43,28 @@ describe("Auth Flow & Security", () => {
 
   it("Защита от XSS-инъекций (UI блокирует ввод)", () => {
     const xssPayload = '<script>alert("hacked")</script>';
-    
+
     cy.visit("/register");
     cy.intercept("POST", "**/api/auth/register").as("registerRequest");
 
-    cy.get(SELECTORS.auth.regName).type(xssPayload, { parseSpecialCharSequences: false });
+    cy.get(SELECTORS.auth.regName).type(xssPayload, {
+      parseSpecialCharSequences: false,
+    });
     cy.get(SELECTORS.auth.regSurname).type("Тестов");
-    cy.get(SELECTORS.auth.regEmail).type(generateEmail('xss'));
-    cy.get(SELECTORS.auth.regLogin).type(generateLogin('xss'));
+    cy.get(SELECTORS.auth.regEmail).type(generateEmail("xss"));
+    cy.get(SELECTORS.auth.regLogin).type(generateLogin("xss"));
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
-    
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
-    cy.get(SELECTORS.auth.regNameWrapper)
-      .should('contain', 'Только кириллица, с заглавной буквы');
+    cy.get(SELECTORS.auth.regNameWrapper).should(
+      "contain",
+      "Только кириллица, с заглавной буквы",
+    );
 
-    cy.get('@registerRequest.all').should('have.length', 0);
-    
+    cy.get("@registerRequest.all").should("have.length", 0);
+
     cy.url().should("include", "/register");
   });
 
@@ -82,7 +86,7 @@ describe("Auth Flow & Security", () => {
   });
 
   it("Ошибка при дублировании ТОЛЬКО почты", () => {
-    const uniqueLogin = generateLogin('unique');
+    const uniqueLogin = generateLogin("unique");
 
     cy.visit("/register");
     cy.intercept("POST", "**/api/auth/register").as("registerRequest");

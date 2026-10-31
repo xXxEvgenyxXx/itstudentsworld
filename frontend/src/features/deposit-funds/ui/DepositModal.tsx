@@ -44,10 +44,13 @@ export function DepositModal({ isOpen, onClose }: Props) {
             { required: true, message: "Введите сумму" },
             {
               validator: (_, value) => {
-                if (value === undefined || value === null) return Promise.resolve();
+                if (value === undefined || value === null)
+                  return Promise.resolve();
                 const isValid = /^\d+(\.\d{1,2})?$/.test(String(value));
                 if (!isValid) {
-                  return Promise.reject(new Error("Только числа (до 2 знаков после запятой)"));
+                  return Promise.reject(
+                    new Error("Только числа (до 2 знаков после запятой)"),
+                  );
                 }
                 return Promise.resolve();
               },

@@ -18,7 +18,10 @@ export function ProfileInfoEdit({ user, form }: Props) {
         label="Имя"
         rules={[
           { required: true, message: "Введите имя" },
-          { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+          {
+            pattern: cyrillicCapitalizedRegex,
+            message: "Только кириллица, с заглавной буквы",
+          },
         ]}
       >
         <Input data-cy={DATA_CY.profile.EDIT_NAME} />
@@ -29,17 +32,23 @@ export function ProfileInfoEdit({ user, form }: Props) {
         label="Фамилия"
         rules={[
           { required: true, message: "Введите фамилию" },
-          { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+          {
+            pattern: cyrillicCapitalizedRegex,
+            message: "Только кириллица, с заглавной буквы",
+          },
         ]}
       >
         <Input data-cy={DATA_CY.profile.EDIT_SURNAME} />
       </Form.Item>
 
-      <Form.Item 
-        name="patronymic" 
+      <Form.Item
+        name="patronymic"
         label="Отчество"
         rules={[
-          { pattern: cyrillicCapitalizedRegex, message: "Только кириллица, с заглавной буквы" },
+          {
+            pattern: cyrillicCapitalizedRegex,
+            message: "Только кириллица, с заглавной буквы",
+          },
         ]}
       >
         <Input data-cy={DATA_CY.profile.EDIT_PATRONYMIC} />

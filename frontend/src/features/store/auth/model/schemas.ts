@@ -29,7 +29,7 @@ export const registerSchema = z
       .string()
       .regex(
         minecraftLoginRegex,
-        "Логин должен содержать от 3 до 16 символов: латиница, цифры и подчеркивания"
+        "Логин должен содержать от 3 до 16 символов: латиница, цифры и подчеркивания",
       ),
     password: z.string().min(8, "Пароль должен быть не менее 8 символов"),
     password_confirmation: z.string(),
