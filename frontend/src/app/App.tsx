@@ -7,8 +7,13 @@ import { queryClient } from "./providers/QueryProvider";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      {/* ConfigProvider понадобится для темы AntD */}
-      <ConfigProvider>
+      <ConfigProvider
+        theme={{
+          token: {
+            fontFamily: "'Monocraft', sans-serif", // Привязка основного шрифта к компонентам Ant Design
+          },
+        }}
+      >
         <AuthProvider>
           <AppRouter />
         </AuthProvider>
