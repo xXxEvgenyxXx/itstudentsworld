@@ -63,6 +63,7 @@ export function AdminCosmeticsPage() {
           <Button
             type="primary"
             icon={<PlusOutlined />}
+            data-cy={DATA_CY.admin.cosmetics.ADD_BTN}
             onClick={() => {
               setEditingItem(null);
               setIsModalOpen(true);
