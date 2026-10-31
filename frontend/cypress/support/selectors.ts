@@ -31,6 +31,11 @@ export const SELECTORS = {
     editName: cy(DATA_CY.profile.EDIT_NAME),
     editSurname: cy(DATA_CY.profile.EDIT_SURNAME),
     editEmail: cy(DATA_CY.profile.EDIT_EMAIL),
+    tabInfo: cy(DATA_CY.profile.TAB_INFO),
+    tabWishlist: cy(DATA_CY.profile.TAB_WISHLIST),
+  },
+  wishlist: {
+    item: cy(DATA_CY.profile.WISHLIST_ITEM),
   },
   wallet: {
     balance: cy(DATA_CY.wallet.BALANCE),
@@ -42,6 +47,9 @@ export const SELECTORS = {
     buyBtn: (id: number) => cy(DATA_CY.shop.BUY_BTN(id)),
     wishlistBtn: (id: number) => cy(DATA_CY.shop.WISHLIST_BTN(id)),
     confirmPurchase: cy(DATA_CY.shop.CONFIRM_PURCHASE),
+    anyWishlistBtn: `[data-cy^="${DATA_CY.shop.WISHLIST_BTN_PREFIX}-"]`,
+    anyWishlistActiveBtn: `[data-cy^="${DATA_CY.shop.WISHLIST_BTN_ACTIVE_PREFIX}-"]`,
+    anyBuyBtn: `[data-cy^="${DATA_CY.shop.BUY_BTN_PREFIX}-"]`,
   },
   admin: {
     users: {

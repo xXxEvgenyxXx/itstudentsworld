@@ -52,20 +52,18 @@ describe("Shop & Wishlist Flow", () => {
     cy.visit("/shop");
     cy.intercept("POST", "**/api/wishlist/toggle").as("wishlistRequest");
 
-    cy.get('[data-cy^="wishlist-btn-"]').first().as("heartButton");
+    cy.get(SELECTORS.shop.anyWishlistBtn).first().as("heartButton");
     cy.get("@heartButton").click();
 
     cy.wait("@wishlistRequest").its("response.statusCode").should("eq", 200);
     cy.reload();
 
-    cy.get('[data-cy^="wishlist-btn-"]')
-      .first()
-      .find(".anticon-heart")
-      .should("have.css", "color", "rgb(255, 77, 79)");
+    cy.get(SELECTORS.shop.anyWishlistActiveBtn).should("exist");
 
     cy.visit("/profile");
-    cy.get('[data-cy="tab-wishlist"]').click();
-    cy.get(".ant-list-item").should("have.length.at.least", 1);
+    
+    cy.get(SELECTORS.profile.tabWishlist).click();
+    cy.get(SELECTORS.wishlist.item).should("have.length.at.least", 1);
   });
 
   it("Ошибка при попытке покупки без денег", () => {

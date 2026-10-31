@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useTransactions } from "@/entities/user/lib/useUserProfile";
 import type { User, Transaction } from "@/entities/user";
 import type { CosmeticItem } from "@/entities/cosmetic";
+import { DATA_CY } from "@/shared/config";
 
 interface Props {
   user: User;
@@ -20,15 +21,17 @@ export function ProfileTabs({ user, shopRoute }: Props) {
     user.id,
   );
 
-  const renderCosmetic = (item: CosmeticItem) => (
-    <List.Item>
+  // Применяем DATA_CY.profile.WISHLIST_ITEM для избранного
+  const renderCosmetic = (item: CosmeticItem, isWishlist = false) => (
+    <List.Item
+      data-cy={isWishlist ? DATA_CY.profile.WISHLIST_ITEM : DATA_CY.profile.COSMETIC_ITEM}
+    >
       <Card size="small" title={item.name} style={{ width: "100%" }}>
         <Tag color="blue">{item.type?.name || "Косметика"}</Tag>
       </Card>
     </List.Item>
   );
 
-  // Строгая типизация колонок для Ant Design
   const txColumns: ColumnsType<Transaction> = [
     {
       title: "Дата",
@@ -59,7 +62,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
     {
       key: "cosmetics",
       label: (
-        <span>
+        <span data-cy={DATA_CY.profile.TAB_COSMETICS}>
           <SkinOutlined /> Моя косметика
         </span>
       ),
@@ -67,7 +70,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
         <List
           grid={{ gutter: 16, column: 4 }}
           dataSource={user.cosmetics}
-          renderItem={renderCosmetic}
+          renderItem={(item) => renderCosmetic(item, false)}
         />
       ) : (
         <Empty description="У вас пока нет купленной косметики">
@@ -80,7 +83,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
     {
       key: "wishlist",
       label: (
-        <span>
+        <span data-cy={DATA_CY.profile.TAB_WISHLIST}>
           <HeartOutlined /> Список желаемого
         </span>
       ),
@@ -88,7 +91,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
         <List
           grid={{ gutter: 16, column: 4 }}
           dataSource={user.wishlist}
-          renderItem={renderCosmetic}
+          renderItem={(item) => renderCosmetic(item, true)}
         />
       ) : (
         <Empty description="Ваш список желаемого пуст">
@@ -101,7 +104,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
     {
       key: "transactions",
       label: (
-        <span>
+        <span data-cy={DATA_CY.profile.TAB_TRANSACTIONS}>
           <HistoryOutlined /> История транзакций
         </span>
       ),

@@ -8,4 +8,10 @@ export const PROFILE_DATA_CY = {
   EDIT_SURNAME: "edit-surname",
   EDIT_PATRONYMIC: "edit-patronymic",
   EDIT_EMAIL: "edit-email",
+  TAB_INFO: "profile-tab-info",
+  TAB_WISHLIST: "profile-tab-wishlist",
+  TAB_TRANSACTIONS: "profile-tab-transactions",
+  TAB_COSMETICS: "profile-tab-cosmetics",
+  WISHLIST_ITEM: "wishlist-item",
+  COSMETIC_ITEM: "profile-cosmetic-item",
 } as const;

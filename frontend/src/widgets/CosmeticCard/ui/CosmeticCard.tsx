@@ -89,7 +89,11 @@ export function CosmeticCard({
               </Tag>
 
               <Button
-                data-cy={DATA_CY.shop.WISHLIST_BTN(item.id)}
+                data-cy={
+                  isWishlisted 
+                    ? `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-active-${item.id}`
+                    : `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-${item.id}`
+                }
                 type="text"
                 disabled={!isAuthenticated}
                 onClick={() => onWishlistToggle(item)}
