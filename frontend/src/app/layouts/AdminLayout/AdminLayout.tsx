@@ -3,7 +3,7 @@ import { Header } from "@/widgets/Header";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Menu } from "antd";
 import { allRoutes } from "@/app/router/routes";
-import s from './AdminLayout.module.scss'
+import s from "./AdminLayout.module.scss";
 
 // Маппинг путей в человекочитаемые названия для меню
 const routeLabels: Record<string, string> = {
