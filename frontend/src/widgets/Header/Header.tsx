@@ -3,93 +3,65 @@ import { useAuth, useLogout } from "@/entities/user";
 import { Button, Space } from "antd";
 import { DATA_CY } from "@/shared/config";
 import { allRoutes } from "@/app/router/routes";
-
-//const { Text } = Typography;
+import s from './Header.module.scss';
+import { clsx } from 'clsx';
 
 export function Header() {
   const { user, isAuthenticated } = useAuth();
   const isAdmin = user?.role.alias === "admin" || user?.role.alias === "owner";
   const { mutate: logout } = useLogout();
-  //const navigate = useNavigate();
-
   const location = useLocation();
 
-  // Стили для NavLink (чтобы не писать инлайн-функции в каждом теге)
-  const navLinkStyle = ({ isActive }: { isActive: boolean }) => ({
-    color: isActive ? "#4096ff" : "white", // Синий при наведении/активности
-    fontSize: 16,
-    textDecoration: "none",
-    transition: "color 0.3s",
-  });
+  const getNavClass = ({ isActive }: { isActive: boolean }) =>
+    clsx(s.headerLink, { [s.active]: isActive });
+  const getAdminNavClass = ({ isActive }: { isActive: boolean }) =>
+    clsx(s.headerLink, { 
+      [s.active]: isActive || location.pathname.startsWith("/admin") 
+    });
 
   return (
-    <header
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "16px 24px",
-        background: "#001529",
-        color: "white",
-      }}
-    >
-      {/* ЛЕВАЯ ЧАСТЬ: Логотип */}
+    <header className={s.header}>
       <Link
         to={allRoutes.publicRoutes.MAIN_PAGE.path}
-        style={{
-          color: "white",
-          fontSize: 20,
-          fontWeight: "bold",
-          textDecoration: "none",
-        }}
+        className={s.logoWrapper}
       >
-        IT Students World
+        <img className={s.logo} src="/favicon.svg" alt="Logo" />
       </Link>
 
-      {/* ЦЕНТРАЛЬНАЯ ЧАСТЬ: Публичные ссылки */}
-      <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-        <NavLink
-          to={allRoutes.publicRoutes.SHOP_PAGE.path}
-          style={navLinkStyle}
-        >
-          Магазин
+      <nav className={s.nav}>
+        <NavLink end to={allRoutes.publicRoutes.MAIN_PAGE.path} className={getNavClass}>
+          Главная
         </NavLink>
-        <NavLink
-          to={allRoutes.publicRoutes.ABOUT_PAGE.path}
-          style={navLinkStyle}
-        >
+        <NavLink end to={allRoutes.publicRoutes.ABOUT_PAGE.path} className={getNavClass}>
           О сервере
         </NavLink>
+        <NavLink end to={allRoutes.publicRoutes.SHOP_PAGE.path} className={getNavClass}>
+          Магазин
+        </NavLink>
+        
         {isAdmin && (
           <NavLink
             to={allRoutes.adminRoutes.ADMIN_DASHBOARD_PAGE.path}
-            style={({ isActive }) =>
-              navLinkStyle({
-                isActive: isActive || location.pathname.startsWith("/admin"),
-              })
-            }
+            className={getAdminNavClass}
           >
             Управление
           </NavLink>
         )}
-      </div>
+      </nav>
 
-      {/* ПРАВАЯ ЧАСТЬ: Авторизация / Профиль */}
-      <Space size="large">
+      <Space size="large" className={s.nav}>
         {isAuthenticated ? (
           <>
             <NavLink
               to={allRoutes.userRoutes.PROFILE_PAGE.path}
               data-cy={DATA_CY.header.USERNAME}
-              style={({ isActive }) => ({
-                color: isActive ? "#4096ff" : "white",
-                textDecoration: "none",
-                fontSize: 16,
-              })}
+              className={getNavClass}
+              end
             >
               {user?.login}
             </NavLink>
             <Button
+              className={s.navButton}
               data-cy={DATA_CY.header.LOGOUT_BTN}
               onClick={() => logout()}
             >
@@ -99,12 +71,12 @@ export function Header() {
         ) : (
           <>
             <Link to={allRoutes.publicRoutes.LOGIN_PAGE.path}>
-              <Button type="text" style={{ color: "white" }}>
+              <Button className={s.navButton} type="text" style={{ color: "var(--text-main)" }}>
                 Войти
               </Button>
             </Link>
             <Link to={allRoutes.publicRoutes.REGISTER_PAGE.path}>
-              <Button type="primary">Регистрация</Button>
+              <Button className={s.navButton} type="primary">Регистрация</Button>
             </Link>
           </>
         )}
