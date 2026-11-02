@@ -25,7 +25,7 @@ export function Header() {
         to={allRoutes.publicRoutes.MAIN_PAGE.path}
         className={s.logoWrapper}
       >
-        <img className={s.logo} src="/favicon.svg" alt="Logo" />
+        <img className={s.logo} src="/images/header-logo.svg" alt="Мир студента IT" />
       </Link>
 
       <nav className={s.nav}>
