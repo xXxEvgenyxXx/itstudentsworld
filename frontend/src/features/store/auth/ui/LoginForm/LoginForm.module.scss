@@ -1,0 +1,21 @@
+.form {
+    :global(.ant-input-password-icon) {
+        color: var(--text-secondary) !important;
+        transition: 0.3s;
+
+        &:hover {
+            color: var(--text-main) !important; /* При наведении делаем ярче (опционально) */
+        }
+    }
+    .error {
+        color:var(--bg-main);
+    }
+    .submitButton {
+        background-color:var(--color-primary);
+        color:var(--text-main);
+        border: none !important;
+        &:hover {
+            background-color:var(--color-primary-hover) !important;
+        }
+    }
+}

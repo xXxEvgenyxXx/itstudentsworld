@@ -1,7 +1,7 @@
 import { Select } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { DATA_CY } from "@/shared/config";
-import { useAdminFilters } from "@/shared/lib/useAdminFilters"; // Импорт хука
+import { useAdminFilters } from "@/shared/lib/useAdminFilters";
 import { useAdminTransactions } from "@/entities/transaction";
 import { AdminPageLayout } from "@/widgets/AdminPageLayout";
 import { getAdminTransactionsColumns } from "./AdminTransactionsPageColumns";
@@ -43,12 +43,24 @@ export function AdminTransactionsPage() {
         <>
           <Select
             placeholder="Фильтр по статусу"
-            allowClear
-            clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
+            allowClear={{
+              clearIcon: <CloseCircleOutlined style={{ fontSize: 16 }} />,
+            }}
             style={{ width: 200 }}
             value={filters.status || undefined}
             onChange={(val) => setFilter("status", val || "")}
             data-cy={DATA_CY.admin.transactions.STATUS_FILTER}
+            classNames={{
+              suffix: "custom-select-suffix",
+              clear: "custom-select-clear",
+            }}
+            styles={{
+              suffix: {
+                color: "var(--text-main)",
+                transition: "color 0.3s",
+              },
+              clear: { color: "var(--text-main)" },
+            }}
             options={[
               { value: "success", label: "Успешно" },
               { value: "failed", label: "Ошибка" },
@@ -57,12 +69,24 @@ export function AdminTransactionsPage() {
           />
           <Select
             placeholder="Фильтр по типу"
-            allowClear
-            clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
+            allowClear={{
+              clearIcon: <CloseCircleOutlined style={{ fontSize: 16 }} />,
+            }}
             style={{ width: 200 }}
             value={filters.type || undefined}
             onChange={(val) => setFilter("type", val || "")}
             data-cy={DATA_CY.admin.transactions.TYPE_FILTER}
+            classNames={{
+              suffix: "custom-select-suffix",
+              clear: "custom-select-clear",
+            }}
+            styles={{
+              suffix: {
+                color: "var(--text-main)",
+                transition: "color 0.3s",
+              },
+              clear: { color: "var(--text-main)" },
+            }}
             options={[
               { value: "deposit", label: "Пополнение" },
               { value: "purchase", label: "Покупка" },

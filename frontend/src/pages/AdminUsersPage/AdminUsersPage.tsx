@@ -67,11 +67,24 @@ export function AdminUsersPage() {
         filters={
           <Select
             placeholder="Фильтр по роли"
-            allowClear
-            clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
+            allowClear={{
+              // Убираем лишний style, чтобы он не перебивал цвет
+              clearIcon: <CloseCircleOutlined style={{ fontSize: 16 }} />,
+            }}
             style={{ width: 200 }}
             value={filters.role || undefined}
             onChange={(val) => setFilter("role", val || "")}
+            classNames={{
+              suffix: "custom-select-suffix", // Класс для стрелочки
+              clear: "custom-select-clear",
+            }}
+            styles={{
+              suffix: {
+                color: "var(--text-main)",
+                transition: "color 0.3s",
+              },
+              clear: { color: "var(--text-main)" },
+            }}
             options={[
               { value: "user", label: "Пользователь" },
               { value: "admin", label: "Администратор" },
