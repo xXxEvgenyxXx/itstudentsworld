@@ -38,7 +38,7 @@ export function getAdminUsersColumns({
   onBalanceClick,
 }: GetColumnsProps): ColumnsType<User> {
   return [
-    { title: "ID", dataIndex: "id", key: "id", width: 80 },
+    { title: "ID", dataIndex: "id", key: "id", width: 80, fixed: 'left' },
     {
       title: "Логин",
       dataIndex: "login",

@@ -1,4 +1,5 @@
 import { SELECTORS } from "../support/selectors";
+import { generateLogin, generateEmail } from "../support/utils";
 
 describe("Admin Wallet Management", () => {
   let targetUserLogin: string;
@@ -6,8 +7,7 @@ describe("Admin Wallet Management", () => {
 
   beforeEach(() => {
     cy.loginAsAdmin();
-    const uniqueId = Date.now();
-    targetUserLogin = `wallet_target_${uniqueId}`;
+    targetUserLogin = generateLogin("wallet");
 
     cy.request({
       method: "POST",
@@ -15,7 +15,7 @@ describe("Admin Wallet Management", () => {
       body: {
         name: "Wallet",
         surname: "Target",
-        email: `wallet_${uniqueId}@test.com`,
+        email: generateEmail("wallet"),
         login: targetUserLogin,
         password: "password123",
         password_confirmation: "password123",

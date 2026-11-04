@@ -8,6 +8,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
+        table={{
+          scroll: { x: 'max-content' }
+        }}
         theme={{
           token: {
             fontFamily: "'Monocraft', sans-serif", // Привязка основного шрифта к компонентам Ant Design

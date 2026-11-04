@@ -1,10 +1,10 @@
 import { SELECTORS } from "../support/selectors";
+import { generateEmail, generateLogin } from "cypress/support/utils";
 
 describe("Shop & Wishlist Flow", () => {
   beforeEach(() => {
-    const currentId = Date.now();
-    const email = `shop_${currentId}@example.com`;
-    const login = `shop_${currentId}`;
+    const email = generateEmail("shop");
+    const login = generateLogin("shop");
     const password = "password123";
 
     cy.request("POST", "http://localhost:8000/api/auth/register", {
@@ -68,13 +68,14 @@ describe("Shop & Wishlist Flow", () => {
 
   it("Ошибка при попытке покупки без денег", () => {
     cy.clearLocalStorage();
-    const poorUserEmail = `poor_${Date.now()}@example.com`;
+    const poorUserEmail = generateEmail("poor");
+    const poorUserLogin = generateLogin("poor");
 
     cy.request("POST", "http://localhost:8000/api/auth/register", {
       name: "Бедняк",
       surname: "Тест",
       email: poorUserEmail,
-      login: `poor_${Date.now()}`,
+      login: poorUserLogin,
       password: "password123",
       password_confirmation: "password123",
     }).then((response) => {

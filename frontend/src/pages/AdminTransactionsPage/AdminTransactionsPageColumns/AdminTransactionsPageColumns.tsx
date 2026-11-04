@@ -4,7 +4,7 @@ import type { Transaction } from "@/entities/transaction";
 
 export function getAdminTransactionsColumns(): ColumnsType<Transaction> {
   return [
-    { title: "ID", dataIndex: "id", key: "id", width: 80 },
+    { title: "ID", dataIndex: "id", key: "id", width: 80, fixed: 'left', },
 
     { title: "Пользователь", dataIndex: ["user", "login"], key: "user" },
 

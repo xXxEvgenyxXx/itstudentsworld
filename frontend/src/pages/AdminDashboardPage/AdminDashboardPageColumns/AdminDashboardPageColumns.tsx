@@ -4,7 +4,7 @@ import type { RecentTransaction } from "@/entities/admin-dashboard";
 
 export function getAdminDashboardRecentColumns(): ColumnsType<RecentTransaction> {
   return [
-    { title: "ID", dataIndex: "id", key: "id", width: 80 },
+    { title: "ID", dataIndex: "id", key: "id", width: 80, fixed: "left" },
     { title: "Пользователь", dataIndex: ["user", "login"], key: "user" },
     {
       title: "Сумма",
