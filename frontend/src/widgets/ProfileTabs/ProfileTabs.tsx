@@ -10,6 +10,7 @@ import { useTransactions } from "@/entities/user/lib/useUserProfile";
 import type { User, Transaction } from "@/entities/user";
 import type { CosmeticItem } from "@/entities/cosmetic";
 import { DATA_CY } from "@/shared/config";
+import s from "./ProfileTabs.module.scss";
 
 interface Props {
   user: User;
@@ -17,11 +18,8 @@ interface Props {
 }
 
 export function ProfileTabs({ user, shopRoute }: Props) {
-  const { data: transactions, isLoading: isLoadingTx } = useTransactions(
-    user.id,
-  );
+  const { data: transactions, isLoading: isLoadingTx } = useTransactions(user.id);
 
-  // Применяем DATA_CY.profile.WISHLIST_ITEM для избранного
   const renderCosmetic = (item: CosmeticItem, isWishlist = false) => (
     <List.Item
       data-cy={
@@ -30,7 +28,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
           : DATA_CY.profile.COSMETIC_ITEM
       }
     >
-      <Card size="small" title={item.name} style={{ width: "100%" }}>
+      <Card size="small" title={item.name} className={s.cosmeticCard}>
         <Tag color="blue">{item.type?.name || "Косметика"}</Tag>
       </Card>
     </List.Item>
@@ -126,10 +124,7 @@ export function ProfileTabs({ user, shopRoute }: Props) {
   ];
 
   return (
-    <Card
-      bordered={false}
-      style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)", marginTop: 24 }}
-    >
+    <Card bordered={false} className={s.tabsCard}>
       <Tabs defaultActiveKey="cosmetics" items={tabItems} size="large" />
     </Card>
   );

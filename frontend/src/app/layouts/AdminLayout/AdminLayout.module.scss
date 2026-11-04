@@ -3,9 +3,25 @@
   min-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
+
+  .navWrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px; 
+  }
+
+  .menu {
+    flex-shrink: 0; 
+    width: max-content;
+    border-bottom: none !important; 
+    flex-wrap: nowrap !important;
+  }
+
   .main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%; 
   }
 }

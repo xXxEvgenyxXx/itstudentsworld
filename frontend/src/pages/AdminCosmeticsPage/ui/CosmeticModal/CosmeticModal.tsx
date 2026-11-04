@@ -95,7 +95,7 @@ export function CosmeticModal({ isOpen, onClose, editingItem }: Props) {
             data-cy={DATA_CY.admin.cosmetics.FORM_PRICE}
             min={0.01}
             step={0.01}
-            style={{ width: "100%" }}
+            style={{ width: "100%", background: "var(--bg-tertiary)", borderColor: "var(--bg-tertiary)" }}
           />
         </Form.Item>
 

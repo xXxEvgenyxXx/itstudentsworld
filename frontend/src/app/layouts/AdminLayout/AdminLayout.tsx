@@ -27,13 +27,15 @@ export function AdminLayout() {
     <>
       <Header />
       <div className={s.adminLayoutContentWrapper}>
-        <nav>
+        <nav className={s.navWrapper}>
           <Menu
             mode="horizontal"
             selectedKeys={[location.pathname]}
             items={menuItems}
+            disabledOverflow={true}
             onClick={({ key }) => navigate(key)}
-            style={{ marginBottom: 20, borderBottom: "1px solid #f0f0f0" }}
+            style={{ marginBottom: 20 }}
+            className={s.menu}
           />
         </nav>
 

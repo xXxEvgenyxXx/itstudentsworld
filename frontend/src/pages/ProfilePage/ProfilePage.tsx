@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Row, Col } from "antd";
 import { useAuth } from "@/entities/user";
-import { ProfileInfo } from "@/widgets/ProfileInfo/ProfileInfo";
-import { WalletCard } from "@/widgets/WalletCard/WalletCard";
-import { ProfileTabs } from "@/widgets/ProfileTabs/ProfileTabs";
+import { ProfileInfo } from "@/widgets/ProfileInfo";
+import { WalletCard } from "@/widgets/WalletCard";
+import { ProfileTabs } from "@/widgets/ProfileTabs";
 import { DepositModal } from "@/features/deposit-funds";
 import { allRoutes } from "@/app/router/routes";
 
