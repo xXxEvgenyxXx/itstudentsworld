@@ -34,11 +34,17 @@ export function AdminDashboardPage() {
         <Col xs={24} sm={8}>
           <Card>
             <Statistic
-              title={<span style={{ color: "var(--text-main)" }}>Всего пользователей</span>}
+              title={
+                <span style={{ color: "var(--text-main)" }}>
+                  Всего пользователей
+                </span>
+              }
               value={data.stats.users.total}
               data-cy={DATA_CY.admin.dashboard.STAT_TOTAL_USERS}
             />
-            <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}>
+            <div
+              style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}
+            >
               Забанено: {data.stats.users.banned} | Админов:{" "}
               {data.stats.users.admins}
             </div>
@@ -48,13 +54,17 @@ export function AdminDashboardPage() {
         <Col xs={24} sm={8}>
           <Card>
             <Statistic
-              title={<span style={{ color: "var(--text-main)" }}>Общая выручка</span>}
+              title={
+                <span style={{ color: "var(--text-main)" }}>Общая выручка</span>
+              }
               value={data.stats.transactions.revenue}
               precision={2}
               suffix="₽"
               data-cy={DATA_CY.admin.dashboard.STAT_REVENUE}
             />
-            <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}>
+            <div
+              style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}
+            >
               Всего транзакций: {data.stats.transactions.total} | В ожидании:{" "}
               {data.stats.transactions.pending}
             </div>
@@ -64,11 +74,17 @@ export function AdminDashboardPage() {
         <Col xs={24} sm={8}>
           <Card>
             <Statistic
-              title={<span style={{ color: "var(--color-primary)" }}>Ошибки транзакций</span>}
+              title={
+                <span style={{ color: "var(--color-primary)" }}>
+                  Ошибки транзакций
+                </span>
+              }
               value={data.stats.transactions.failed}
               data-cy={DATA_CY.admin.dashboard.STAT_FAILED_TX}
             />
-            <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}>
+            <div
+              style={{ marginTop: 8, fontSize: 12, color: "var(--text-main)" }}
+            >
               Косметика в магазине: {data.stats.shop.total_cosmetics}
             </div>
           </Card>

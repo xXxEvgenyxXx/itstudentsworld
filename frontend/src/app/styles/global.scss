@@ -26,16 +26,23 @@ body {
   --text-secondary: #8a8f98;
 }
 
-h1, h2, h3, h4, h5, h6, 
-b, strong, th {
-    font-weight: normal !important;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: normal !important;
 }
 
-.ant-typography, 
-.ant-btn, 
+.ant-typography,
+.ant-btn,
 .ant-statistic-content,
 .ant-card-head-title {
-    font-weight: normal !important;
+  font-weight: normal !important;
 }
 
 .custom-select-suffix:hover {

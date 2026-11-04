@@ -6,7 +6,7 @@ import { parseApiError } from "@/shared/api";
 import { useState } from "react";
 import { DATA_CY } from "@/shared/config";
 import { loginFields } from "@/shared/config";
-import s from './LoginForm.module.scss'
+import s from "./LoginForm.module.scss";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -32,7 +32,12 @@ export function LoginForm() {
   };
 
   return (
-    <Form className={s.form} layout="vertical" onFinish={onFinish} autoComplete="off">
+    <Form
+      className={s.form}
+      layout="vertical"
+      onFinish={onFinish}
+      autoComplete="off"
+    >
       {errorMsg && (
         <Alert
           className={s.error}

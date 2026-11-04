@@ -1,21 +1,21 @@
 .form {
-    :global(.ant-input-password-icon) {
-        color: var(--text-secondary) !important;
-        transition: 0.3s;
+  :global(.ant-input-password-icon) {
+    color: var(--text-secondary) !important;
+    transition: 0.3s;
 
-        &:hover {
-            color: var(--text-main) !important;
-        }
+    &:hover {
+      color: var(--text-main) !important;
     }
-    .error {
-        color:var(--bg-main) !important;
+  }
+  .error {
+    color: var(--bg-main) !important;
+  }
+  .submitButton {
+    background-color: var(--color-primary);
+    color: var(--text-main);
+    border: none !important;
+    &:hover {
+      background-color: var(--color-primary-hover) !important;
     }
-    .submitButton {
-        background-color:var(--color-primary);
-        color:var(--text-main);
-        border: none !important;
-        &:hover {
-            background-color:var(--color-primary-hover) !important;
-        }
-    }
+  }
 }

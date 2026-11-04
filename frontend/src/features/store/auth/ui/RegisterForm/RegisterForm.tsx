@@ -6,7 +6,7 @@ import { parseApiError } from "@/shared/api";
 import { useState } from "react";
 import { DATA_CY } from "@/shared/config";
 import { registerFields } from "@/shared/config";
-import s from './RegisterForm.module.scss'
+import s from "./RegisterForm.module.scss";
 
 export function RegisterForm() {
   const navigate = useNavigate();
@@ -29,7 +29,12 @@ export function RegisterForm() {
   };
 
   return (
-    <Form className={s.form} layout="vertical" onFinish={onFinish} autoComplete="off">
+    <Form
+      className={s.form}
+      layout="vertical"
+      onFinish={onFinish}
+      autoComplete="off"
+    >
       {errorMsg && (
         <Alert
           className={s.error}

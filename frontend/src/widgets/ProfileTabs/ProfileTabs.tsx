@@ -18,7 +18,9 @@ interface Props {
 }
 
 export function ProfileTabs({ user, shopRoute }: Props) {
-  const { data: transactions, isLoading: isLoadingTx } = useTransactions(user.id);
+  const { data: transactions, isLoading: isLoadingTx } = useTransactions(
+    user.id,
+  );
 
   const renderCosmetic = (item: CosmeticItem, isWishlist = false) => (
     <List.Item

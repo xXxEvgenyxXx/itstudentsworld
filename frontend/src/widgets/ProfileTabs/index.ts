@@ -1,1 +1,1 @@
-export {ProfileTabs} from './ProfileTabs'
+export { ProfileTabs } from "./ProfileTabs";
