@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "@/entities/user";
 import { RegisterForm } from "@/features/store/auth/ui";
 import { Card } from "antd";
+import s from "./RegisterPage.module.scss";
 
 export const RegisterPage = () => {
   const { isAuthenticated } = useAuth();
@@ -12,10 +13,8 @@ export const RegisterPage = () => {
   }
 
   return (
-    <div
-      style={{ display: "flex", justifyContent: "center", paddingTop: "10vh" }}
-    >
-      <Card title="Вход в аккаунт" style={{ width: 400 }}>
+    <div className={s.pageWrapper}>
+      <Card className={s.formCard} title="Регистрация">
         <RegisterForm />
       </Card>
     </div>

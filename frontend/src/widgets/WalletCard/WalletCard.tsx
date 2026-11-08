@@ -14,14 +14,21 @@ export function WalletCard({ wallet, shopRoute, onDepositClick }: Props) {
   return (
     <Card bordered={false} style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
       <Statistic
-        title="Баланс кошелька"
+        title={
+          <span style={{ color: "var(--text-main)" }}>Баланс кошелька</span>
+        }
         value={Number(wallet.balance)}
         precision={2}
         prefix={<WalletOutlined />}
         suffix="монет"
-        valueStyle={{ color: "#3f8600", fontWeight: "bold" }}
+        valueStyle={{ color: "var(--color-success)" }}
         formatter={(value) => (
-          <span data-cy={DATA_CY.wallet.BALANCE}>{value}</span>
+          <span
+            style={{ color: "var(--color-success)" }}
+            data-cy={DATA_CY.wallet.BALANCE}
+          >
+            {value}
+          </span>
         )}
       />
 

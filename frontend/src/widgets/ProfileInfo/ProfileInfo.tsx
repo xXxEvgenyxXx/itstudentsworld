@@ -11,6 +11,7 @@ import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
 import { DATA_CY } from "@/shared/config";
+import s from "./ProfileInfo.module.scss";
 
 export function ProfileInfo({ user }: { user: User }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,6 +36,7 @@ export function ProfileInfo({ user }: { user: User }) {
 
   return (
     <Card
+      className={s.profileInfoCard}
       title={
         <>
           <UserOutlined /> Профиль игрока

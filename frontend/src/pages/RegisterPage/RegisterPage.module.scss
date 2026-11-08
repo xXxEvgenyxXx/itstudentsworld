@@ -1,0 +1,12 @@
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .formCard {
+    border: 2.5px solid var(--bg-secondary);
+    background-color: rgba(var(--bg-main-rgb), 0.75);
+    backdrop-filter: blur(10px);
+    width: 400px;
+  }
+}

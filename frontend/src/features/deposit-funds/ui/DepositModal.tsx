@@ -62,7 +62,11 @@ export function DepositModal({ isOpen, onClose }: Props) {
             min={1}
             step={100}
             precision={2}
-            style={{ width: "100%" }}
+            style={{
+              width: "100%",
+              borderColor: "var(--bg-tertiary)",
+              background: "var(--bg-tertiary)",
+            }}
             onKeyPress={(event) => {
               if (!/[0-9.]/.test(event.key)) {
                 event.preventDefault();

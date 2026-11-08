@@ -38,7 +38,7 @@ export function getAdminUsersColumns({
   onBalanceClick,
 }: GetColumnsProps): ColumnsType<User> {
   return [
-    { title: "ID", dataIndex: "id", key: "id", width: 80 },
+    { title: "ID", dataIndex: "id", key: "id", width: 80, fixed: 'left' },
     {
       title: "Логин",
       dataIndex: "login",
@@ -68,7 +68,6 @@ export function getAdminUsersColumns({
             <Select
               data-cy={DATA_CY.admin.users.ROLE_SELECT(record.id)}
               value={record.role.alias}
-              style={{ width: 150 }}
               onChange={(value) =>
                 changeRole({ userId: record.id, role: value })
               }

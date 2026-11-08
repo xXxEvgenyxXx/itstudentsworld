@@ -1,0 +1,59 @@
+html,
+body {
+  font-family: "Monocraft", sans-serif !important;
+  font-size: 16px;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+}
+
+:root {
+  /* Основные фоны */
+  --bg-main: #0d0f12;
+  --bg-main-rgb: 13, 15, 18;
+  --bg-secondary: #1a1d24;
+  --bg-tertiary: #252a34;
+
+  /* Акцентные цвета */
+  --color-primary: #d32f2f;
+  --color-primary-hover: #b71c1c;
+  --color-secondary: #ff9800;
+  --color-warning: #ffc107;
+  --color-success: #00e676;
+  --color-hover: #4096ff;
+
+  /* Текст */
+  --text-main: #e0e0e0;
+  --text-secondary: #8a8f98;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+strong,
+th {
+  font-weight: normal !important;
+}
+
+.ant-typography,
+.ant-btn,
+.ant-statistic-content,
+.ant-card-head-title {
+  font-weight: normal !important;
+}
+
+.custom-select-suffix:hover {
+  color: var(--color-primary-hover) !important;
+  transition: 0.3s;
+}
+
+.custom-select-clear {
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--color-primary-hover) !important;
+  }
+}

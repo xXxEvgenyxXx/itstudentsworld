@@ -3,6 +3,7 @@ import { Header } from "@/widgets/Header";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Menu } from "antd";
 import { allRoutes } from "@/app/router/routes";
+import s from "./AdminLayout.module.scss";
 
 // Маппинг путей в человекочитаемые названия для меню
 const routeLabels: Record<string, string> = {
@@ -25,19 +26,23 @@ export function AdminLayout() {
   return (
     <>
       <Header />
-      <nav style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px" }}>
-        <Menu
-          mode="horizontal"
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          onClick={({ key }) => navigate(key)}
-          style={{ marginBottom: 20, borderBottom: "1px solid #f0f0f0" }}
-        />
-      </nav>
+      <div className={s.adminLayoutContentWrapper}>
+        <nav className={s.navWrapper}>
+          <Menu
+            mode="horizontal"
+            selectedKeys={[location.pathname]}
+            items={menuItems}
+            disabledOverflow={true}
+            onClick={({ key }) => navigate(key)}
+            style={{ marginBottom: 20 }}
+            className={s.menu}
+          />
+        </nav>
 
-      <main>
-        <Outlet />
-      </main>
+        <main className={s.main}>
+          <Outlet />
+        </main>
+      </div>
       <Footer />
     </>
   );

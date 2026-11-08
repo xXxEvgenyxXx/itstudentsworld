@@ -1,4 +1,5 @@
 import { SELECTORS } from "../support/selectors";
+import { generateLogin, generateEmail } from "../support/utils";
 
 describe("Admin Users Management", () => {
   let targetUserLogin: string;
@@ -8,9 +9,8 @@ describe("Admin Users Management", () => {
 
   beforeEach(() => {
     cy.loginAsOwner();
-    const uniqueId = Date.now();
-    targetUserLogin = `target_user_${uniqueId}`;
-    targetUserEmail = `target_${uniqueId}@test.com`;
+    targetUserLogin = generateLogin("target"); 
+    targetUserEmail = generateEmail("target");
     targetUserPassword = "password123";
 
     cy.request({

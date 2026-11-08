@@ -20,6 +20,8 @@ export function getAdminCosmeticsColumns({
     {
       title: "Превью",
       key: "image",
+      width: 80,
+      fixed: 'left',
       render: (_: unknown, record: CosmeticItem) => (
         <Image
           width={40}

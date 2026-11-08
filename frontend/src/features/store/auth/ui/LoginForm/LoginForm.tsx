@@ -1,25 +1,29 @@
 import { Button, Form, Input, Alert } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useRegister } from "@/entities/user";
-import { registerSchema, type RegisterFormData } from "../model/schemas";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useLogin } from "@/entities/user";
+import { loginSchema, type LoginFormData } from "../../model";
 import { parseApiError } from "@/shared/api";
 import { useState } from "react";
 import { DATA_CY } from "@/shared/config";
-import { registerFields } from "@/shared/config";
+import { loginFields } from "@/shared/config";
+import s from "./LoginForm.module.scss";
 
-export function RegisterForm() {
+export function LoginForm() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const { mutate: register, isPending } = useRegister();
+  const { mutate: login, isPending } = useLogin();
 
-  const onFinish = (values: RegisterFormData) => {
+  const from = location.state?.from?.pathname || "/profile";
+
+  const onFinish = (values: LoginFormData) => {
     setErrorMsg(null);
-    const result = registerSchema.safeParse(values);
+    const result = loginSchema.safeParse(values);
     if (!result.success) return;
 
-    register(values, {
-      onSuccess: () => navigate("/profile"),
+    login(values, {
+      onSuccess: () => navigate(from, { replace: true }),
       onError: (error) => {
         const apiError = parseApiError(error);
         setErrorMsg(apiError.message);
@@ -28,9 +32,15 @@ export function RegisterForm() {
   };
 
   return (
-    <Form layout="vertical" onFinish={onFinish} autoComplete="off">
+    <Form
+      className={s.form}
+      layout="vertical"
+      onFinish={onFinish}
+      autoComplete="off"
+    >
       {errorMsg && (
         <Alert
+          className={s.error}
           data-cy={DATA_CY.auth.ERROR_ALERT}
           message={errorMsg}
           type="error"
@@ -39,13 +49,12 @@ export function RegisterForm() {
         />
       )}
 
-      {registerFields.map((field) => (
+      {loginFields.map((field) => (
         <Form.Item
           key={field.name}
           label={field.label}
           name={field.name}
           rules={field.rules}
-          dependencies={field.dependencies}
           data-cy={`${field.dataCy}-wrapper`}
         >
           {field.isPassword ? (
@@ -66,14 +75,15 @@ export function RegisterForm() {
 
       <Form.Item>
         <Button
-          data-cy={DATA_CY.auth.REG_SUBMIT}
+          className={s.submitButton}
+          data-cy={DATA_CY.auth.LOGIN_SUBMIT}
           type="primary"
           htmlType="submit"
           size="large"
           block
           loading={isPending}
         >
-          Зарегистрироваться
+          Войти
         </Button>
       </Form.Item>
     </Form>

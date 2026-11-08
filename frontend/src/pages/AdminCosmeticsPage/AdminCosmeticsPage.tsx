@@ -82,11 +82,23 @@ export function AdminCosmeticsPage() {
           <>
             <Select
               placeholder="Тип"
-              allowClear
-              clearIcon={<CloseCircleOutlined style={{ fontSize: 16 }} />}
+              allowClear={{
+                clearIcon: <CloseCircleOutlined style={{ fontSize: 16 }} />,
+              }}
               style={{ width: 150 }}
               value={filters.type || undefined}
               onChange={(val) => setFilter("type", val || "")}
+              classNames={{
+                suffix: "custom-select-suffix",
+                clear: "custom-select-clear",
+              }}
+              styles={{
+                suffix: {
+                  color: "var(--text-main)",
+                  transition: "color 0.3s",
+                },
+                clear: { color: "var(--text-main)" },
+              }}
             >
               {types?.map((t) => (
                 <Select.Option key={t.id} value={t.alias}>
@@ -98,6 +110,15 @@ export function AdminCosmeticsPage() {
               style={{ width: 180 }}
               value={filters.status}
               onChange={(val) => setFilter("status", val)}
+              classNames={{
+                suffix: "custom-select-suffix",
+              }}
+              styles={{
+                suffix: {
+                  color: "var(--text-main)",
+                  transition: "color 0.3s",
+                },
+              }}
             >
               <Select.Option value="active">Только активные</Select.Option>
               <Select.Option value="deleted">Только удаленные</Select.Option>
