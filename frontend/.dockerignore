@@ -14,8 +14,8 @@ cypress/screenshots/
 cypress/videos/
 
 # Окружение
-.env
 .env.*
+!.env
 !.env.example
 !**/.env.production.local
 !**/.env.example
