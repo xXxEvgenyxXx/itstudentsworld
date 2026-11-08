@@ -4,7 +4,6 @@ import {
   WalletOutlined,
   HeartOutlined,
   HeartFilled,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "@/entities/user";
 import type { CosmeticItem } from "@/entities/cosmetic";
@@ -37,7 +36,7 @@ export function CosmeticCard({
         <div
           style={{
             height: 200,
-            background: "#f0f2f5",
+            background: "var(--text-main)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -46,18 +45,6 @@ export function CosmeticCard({
           <Text type="secondary">[Картинка: {item.name}]</Text>
         </div>
       }
-      actions={[
-        <Button
-          data-cy={DATA_CY.shop.BUY_BTN(item.id)}
-          type={isOwned ? "default" : "primary"}
-          icon={isOwned ? <CheckCircleOutlined /> : <ShoppingCartOutlined />}
-          key="buy"
-          disabled={!isAuthenticated || isOwned} // Блокируем, если не авторизован или уже куплен
-          onClick={() => onBuyClick(item)}
-        >
-          {isOwned ? "Уже куплено" : `Купить за ${Number(item.price)} монет`}
-        </Button>,
-      ]}
     >
       <Meta
         title={
@@ -88,30 +75,55 @@ export function CosmeticCard({
                 {item.type.name}
               </Tag>
 
-              <Button
-                data-cy={
-                  isWishlisted
-                    ? `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-active-${item.id}`
-                    : `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-${item.id}`
-                }
-                type="text"
-                disabled={!isAuthenticated}
-                onClick={() => onWishlistToggle(item)}
-                icon={
-                  isWishlisted ? (
-                    <HeartFilled style={{ color: "#ff4d4f" }} />
-                  ) : (
-                    <HeartOutlined />
-                  )
-                }
-              />
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                {isAuthenticated && !isOwned && (
+                  <Button
+                    data-cy={DATA_CY.shop.BUY_BTN(item.id)}
+                    type="primary" 
+                    shape="circle"
+                    icon={<ShoppingCartOutlined />}
+                    onClick={() => onBuyClick(item)}
+                  />
+                )}
+
+                {isAuthenticated && (
+                  <Button
+                    data-cy={
+                      isWishlisted
+                        ? `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-active-${item.id}`
+                        : `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-${item.id}`
+                    }
+                    type="primary"
+                    shape="circle" 
+                    onClick={() => onWishlistToggle(item)}
+                    icon={
+                      isWishlisted ? (
+                        <HeartFilled />
+                      ) : (
+                        <HeartOutlined />
+                      )
+                    }
+                  />
+                )}
+              </div>
             </div>
 
             <Text
               strong
-              style={{ fontSize: 18, color: isOwned ? "#8c8c8c" : "#3f8600" }}
+              style={{
+                fontSize: 18,
+                color: isOwned
+                  ? "var(--text-secondary)"
+                  : "var(--color-success)",
+              }}
             >
-              <WalletOutlined /> {Number(item.price).toFixed(2)}
+              {isOwned ? (
+                "Куплено"
+              ) : (
+                <>
+                  <WalletOutlined /> {Number(item.price).toFixed(2)}
+                </>
+              )}
             </Text>
           </div>
         }
