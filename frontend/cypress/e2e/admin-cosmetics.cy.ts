@@ -3,8 +3,10 @@ import { SELECTORS } from "../support/selectors";
 describe("Admin Cosmetics Management", () => {
   let testItemId: number;
   let testItemName: string;
+  let createdItemIds: number[] = [];
 
   beforeEach(() => {
+    createdItemIds = [];
     cy.loginAsAdmin();
 
     testItemName = `Предмет E2E ${Date.now()}`;
@@ -22,12 +24,26 @@ describe("Admin Cosmetics Management", () => {
         },
       }).then((response) => {
         testItemId = response.body.item.id;
+        createdItemIds.push(testItemId);
       });
     });
 
     cy.intercept("GET", "**/api/admin/cosmetic-items?*").as("getCosmetics");
     cy.visit("/admin/cosmetics");
     cy.wait("@getCosmetics");
+  });
+
+  afterEach(() => {
+    cy.get("@adminToken").then((token) => {
+      createdItemIds.forEach((id) => {
+        cy.request({
+          method: "DELETE",
+          url: `http://localhost:8000/api/admin/cosmetic-items/${id}`,
+          headers: { Authorization: `Bearer ${token}` },
+          failOnStatusCode: false,
+        });
+      });
+    });
   });
 
   it("Админ может создать новый предмет", () => {
@@ -44,7 +60,11 @@ describe("Admin Cosmetics Management", () => {
     cy.get(SELECTORS.admin.cosmetics.formImage).type("/images/hat.png");
     cy.get(SELECTORS.admin.cosmetics.saveBtn).click();
 
-    cy.wait("@createCosmetic").its("response.statusCode").should("eq", 201);
+    cy.wait("@createCosmetic").then((interception) => {
+      const newItemId = interception.response?.body.item.id;
+      if (newItemId) createdItemIds.push(newItemId);
+    }).its("response.statusCode").should("eq", 201);
+    
     cy.wait("@getCosmetics");
 
     cy.contains(".ant-table-tbody tr", newItemName, { timeout: 10000 }).should(
