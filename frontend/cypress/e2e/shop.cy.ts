@@ -35,17 +35,27 @@ describe("Shop & Wishlist Flow", () => {
     });
   });
 
-  it("Успешная покупка предмета и смена статуса кнопки", () => {
+  it("Успешная покупка предмета и скрытие кнопки", () => {
     cy.visit("/shop");
     cy.intercept("POST", "**/api/wallet/purchase").as("purchaseRequest");
+    cy.intercept("GET", "**/api/auth/me").as("getUser");
 
-    cy.get('[data-cy^="buy-btn-"]').first().as("buyButton");
-    cy.get("@buyButton").click();
+    cy.get('[data-cy^="buy-btn-"]').first().then(($btn) => {
+      const btnDataCy = $btn.attr("data-cy");
+      
+      if (!btnDataCy) throw new Error("Кнопка не имеет атрибута data-cy");
 
-    cy.get(SELECTORS.shop.confirmPurchase).click();
-    cy.wait("@purchaseRequest").its("response.statusCode").should("eq", 201);
+      cy.wrap($btn).click();
+      
+      cy.get(SELECTORS.shop.confirmPurchase).click();
 
-    cy.get("@buyButton").should("contain", "Уже куплено").and("be.disabled");
+      cy.wait("@purchaseRequest").its("response.statusCode").should("eq", 201);
+      cy.wait("@getUser");
+
+      cy.get(`[data-cy="${btnDataCy}"]`).should("not.exist");
+      
+      cy.get('[data-cy^="buy-btn-"]').should("have.length.at.least", 1);
+    });
   });
 
   it("Добавление в избранное и проверка перезагрузки", () => {
