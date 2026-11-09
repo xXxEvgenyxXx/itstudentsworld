@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Monocraft";
+  src: url("@/shared/assets/fonts/Monocraft.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 html,
 body {
   font-family: "Monocraft", sans-serif !important;

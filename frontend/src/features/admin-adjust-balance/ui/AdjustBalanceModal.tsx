@@ -68,7 +68,11 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
             data-cy={DATA_CY.admin.wallet.AMOUNT_INPUT}
             min={0.01}
             step={0.01}
-            style={{ width: "100%", background:"var(--bg-tertiary)", borderColor: "var(--bg-tertiary)" }}
+            style={{
+              width: "100%",
+              background: "var(--bg-tertiary)",
+              borderColor: "var(--bg-tertiary)",
+            }}
           />
         </Form.Item>
 

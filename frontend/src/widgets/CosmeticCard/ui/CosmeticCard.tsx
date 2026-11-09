@@ -79,7 +79,7 @@ export function CosmeticCard({
                 {isAuthenticated && !isOwned && (
                   <Button
                     data-cy={DATA_CY.shop.BUY_BTN(item.id)}
-                    type="primary" 
+                    type="primary"
                     shape="circle"
                     icon={<ShoppingCartOutlined />}
                     onClick={() => onBuyClick(item)}
@@ -94,15 +94,9 @@ export function CosmeticCard({
                         : `${DATA_CY.shop.WISHLIST_BTN_PREFIX}-${item.id}`
                     }
                     type="primary"
-                    shape="circle" 
+                    shape="circle"
                     onClick={() => onWishlistToggle(item)}
-                    icon={
-                      isWishlisted ? (
-                        <HeartFilled />
-                      ) : (
-                        <HeartOutlined />
-                      )
-                    }
+                    icon={isWishlisted ? <HeartFilled /> : <HeartOutlined />}
                   />
                 )}
               </div>
