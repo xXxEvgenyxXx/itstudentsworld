@@ -60,11 +60,14 @@ describe("Admin Cosmetics Management", () => {
     cy.get(SELECTORS.admin.cosmetics.formImage).type("/images/hat.png");
     cy.get(SELECTORS.admin.cosmetics.saveBtn).click();
 
-    cy.wait("@createCosmetic").then((interception) => {
-      const newItemId = interception.response?.body.item.id;
-      if (newItemId) createdItemIds.push(newItemId);
-    }).its("response.statusCode").should("eq", 201);
-    
+    cy.wait("@createCosmetic")
+      .then((interception) => {
+        const newItemId = interception.response?.body.item.id;
+        if (newItemId) createdItemIds.push(newItemId);
+      })
+      .its("response.statusCode")
+      .should("eq", 201);
+
     cy.wait("@getCosmetics");
 
     cy.contains(".ant-table-tbody tr", newItemName, { timeout: 10000 }).should(
