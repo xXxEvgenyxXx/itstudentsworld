@@ -9,7 +9,7 @@ describe("Admin Users Management", () => {
 
   beforeEach(() => {
     cy.loginAsOwner();
-    targetUserLogin = generateLogin("target"); 
+    targetUserLogin = generateLogin("target");
     targetUserEmail = generateEmail("target");
     targetUserPassword = "password123";
 

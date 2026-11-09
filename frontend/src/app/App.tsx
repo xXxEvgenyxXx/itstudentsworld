@@ -9,7 +9,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         table={{
-          scroll: { x: 'max-content' }
+          scroll: { x: "max-content" },
         }}
         theme={{
           token: {
