@@ -15,23 +15,28 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
 
   if (!user) return null;
 
-  const handleOk = () => {
-    form.validateFields().then((values) => {
-      adjustBalance(
-        {
-          userId: user.id,
-          amount: values.amount,
-          type: values.type,
-          comment: values.comment,
-        },
-        {
-          onSuccess: () => {
-            form.resetFields();
-            onClose();
+    const handleOk = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        adjustBalance(
+          {
+            userId: user.id,
+            amount: values.amount,
+            type: values.type,
+            comment: values.comment,
           },
-        },
-      );
-    });
+          {
+            onSuccess: () => {
+              form.resetFields();
+              onClose();
+            },
+          },
+        );
+      })
+      .catch(() => {
+        // Ошибки валидации уже отображаются в UI
+      });
   };
 
   return (

@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import { resolve } from "path";
 import Sitemap from "vite-plugin-sitemap";
 
@@ -114,4 +114,11 @@ export default defineConfig({
       ],
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+    testTimeout: 15000,
+    hookTimeout: 15000,
+  },
 });

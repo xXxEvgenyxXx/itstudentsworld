@@ -42,7 +42,7 @@ export function LoginForm() {
         <Alert
           className={s.error}
           data-cy={DATA_CY.auth.ERROR_ALERT}
-          message={errorMsg}
+          title={errorMsg}
           type="error"
           showIcon
           style={{ marginBottom: 16 }}
