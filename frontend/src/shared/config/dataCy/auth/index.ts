@@ -4,6 +4,7 @@ export const AUTH_DATA_CY = {
   LOGIN_SUBMIT: "login-submit",
   REG_NAME: "reg-name",
   REG_SURNAME: "reg-surname",
+  REG_PATRONYMIC:"reg-patronymic",
   REG_EMAIL: "reg-email",
   REG_LOGIN: "reg-login",
   REG_PASSWORD: "reg-password",

@@ -41,6 +41,10 @@ Dockerfile
 *.swo
 
 # Тесты и CI
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
 coverage/
 .nyc_output/
 .github/
