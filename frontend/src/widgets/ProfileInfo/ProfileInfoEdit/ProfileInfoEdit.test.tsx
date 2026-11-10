@@ -11,7 +11,7 @@ const TestWrapper = ({ user }: { user: User }) => {
   return <ProfileInfoEdit user={user} form={form} />;
 };
 
-describe("ProfileInfoEdit (Валидация полей)", () => {
+describe("ProfileInfoEdit (Безопасность и Валидация)", () => {
   const mockUser = {
     id: 1,
     name: "Иван",
@@ -24,47 +24,109 @@ describe("ProfileInfoEdit (Валидация полей)", () => {
     const user = userEvent.setup({ delay: null });
     render(<TestWrapper user={mockUser} />);
 
-    const nameInput = screen.getByLabelText(/Имя/i);
-    await user.clear(nameInput);
-    await user.type(nameInput, "' OR 1=1 --");
+    const input = screen.getByLabelText(/Имя/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
 
-    // Ждем, пока AntD провалидирует ввод
-    const errorMsg = await screen.findByText(/Только кириллица, с заглавной буквы/i);
-    expect(errorMsg).toBeTruthy();
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+  });
+
+  it("должен блокировать ввод XSS в поле Имя", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Имя/i);
+    await user.clear(input);
+    await user.type(input, "<script>alert(1)</script>");
+
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+  });
+
+  it("должен блокировать ввод SQL-инъекции в поле Фамилия", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Фамилия/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
+
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
   });
 
   it("должен блокировать ввод XSS в поле Фамилия", async () => {
     const user = userEvent.setup({ delay: null });
     render(<TestWrapper user={mockUser} />);
 
-    const surnameInput = screen.getByLabelText(/Фамилия/i);
-    await user.clear(surnameInput);
-    await user.type(surnameInput, "<script>alert(1)</script>");
+    const input = screen.getByLabelText(/Фамилия/i);
+    await user.clear(input);
+    await user.type(input, "<script>alert(1)</script>");
 
-    const errorMsg = await screen.findByText(/Только кириллица, с заглавной буквы/i);
-    expect(errorMsg).toBeTruthy();
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+  });
+
+  it("должен блокировать ввод SQL-инъекции в поле Отчество", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Отчество/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
+
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+  });
+
+  it("должен блокировать ввод XSS в поле Отчество", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Отчество/i);
+    await user.clear(input);
+    await user.type(input, "<script>alert(1)</script>");
+
+    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
   });
 
   it("должен пропускать пустое поле Отчество (оно необязательное)", async () => {
     const user = userEvent.setup({ delay: null });
     render(<TestWrapper user={mockUser} />);
 
-    const patronymicInput = screen.getByLabelText(/Отчество/i);
-    await user.clear(patronymicInput);
+    const input = screen.getByLabelText(/Отчество/i);
+    await user.clear(input);
 
     // Ошибки быть не должно
     expect(screen.queryByText(/Только кириллица/i)).toBeNull();
+  });
+
+  it("должен блокировать ввод SQL-инъекции в поле Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Email/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
+
+    expect(await screen.findByText(/Некорректный email/i)).toBeTruthy();
+  });
+
+  it("должен блокировать ввод XSS в поле Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<TestWrapper user={mockUser} />);
+
+    const input = screen.getByLabelText(/Email/i);
+    await user.clear(input);
+    await user.type(input, "<script>alert(1)</script>@test.com");
+
+    expect(await screen.findByText(/Некорректный email/i)).toBeTruthy();
   });
 
   it("должен блокировать некорректный email", async () => {
     const user = userEvent.setup({ delay: null });
     render(<TestWrapper user={mockUser} />);
 
-    const emailInput = screen.getByLabelText(/Email/i);
-    await user.clear(emailInput);
-    await user.type(emailInput, "invalid-email");
+    const input = screen.getByLabelText(/Email/i);
+    await user.clear(input);
+    await user.type(input, "invalid-email");
 
-    const errorMsg = await screen.findByText(/Некорректный email/i);
-    expect(errorMsg).toBeTruthy();
+    expect(await screen.findByText(/Некорректный email/i)).toBeTruthy();
   });
 });

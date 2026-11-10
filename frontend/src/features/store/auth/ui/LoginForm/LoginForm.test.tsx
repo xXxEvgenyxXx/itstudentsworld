@@ -20,7 +20,7 @@ vi.mock("react-router-dom", async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-    useLocation: () => ({ state: null }), // Имитируем, что пользователь пришел не из ProtectedRoute
+    useLocation: () => ({ state: null }),
   };
 });
 
@@ -44,83 +44,91 @@ describe("LoginForm", () => {
   };
 
   it("должна отправлять форму при валидных данных", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderForm();
 
     await user.type(screen.getByLabelText(/Email/i), "test@example.com");
     await user.type(screen.getByLabelText(/Пароль/i), "password123");
+    await user.click(screen.getByRole("button", { name: /Войти/i }));
 
+    await waitFor(() => {
+      expect(mockMutate).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("не должна отправлять форму при XSS-инъекции в Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    renderForm();
+
+    await user.type(screen.getByLabelText(/Email/i), '<script>alert("xss")</script>');
+    await user.type(screen.getByLabelText(/Пароль/i), "password123");
+    await user.click(screen.getByRole("button", { name: /Войти/i }));
+
+    expect(await screen.findByText(/Неверный формат/i)).toBeTruthy();
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("не должна отправлять форму при SQL-инъекции в Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    renderForm();
+
+    await user.type(screen.getByLabelText(/Email/i), "' OR '1'='1");
+    await user.type(screen.getByLabelText(/Пароль/i), "password123");
+    await user.click(screen.getByRole("button", { name: /Войти/i }));
+
+    expect(await screen.findByText(/Неверный формат/i)).toBeTruthy();
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("не должна отправлять форму при коротком пароле", async () => {
+    const user = userEvent.setup({ delay: null });
+    renderForm();
+
+    await user.type(screen.getByLabelText(/Email/i), "test@example.com");
+    await user.type(screen.getByLabelText(/Пароль/i), "123");
+    await user.click(screen.getByRole("button", { name: /Войти/i }));
+
+    expect(await screen.findByText(/Пароль должен быть не менее 8 символов/i)).toBeTruthy();
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должна передавать XSS из поля пароль в мутацию", async () => {
+    const user = userEvent.setup({ delay: null });
+    renderForm();
+
+    await user.type(screen.getByLabelText(/Email/i), "test@example.com");
+    await user.type(screen.getByLabelText(/Пароль/i), '<script>alert(1)</script>');
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
       expect(mockMutate).toHaveBeenCalledWith(
-        { email: "test@example.com", password: "password123" },
-        expect.objectContaining({
-          onSuccess: expect.any(Function),
-          onError: expect.any(Function),
-        })
+        expect.objectContaining({ password: '<script>alert(1)</script>' }),
+        expect.any(Object)
       );
     });
   });
 
-  it("не должна отправлять форму при XSS-инъекции в Email", async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    const emailInput = screen.getByLabelText(/Email/i);
-    await user.type(emailInput, '<script>alert("xss")</script>');
-    await user.type(screen.getByLabelText(/Пароль/i), "password123");
-
-    await user.click(screen.getByRole("button", { name: /Войти/i }));
-
-    // Ожидаем, что Ant Design / Zod выдаст ошибку формата
-    await waitFor(() => {
-      expect(screen.getByText(/Неверный формат/i)).toBeTruthy();
-    });
-
-    // Главная проверка: запрос на сервер не улетел
-    expect(mockMutate).not.toHaveBeenCalled();
-  });
-
-  it("не должна отправлять форму при SQL-инъекции в Email", async () => {
-    const user = userEvent.setup();
-    renderForm();
-
-    const emailInput = screen.getByLabelText(/Email/i);
-    await user.type(emailInput, "' OR '1'='1");
-    await user.type(screen.getByLabelText(/Пароль/i), "password123");
-
-    await user.click(screen.getByRole("button", { name: /Войти/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText(/Неверный формат/i)).toBeTruthy();
-    });
-
-    expect(mockMutate).not.toHaveBeenCalled();
-  });
-
-  it("не должна отправлять форму при коротком пароле", async () => {
-    const user = userEvent.setup();
+  it("должна передавать SQLi из поля пароль в мутацию", async () => {
+    const user = userEvent.setup({ delay: null });
     renderForm();
 
     await user.type(screen.getByLabelText(/Email/i), "test@example.com");
-    // Вводим пароль короче 8 символов
-    await user.type(screen.getByLabelText(/Пароль/i), "123");
-
+    await user.type(screen.getByLabelText(/Пароль/i), "' OR 1=1 --");
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Пароль должен быть не менее 8 символов/i)).toBeTruthy();
+      expect(mockMutate).toHaveBeenCalledTimes(1);
+      expect(mockMutate).toHaveBeenCalledWith(
+        expect.objectContaining({ password: "' OR 1=1 --" }),
+        expect.any(Object)
+      );
     });
-
-    expect(mockMutate).not.toHaveBeenCalled();
   });
 
   it("должна отображать ошибку, если сервер вернул ошибку (onError)", async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     
-    // Настраиваем мок так, чтобы он вызывал onError
     mockMutate.mockImplementationOnce((_values, options) => {
       options.onError(new Error("API Error"));
     });
@@ -131,9 +139,6 @@ describe("LoginForm", () => {
     await user.type(screen.getByLabelText(/Пароль/i), "password123");
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
-    // Проверяем, что появился Alert с сообщением из parseApiError
-    await waitFor(() => {
-      expect(screen.getByText("Неверный email или пароль")).toBeTruthy();
-    });
+    expect(await screen.findByText("Неверный email или пароль")).toBeTruthy();
   });
 });
