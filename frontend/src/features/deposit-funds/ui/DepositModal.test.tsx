@@ -64,14 +64,33 @@ describe("DepositModal", () => {
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it("должен блокировать ввод отрицательных чисел", async () => {
+  it("должен блокировать XSS-инъекцию (ввод фильтруется до безопасного числа)", async () => {
     const user = userEvent.setup({ delay: null });
     render(<DepositModal isOpen={true} onClose={mockOnClose} />);
 
     const input = await screen.findByTestId(DATA_CY.wallet.DEPOSIT_AMOUNT);
     await user.clear(input);
-    await user.type(input, "-50");
 
-    expect(input).not.toHaveValue("-50"); 
+    await user.type(input, '<script>alert(1)</script>');
+
+    const submitBtn = screen.getByTestId(DATA_CY.wallet.DEPOSIT_SUBMIT);
+    await user.click(submitBtn);
+
+    expect(mockMutate).toHaveBeenCalledWith(1, expect.any(Object));
+  });
+
+  it("должен блокировать SQL-инъекцию (ввод фильтруется до безопасного числа)", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<DepositModal isOpen={true} onClose={mockOnClose} />);
+
+    const input = await screen.findByTestId(DATA_CY.wallet.DEPOSIT_AMOUNT);
+    await user.clear(input);
+    
+    await user.type(input, "' OR 1=1 --");
+
+    const submitBtn = screen.getByTestId(DATA_CY.wallet.DEPOSIT_SUBMIT);
+    await user.click(submitBtn);
+
+    expect(mockMutate).toHaveBeenCalledWith(11, expect.any(Object));
   });
 });
