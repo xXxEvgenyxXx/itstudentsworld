@@ -10,6 +10,7 @@ import { useUpdateProfile } from "@/entities/user/lib/useUserProfile";
 import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
+import {profileInfoSchema} from './ProfileInfoEdit/model/schemas'
 import { DATA_CY } from "@/shared/config";
 import s from "./ProfileInfo.module.scss";
 
@@ -19,14 +20,22 @@ export function ProfileInfo({ user }: { user: User }) {
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
   const handleSave = () => {
-    form.validateFields().then((values) => {
-      updateProfile(
-        { userId: user.id, data: values },
-        {
-          onSuccess: () => setIsEditing(false),
-        },
-      );
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        const result = profileInfoSchema.safeParse(values);
+        if (!result.success) return;
+
+        updateProfile(
+          { userId: user.id, data: result.data },
+          {
+            onSuccess: () => setIsEditing(false),
+          },
+        );
+      })
+      .catch((info) => {
+        console.log("Ошибка валидации формы:", info);
+      });
   };
 
   const handleCancel = () => {
@@ -42,7 +51,7 @@ export function ProfileInfo({ user }: { user: User }) {
           <UserOutlined /> Профиль игрока
         </>
       }
-      bordered={false}
+      variant="borderless"
       style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)", height: "100%" }}
       extra={
         !isEditing ? (

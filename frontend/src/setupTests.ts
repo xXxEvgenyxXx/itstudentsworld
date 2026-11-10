@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
+import { configure } from '@testing-library/react';
+
+configure({ testIdAttribute: 'data-cy' });
 
 // Мок для window.matchMedia, который отсутствует в jsdom
 Object.defineProperty(window, 'matchMedia', {
