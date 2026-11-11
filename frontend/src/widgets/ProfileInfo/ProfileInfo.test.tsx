@@ -36,13 +36,13 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
 
     // В режиме просмотра нет инпутов
     expect(screen.queryByLabelText(/Имя/i)).toBeNull();
-    
+
     // Кликаем "Редактировать"
     await user.click(screen.getByRole("button", { name: /Редактировать/i }));
 
     // Появились поля ввода
     expect(screen.getByLabelText(/Имя/i)).toBeTruthy();
-    
+
     // Кликаем "Отмена" (иконка крестика)
     // Ищем по data-cy, так как кнопка без текста
     await user.click(screen.getByTestId("cancel-profile-btn")); // Или getByRole, если добавишь aria-label
@@ -70,7 +70,7 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
           userId: 1,
           data: expect.objectContaining({ name: "Пётр" }),
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -82,11 +82,13 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
 
     const nameInput = screen.getByLabelText(/Имя/i);
     await user.clear(nameInput);
-    await user.type(nameInput, '<script>alert(1)</script>');
+    await user.type(nameInput, "<script>alert(1)</script>");
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -102,7 +104,9 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -114,11 +118,13 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
 
     const input = screen.getByLabelText(/Фамилия/i);
     await user.clear(input);
-    await user.type(input, '<img src=x onerror=alert(1)>');
+    await user.type(input, "<img src=x onerror=alert(1)>");
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -134,7 +140,9 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -146,11 +154,13 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
 
     const input = screen.getByLabelText(/Отчество/i);
     await user.clear(input);
-    await user.type(input, '<script>alert(1)</script>');
+    await user.type(input, "<script>alert(1)</script>");
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -166,7 +176,9 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+      expect(
+        screen.getByText(/Только кириллица, с заглавной буквы/i),
+      ).toBeTruthy();
     });
     expect(mockMutate).not.toHaveBeenCalled();
   });
@@ -178,7 +190,7 @@ describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
 
     const input = screen.getByLabelText(/Email/i);
     await user.clear(input);
-    await user.type(input, '<script>alert(1)</script>@test.com');
+    await user.type(input, "<script>alert(1)</script>@test.com");
     await user.click(screen.getByTestId("save-profile-btn"));
 
     await waitFor(() => {

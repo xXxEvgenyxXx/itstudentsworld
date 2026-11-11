@@ -27,12 +27,20 @@ describe("AdjustBalanceModal", () => {
   });
 
   it("не должен рендериться, если пользователь не передан", () => {
-    render(<AdjustBalanceModal user={null} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal user={null} isOpen={true} onClose={mockOnClose} />,
+    );
     expect(screen.queryByText(/Корректировка баланса/i)).toBeNull();
   });
 
   it("должен отображать логин пользователя в заголовке", async () => {
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
     const title = await screen.findByText(/Корректировка баланса: Steve/i);
     expect(title).toBeTruthy();
   });
@@ -43,9 +51,17 @@ describe("AdjustBalanceModal", () => {
     });
 
     const user = userEvent.setup({ delay: null });
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    const amountInput = await screen.findByTestId(
+      DATA_CY.admin.wallet.AMOUNT_INPUT,
+    );
     await user.clear(amountInput);
     await user.type(amountInput, "150");
 
@@ -62,7 +78,7 @@ describe("AdjustBalanceModal", () => {
         type: "accrual",
         comment: "Штраф за нарушение",
       }),
-      expect.any(Object)
+      expect.any(Object),
     );
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -70,9 +86,17 @@ describe("AdjustBalanceModal", () => {
 
   it("должен блокировать отправку при XSS-инъекции в поле суммы", async () => {
     const user = userEvent.setup({ delay: null });
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    const amountInput = await screen.findByTestId(
+      DATA_CY.admin.wallet.AMOUNT_INPUT,
+    );
     await user.clear(amountInput);
     // Пытаемся ввести XSS. InputNumber блокирует буквы, поле остается пустым.
     await user.type(amountInput, "<script>alert(1)</script>");
@@ -90,9 +114,17 @@ describe("AdjustBalanceModal", () => {
 
   it("должен блокировать отправку при SQL-инъекции в поле суммы", async () => {
     const user = userEvent.setup({ delay: null });
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    const amountInput = await screen.findByTestId(
+      DATA_CY.admin.wallet.AMOUNT_INPUT,
+    );
     await user.clear(amountInput);
     await user.type(amountInput, "' OR 1=1 --");
 
@@ -107,13 +139,21 @@ describe("AdjustBalanceModal", () => {
 
   it("должен безопасно передавать XSS-инъекцию из комментария в мутацию", async () => {
     const user = userEvent.setup({ delay: null });
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    const amountInput = await screen.findByTestId(
+      DATA_CY.admin.wallet.AMOUNT_INPUT,
+    );
     await user.type(amountInput, "100");
 
     const commentInput = screen.getByTestId(DATA_CY.admin.wallet.COMMENT_INPUT);
-    await user.type(commentInput, '<script>alert(1)</script>');
+    await user.type(commentInput, "<script>alert(1)</script>");
 
     const submitBtn = screen.getByTestId(DATA_CY.admin.wallet.SUBMIT_BTN);
     await user.click(submitBtn);
@@ -122,17 +162,25 @@ describe("AdjustBalanceModal", () => {
     // Строка улетает на бэкенд как есть, где Laravel её очистит.
     expect(mockMutate).toHaveBeenCalledWith(
       expect.objectContaining({
-        comment: '<script>alert(1)</script>',
+        comment: "<script>alert(1)</script>",
       }),
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
   it("должен безопасно передавать SQL-инъекцию из комментария в мутацию", async () => {
     const user = userEvent.setup({ delay: null });
-    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+    render(
+      <AdjustBalanceModal
+        user={mockUser}
+        isOpen={true}
+        onClose={mockOnClose}
+      />,
+    );
 
-    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    const amountInput = await screen.findByTestId(
+      DATA_CY.admin.wallet.AMOUNT_INPUT,
+    );
     await user.type(amountInput, "100");
 
     const commentInput = screen.getByTestId(DATA_CY.admin.wallet.COMMENT_INPUT);
@@ -146,7 +194,7 @@ describe("AdjustBalanceModal", () => {
       expect.objectContaining({
         comment: "' OR 1=1 --",
       }),
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 });

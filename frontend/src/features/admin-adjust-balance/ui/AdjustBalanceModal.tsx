@@ -15,7 +15,7 @@ export function AdjustBalanceModal({ user, isOpen, onClose }: Props) {
 
   if (!user) return null;
 
-    const handleOk = () => {
+  const handleOk = () => {
     form
       .validateFields()
       .then((values) => {

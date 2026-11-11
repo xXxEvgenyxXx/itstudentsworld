@@ -10,7 +10,7 @@ import { useUpdateProfile } from "@/entities/user/lib/useUserProfile";
 import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
-import {profileInfoSchema} from './ProfileInfoEdit/model/schemas'
+import { profileInfoSchema } from "./ProfileInfoEdit/model/schemas";
 import { DATA_CY } from "@/shared/config";
 import s from "./ProfileInfo.module.scss";
 

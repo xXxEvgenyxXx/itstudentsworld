@@ -17,16 +17,15 @@ describe("useWishlist", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
-    const mockMessageReturn = Object.assign(
-      () => {}, 
-      { then: vi.fn().mockResolvedValue(true) } 
-    ) as unknown as ReturnType<typeof message.success>;
+
+    const mockMessageReturn = Object.assign(() => {}, {
+      then: vi.fn().mockResolvedValue(true),
+    }) as unknown as ReturnType<typeof message.success>;
 
     // Мокаем оба метода уведомлений, которые используются в хуке
     vi.spyOn(message, "success").mockReturnValue(mockMessageReturn);
     vi.spyOn(message, "info").mockReturnValue(mockMessageReturn);
-    
+
     queryClient = new QueryClient({
       defaultOptions: { mutations: { retry: false } },
     });
@@ -35,21 +34,19 @@ describe("useWishlist", () => {
   const createWrapper = (client: QueryClient) => {
     return function Wrapper({ children }: { children: ReactNode }) {
       return (
-        <QueryClientProvider client={client}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
       );
     };
   };
 
   it("должен добавлять в избранное (status: added)", async () => {
     // Мокаем успешный ответ от сервера со статусом "added"
-    vi.mocked(api.post).mockResolvedValueOnce({ 
-      data: { status: "added" } 
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: { status: "added" },
     } as unknown as AxiosResponse);
 
-    const { result } = renderHook(() => useWishlist(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => useWishlist(), {
+      wrapper: createWrapper(queryClient),
     });
 
     result.current.mutate(42);
@@ -69,12 +66,12 @@ describe("useWishlist", () => {
 
   it("должен удалять из избранного (status: removed)", async () => {
     // Мокаем успешный ответ от сервера со статусом "removed"
-    vi.mocked(api.post).mockResolvedValueOnce({ 
-      data: { status: "removed" } 
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: { status: "removed" },
     } as unknown as AxiosResponse);
 
-    const { result } = renderHook(() => useWishlist(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => useWishlist(), {
+      wrapper: createWrapper(queryClient),
     });
 
     result.current.mutate(42);

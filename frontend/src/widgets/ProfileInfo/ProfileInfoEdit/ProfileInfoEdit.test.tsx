@@ -28,7 +28,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "' OR 1=1 --");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен блокировать ввод XSS в поле Имя", async () => {
@@ -39,7 +41,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "<script>alert(1)</script>");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен блокировать ввод SQL-инъекции в поле Фамилия", async () => {
@@ -50,7 +54,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "' OR 1=1 --");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен блокировать ввод XSS в поле Фамилия", async () => {
@@ -61,7 +67,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "<script>alert(1)</script>");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен блокировать ввод SQL-инъекции в поле Отчество", async () => {
@@ -72,7 +80,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "' OR 1=1 --");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен блокировать ввод XSS в поле Отчество", async () => {
@@ -83,7 +93,9 @@ describe("ProfileInfoEdit (Безопасность и Валидация)", () 
     await user.clear(input);
     await user.type(input, "<script>alert(1)</script>");
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
   });
 
   it("должен пропускать пустое поле Отчество (оно необязательное)", async () => {

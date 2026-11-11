@@ -20,15 +20,14 @@ describe("usePurchase", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
-    const mockMessageReturn = Object.assign(
-      () => {}, 
-      { then: vi.fn().mockResolvedValue(true) } 
-    ) as unknown as ReturnType<typeof message.success>;
+
+    const mockMessageReturn = Object.assign(() => {}, {
+      then: vi.fn().mockResolvedValue(true),
+    }) as unknown as ReturnType<typeof message.success>;
 
     vi.spyOn(message, "success").mockReturnValue(mockMessageReturn);
     vi.spyOn(message, "error").mockReturnValue(mockMessageReturn);
-    
+
     queryClient = new QueryClient({
       defaultOptions: { mutations: { retry: false } },
     });
@@ -37,21 +36,19 @@ describe("usePurchase", () => {
   const createWrapper = (client: QueryClient) => {
     return function Wrapper({ children }: { children: ReactNode }) {
       return (
-        <QueryClientProvider client={client}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
       );
     };
   };
 
   it("должен успешно совершать покупку", async () => {
     const mockResponse = { new_balance: "1500" };
-    vi.mocked(api.post).mockResolvedValueOnce({ 
-      data: mockResponse 
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: mockResponse,
     } as unknown as AxiosResponse);
 
-    const { result } = renderHook(() => usePurchase(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => usePurchase(), {
+      wrapper: createWrapper(queryClient),
     });
 
     result.current.mutate(42);
@@ -65,7 +62,7 @@ describe("usePurchase", () => {
     });
 
     expect(message.success).toHaveBeenCalledWith(
-      "Покупка успешна! Новый баланс: 1500 монет."
+      "Покупка успешна! Новый баланс: 1500 монет.",
     );
   });
 
@@ -73,8 +70,8 @@ describe("usePurchase", () => {
     const mockError = { message: "Недостаточно средств" };
     vi.mocked(api.post).mockRejectedValueOnce(mockError as unknown as Error);
 
-    const { result } = renderHook(() => usePurchase(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => usePurchase(), {
+      wrapper: createWrapper(queryClient),
     });
 
     result.current.mutate(42);

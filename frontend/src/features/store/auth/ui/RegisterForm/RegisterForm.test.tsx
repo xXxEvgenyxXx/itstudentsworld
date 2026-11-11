@@ -25,7 +25,7 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     return render(
       <MemoryRouter>
         <RegisterForm />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
   };
 
@@ -43,7 +43,9 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     renderForm();
 
     await fillValidData(user);
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
@@ -56,10 +58,14 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.clear(screen.getByLabelText(/Имя/i));
-    await user.type(screen.getByLabelText(/Имя/i), '<script>alert(1)</script>');
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.type(screen.getByLabelText(/Имя/i), "<script>alert(1)</script>");
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -70,9 +76,13 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
 
     await user.clear(screen.getByLabelText(/Имя/i));
     await user.type(screen.getByLabelText(/Имя/i), "' OR 1=1 --");
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -82,10 +92,17 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.clear(screen.getByLabelText(/Фамилия/i));
-    await user.type(screen.getByLabelText(/Фамилия/i), '<script>alert(1)</script>');
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.type(
+      screen.getByLabelText(/Фамилия/i),
+      "<script>alert(1)</script>",
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -96,9 +113,13 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
 
     await user.clear(screen.getByLabelText(/Фамилия/i));
     await user.type(screen.getByLabelText(/Фамилия/i), "' OR 1=1 --");
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -107,10 +128,17 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     renderForm();
     await fillValidData(user);
 
-    await user.type(screen.getByLabelText(/Отчество/i), '<script>alert(1)</script>');
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.type(
+      screen.getByLabelText(/Отчество/i),
+      "<script>alert(1)</script>",
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -120,9 +148,13 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.type(screen.getByLabelText(/Отчество/i), "' OR 1=1 --");
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Только кириллица, с заглавной буквы/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -132,8 +164,13 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.clear(screen.getByLabelText(/Email/i));
-    await user.type(screen.getByLabelText(/Email/i), '<script>alert(1)</script>@test.com');
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.type(
+      screen.getByLabelText(/Email/i),
+      "<script>alert(1)</script>@test.com",
+    );
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
     expect(await screen.findByText(/Неверный формат/i)).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
@@ -146,7 +183,9 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
 
     await user.clear(screen.getByLabelText(/Email/i));
     await user.type(screen.getByLabelText(/Email/i), "' OR 1=1 --");
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
     expect(await screen.findByText(/Неверный формат/i)).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
@@ -158,10 +197,14 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.clear(screen.getByLabelText(/Игровой логин/i));
-    await user.type(screen.getByLabelText(/Игровой логин/i), '<script>');
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.type(screen.getByLabelText(/Игровой логин/i), "<script>");
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Логин должен содержать от 3 до 16 символов/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Логин должен содержать от 3 до 16 символов/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -172,9 +215,13 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
 
     await user.clear(screen.getByLabelText(/Игровой логин/i));
     await user.type(screen.getByLabelText(/Игровой логин/i), "' OR 1=1 --");
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
-    expect(await screen.findByText(/Логин должен содержать от 3 до 16 символов/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Логин должен содержать от 3 до 16 символов/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -184,17 +231,25 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await fillValidData(user);
 
     await user.clear(screen.getByLabelText(/^Пароль/i));
-    await user.type(screen.getByLabelText(/^Пароль/i), '<script>alert(1)</script>');
+    await user.type(
+      screen.getByLabelText(/^Пароль/i),
+      "<script>alert(1)</script>",
+    );
     await user.clear(screen.getByLabelText(/Повторите пароль/i));
-    await user.type(screen.getByLabelText(/Повторите пароль/i), '<script>alert(1)</script>');
+    await user.type(
+      screen.getByLabelText(/Повторите пароль/i),
+      "<script>alert(1)</script>",
+    );
 
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
       expect(mockMutate).toHaveBeenCalledWith(
-        expect.objectContaining({ password: '<script>alert(1)</script>' }),
-        expect.any(Object)
+        expect.objectContaining({ password: "<script>alert(1)</script>" }),
+        expect.any(Object),
       );
     });
   });
@@ -209,13 +264,15 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await user.clear(screen.getByLabelText(/Повторите пароль/i));
     await user.type(screen.getByLabelText(/Повторите пароль/i), "' OR 1=1 --");
 
-    await user.click(screen.getByRole("button", { name: /Зарегистрироваться/i }));
+    await user.click(
+      screen.getByRole("button", { name: /Зарегистрироваться/i }),
+    );
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
       expect(mockMutate).toHaveBeenCalledWith(
         expect.objectContaining({ password: "' OR 1=1 --" }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });

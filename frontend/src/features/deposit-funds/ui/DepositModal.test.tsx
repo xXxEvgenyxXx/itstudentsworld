@@ -49,7 +49,7 @@ describe("DepositModal", () => {
       500,
       expect.objectContaining({
         onSuccess: expect.any(Function),
-      })
+      }),
     );
   });
 
@@ -71,7 +71,7 @@ describe("DepositModal", () => {
     const input = await screen.findByTestId(DATA_CY.wallet.DEPOSIT_AMOUNT);
     await user.clear(input);
 
-    await user.type(input, '<script>alert(1)</script>');
+    await user.type(input, "<script>alert(1)</script>");
 
     const submitBtn = screen.getByTestId(DATA_CY.wallet.DEPOSIT_SUBMIT);
     await user.click(submitBtn);
@@ -85,7 +85,7 @@ describe("DepositModal", () => {
 
     const input = await screen.findByTestId(DATA_CY.wallet.DEPOSIT_AMOUNT);
     await user.clear(input);
-    
+
     await user.type(input, "' OR 1=1 --");
 
     const submitBtn = screen.getByTestId(DATA_CY.wallet.DEPOSIT_SUBMIT);

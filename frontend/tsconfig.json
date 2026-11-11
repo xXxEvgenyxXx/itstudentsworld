@@ -19,7 +19,7 @@
     "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": ["./src/*"]
-    },
+    }
   },
   "include": ["src", "src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
 }

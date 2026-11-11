@@ -58,7 +58,7 @@ describe("profileInfoSchema (Валидация Zod)", () => {
   it("должна блокировать XSS-инъекцию в поле Фамилия", () => {
     const result = profileInfoSchema.safeParse({
       ...validData,
-      surname: '<img src=x onerror=alert(1)>',
+      surname: "<img src=x onerror=alert(1)>",
     });
     expect(result.success).toBe(false);
   });
@@ -102,7 +102,7 @@ describe("profileInfoSchema (Валидация Zod)", () => {
   it("должна блокировать XSS-инъекцию в поле Email", () => {
     const result = profileInfoSchema.safeParse({
       ...validData,
-      email: '<script>alert(1)</script>@test.com',
+      email: "<script>alert(1)</script>@test.com",
     });
     expect(result.success).toBe(false);
     if (!result.success) {

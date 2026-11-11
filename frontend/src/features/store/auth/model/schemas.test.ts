@@ -5,8 +5,8 @@ describe("Безопасность и валидация Zod-схем", () => {
   // Наборы вредоносных строк
   const xssPayloads = [
     '<script>alert("xss")</script>',
-    '<img src=x onerror=alert(1)>',
-    'javascript:alert(1)',
+    "<img src=x onerror=alert(1)>",
+    "javascript:alert(1)",
   ];
 
   const sqlInjectionPayloads = [
@@ -24,14 +24,20 @@ describe("Безопасность и валидация Zod-схем", () => {
 
     it("должна блокировать SQL-инъекции в поле email", () => {
       sqlInjectionPayloads.forEach((payload) => {
-        const result = loginSchema.safeParse({ email: payload, password: "password123" });
+        const result = loginSchema.safeParse({
+          email: payload,
+          password: "password123",
+        });
         expect(result.success).toBe(false);
       });
     });
 
     it("должна блокировать XSS-инъекции в поле email", () => {
       xssPayloads.forEach((payload) => {
-        const result = loginSchema.safeParse({ email: payload, password: "password123" });
+        const result = loginSchema.safeParse({
+          email: payload,
+          password: "password123",
+        });
         expect(result.success).toBe(false);
       });
     });
@@ -54,7 +60,10 @@ describe("Безопасность и валидация Zod-схем", () => {
 
     it("должна блокировать XSS/SQLi в поле имени (name)", () => {
       [...xssPayloads, ...sqlInjectionPayloads].forEach((payload) => {
-        const result = registerSchema.safeParse({ ...validRegisterData, name: payload });
+        const result = registerSchema.safeParse({
+          ...validRegisterData,
+          name: payload,
+        });
         expect(result.success).toBe(false);
         if (!result.success) {
           expect(result.error.issues[0].message).toContain("Только кириллица");
@@ -64,17 +73,25 @@ describe("Безопасность и валидация Zod-схем", () => {
 
     it("должна блокировать XSS/SQLi в поле логина (login)", () => {
       [...xssPayloads, ...sqlInjectionPayloads].forEach((payload) => {
-        const result = registerSchema.safeParse({ ...validRegisterData, login: payload });
+        const result = registerSchema.safeParse({
+          ...validRegisterData,
+          login: payload,
+        });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].message).toContain("латиница, цифры и подчеркивания");
+          expect(result.error.issues[0].message).toContain(
+            "латиница, цифры и подчеркивания",
+          );
         }
       });
     });
 
     it("должна блокировать SQLi в поле email", () => {
-       sqlInjectionPayloads.forEach((payload) => {
-        const result = registerSchema.safeParse({ ...validRegisterData, email: payload });
+      sqlInjectionPayloads.forEach((payload) => {
+        const result = registerSchema.safeParse({
+          ...validRegisterData,
+          email: payload,
+        });
         expect(result.success).toBe(false);
       });
     });

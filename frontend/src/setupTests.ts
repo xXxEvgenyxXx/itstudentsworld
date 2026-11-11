@@ -1,9 +1,9 @@
-import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest';
-import { configure } from '@testing-library/react';
+import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
+import { configure } from "@testing-library/react";
 
-configure({ testIdAttribute: 'data-cy' });
+configure({ testIdAttribute: "data-cy" });
 
 const originalGetComputedStyle = window.getComputedStyle;
 window.getComputedStyle = (elt) => originalGetComputedStyle(elt);
@@ -39,7 +39,7 @@ console.log = (...args: unknown[]) => {
 };
 
 // Мок для window.matchMedia, который отсутствует в jsdom
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
     matches: false, // По умолчанию считаем, что ни одно медиа-условие не выполняется

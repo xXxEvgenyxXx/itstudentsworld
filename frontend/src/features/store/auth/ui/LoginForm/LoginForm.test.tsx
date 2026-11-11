@@ -39,7 +39,7 @@ describe("LoginForm", () => {
     return render(
       <MemoryRouter>
         <LoginForm />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
   };
 
@@ -60,7 +60,10 @@ describe("LoginForm", () => {
     const user = userEvent.setup({ delay: null });
     renderForm();
 
-    await user.type(screen.getByLabelText(/Email/i), '<script>alert("xss")</script>');
+    await user.type(
+      screen.getByLabelText(/Email/i),
+      '<script>alert("xss")</script>',
+    );
     await user.type(screen.getByLabelText(/Пароль/i), "password123");
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
@@ -88,7 +91,9 @@ describe("LoginForm", () => {
     await user.type(screen.getByLabelText(/Пароль/i), "123");
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
-    expect(await screen.findByText(/Пароль должен быть не менее 8 символов/i)).toBeTruthy();
+    expect(
+      await screen.findByText(/Пароль должен быть не менее 8 символов/i),
+    ).toBeTruthy();
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
@@ -97,14 +102,17 @@ describe("LoginForm", () => {
     renderForm();
 
     await user.type(screen.getByLabelText(/Email/i), "test@example.com");
-    await user.type(screen.getByLabelText(/Пароль/i), '<script>alert(1)</script>');
+    await user.type(
+      screen.getByLabelText(/Пароль/i),
+      "<script>alert(1)</script>",
+    );
     await user.click(screen.getByRole("button", { name: /Войти/i }));
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
       expect(mockMutate).toHaveBeenCalledWith(
-        expect.objectContaining({ password: '<script>alert(1)</script>' }),
-        expect.any(Object)
+        expect.objectContaining({ password: "<script>alert(1)</script>" }),
+        expect.any(Object),
       );
     });
   });
@@ -121,14 +129,14 @@ describe("LoginForm", () => {
       expect(mockMutate).toHaveBeenCalledTimes(1);
       expect(mockMutate).toHaveBeenCalledWith(
         expect.objectContaining({ password: "' OR 1=1 --" }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
 
   it("должна отображать ошибку, если сервер вернул ошибку (onError)", async () => {
     const user = userEvent.setup({ delay: null });
-    
+
     mockMutate.mockImplementationOnce((_values, options) => {
       options.onError(new Error("API Error"));
     });

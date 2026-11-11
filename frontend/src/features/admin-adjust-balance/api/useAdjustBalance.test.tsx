@@ -20,15 +20,14 @@ describe("useAdjustBalance", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
-    const mockMessageReturn = Object.assign(
-      () => {}, 
-      { then: vi.fn().mockResolvedValue(true) } 
-    ) as unknown as ReturnType<typeof message.success>;
+
+    const mockMessageReturn = Object.assign(() => {}, {
+      then: vi.fn().mockResolvedValue(true),
+    }) as unknown as ReturnType<typeof message.success>;
 
     vi.spyOn(message, "success").mockReturnValue(mockMessageReturn);
     vi.spyOn(message, "error").mockReturnValue(mockMessageReturn);
-    
+
     queryClient = new QueryClient({
       defaultOptions: { mutations: { retry: false } },
     });
@@ -37,23 +36,26 @@ describe("useAdjustBalance", () => {
   const createWrapper = (client: QueryClient) => {
     return function Wrapper({ children }: { children: ReactNode }) {
       return (
-        <QueryClientProvider client={client}>
-          {children}
-        </QueryClientProvider>
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
       );
     };
   };
 
   it("должен успешно корректировать баланс", async () => {
-    vi.mocked(api.post).mockResolvedValueOnce({ 
-      data: { message: "OK" } 
+    vi.mocked(api.post).mockResolvedValueOnce({
+      data: { message: "OK" },
     } as unknown as AxiosResponse);
 
-    const { result } = renderHook(() => useAdjustBalance(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => useAdjustBalance(), {
+      wrapper: createWrapper(queryClient),
     });
 
-    const payload = { userId: 10, amount: 500, type: "accrual" as const, comment: "Бонус" };
+    const payload = {
+      userId: 10,
+      amount: 500,
+      type: "accrual" as const,
+      comment: "Бонус",
+    };
     result.current.mutate(payload);
 
     await waitFor(() => {
@@ -66,16 +68,18 @@ describe("useAdjustBalance", () => {
       type: "accrual",
       comment: "Бонус",
     });
-    
-    expect(message.success).toHaveBeenCalledWith("Баланс успешно скорректирован");
+
+    expect(message.success).toHaveBeenCalledWith(
+      "Баланс успешно скорректирован",
+    );
   });
 
   it("должен обрабатывать ошибку при корректировке", async () => {
     const mockError = { message: "Недостаточно прав" };
     vi.mocked(api.post).mockRejectedValueOnce(mockError as unknown as Error);
 
-    const { result } = renderHook(() => useAdjustBalance(), { 
-      wrapper: createWrapper(queryClient) 
+    const { result } = renderHook(() => useAdjustBalance(), {
+      wrapper: createWrapper(queryClient),
     });
 
     result.current.mutate({ userId: 10, amount: 500, type: "accrual" });

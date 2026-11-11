@@ -20,7 +20,7 @@ describe("PurchaseModal", () => {
     name: "Золотая шляпа",
     price: "500",
     type_id: 1,
-    image_url: "/test.png", 
+    image_url: "/test.png",
     deleted_at: null,
     type: {
       id: 1,
@@ -37,16 +37,14 @@ describe("PurchaseModal", () => {
   });
 
   it("не должен рендериться, если предмет не передан (item = null)", () => {
-    render(
-      <PurchaseModal item={null} isOpen={true} onClose={mockOnClose} />
-    );
+    render(<PurchaseModal item={null} isOpen={true} onClose={mockOnClose} />);
     // Текст модалки не должен появляться в DOM
     expect(screen.queryByText(/Подтверждение покупки/i)).toBeNull();
   });
 
   it("должен отображать название предмета и цену", async () => {
     render(
-      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />
+      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />,
     );
 
     // Используем findByText, так как модалка рендерится с анимацией
@@ -60,7 +58,7 @@ describe("PurchaseModal", () => {
   it("должен вызывать мутацию при клике на 'Купить'", async () => {
     const user = userEvent.setup({ delay: null });
     render(
-      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />
+      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />,
     );
 
     // Ищем кнопку по data-cy (согласно настройке testIdAttribute)
@@ -72,14 +70,14 @@ describe("PurchaseModal", () => {
       mockItem.id,
       expect.objectContaining({
         onSettled: expect.any(Function),
-      })
+      }),
     );
   });
 
   it("должен вызывать onClose при клике на 'Отмена'", async () => {
     const user = userEvent.setup({ delay: null });
     render(
-      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />
+      <PurchaseModal item={mockItem} isOpen={true} onClose={mockOnClose} />,
     );
 
     const cancelBtn = await screen.findByRole("button", { name: /Отмена/i });
