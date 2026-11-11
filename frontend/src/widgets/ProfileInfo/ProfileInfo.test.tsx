@@ -13,7 +13,7 @@ vi.mock("@/entities/user/lib/useUserProfile", () => ({
   }),
 }));
 
-describe("ProfileInfo (Логика ЛК)", () => {
+describe("ProfileInfo (Логика ЛК и Безопасность)", () => {
   const mockUser: User = {
     id: 1,
     login: "Steve",
@@ -51,28 +51,6 @@ describe("ProfileInfo (Логика ЛК)", () => {
     expect(screen.queryByLabelText(/Имя/i)).toBeNull();
   });
 
-  it("должен блокировать сохранение при XSS-инъекции (Zod/AntD)", async () => {
-    const user = userEvent.setup({ delay: null });
-    render(<ProfileInfo user={mockUser} />);
-
-    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
-
-    const nameInput = screen.getByLabelText(/Имя/i);
-    await user.clear(nameInput);
-    await user.type(nameInput, '<script>alert(1)</script>');
-
-    // Нажимаем "Сохранить" (иконка дискеты)
-    await user.click(screen.getByTestId("save-profile-btn"));
-
-    // Ждем появления ошибки (от AntD rules)
-    await waitFor(() => {
-      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
-    });
-
-    // Главная проверка: запрос на сервер не ушел
-    expect(mockMutate).not.toHaveBeenCalled();
-  });
-
   it("должен вызывать мутацию при успешном сохранении", async () => {
     const user = userEvent.setup({ delay: null });
     render(<ProfileInfo user={mockUser} />);
@@ -95,5 +73,133 @@ describe("ProfileInfo (Логика ЛК)", () => {
         expect.any(Object)
       );
     });
+  });
+
+  it("должен блокировать сохранение при XSS-инъекции в поле Имя", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const nameInput = screen.getByLabelText(/Имя/i);
+    await user.clear(nameInput);
+    await user.type(nameInput, '<script>alert(1)</script>');
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при SQL-инъекции в поле Имя", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const nameInput = screen.getByLabelText(/Имя/i);
+    await user.clear(nameInput);
+    await user.type(nameInput, "' OR 1=1 --");
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при XSS-инъекции в поле Фамилия", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Фамилия/i);
+    await user.clear(input);
+    await user.type(input, '<img src=x onerror=alert(1)>');
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при SQL-инъекции в поле Фамилия", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Фамилия/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при XSS-инъекции в поле Отчество", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Отчество/i);
+    await user.clear(input);
+    await user.type(input, '<script>alert(1)</script>');
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при SQL-инъекции в поле Отчество", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Отчество/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --");
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Только кириллица, с заглавной буквы/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при XSS-инъекции в поле Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Email/i);
+    await user.clear(input);
+    await user.type(input, '<script>alert(1)</script>@test.com');
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Некорректный email/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать сохранение при SQL-инъекции в поле Email", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<ProfileInfo user={mockUser} />);
+    await user.click(screen.getByRole("button", { name: /Редактировать/i }));
+
+    const input = screen.getByLabelText(/Email/i);
+    await user.clear(input);
+    await user.type(input, "' OR 1=1 --@test.com");
+    await user.click(screen.getByTestId("save-profile-btn"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Некорректный email/i)).toBeTruthy();
+    });
+    expect(mockMutate).not.toHaveBeenCalled();
   });
 });
