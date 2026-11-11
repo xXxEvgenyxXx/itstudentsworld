@@ -68,7 +68,27 @@ describe("AdjustBalanceModal", () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it("должен блокировать отправку, если в поле суммы попытались ввести инъекцию", async () => {
+  it("должен блокировать отправку при XSS-инъекции в поле суммы", async () => {
+    const user = userEvent.setup({ delay: null });
+    render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
+
+    const amountInput = await screen.findByTestId(DATA_CY.admin.wallet.AMOUNT_INPUT);
+    await user.clear(amountInput);
+    // Пытаемся ввести XSS. InputNumber блокирует буквы, поле остается пустым.
+    await user.type(amountInput, "<script>alert(1)</script>");
+
+    const submitBtn = screen.getByTestId(DATA_CY.admin.wallet.SUBMIT_BTN);
+    await user.click(submitBtn);
+
+    // Срабатывает required: true, так как поле пустое
+    const errorMsg = await screen.findByText(/Введите сумму/i);
+    expect(errorMsg).toBeTruthy();
+
+    // Мутация не вызывается
+    expect(mockMutate).not.toHaveBeenCalled();
+  });
+
+  it("должен блокировать отправку при SQL-инъекции в поле суммы", async () => {
     const user = userEvent.setup({ delay: null });
     render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
 
@@ -85,7 +105,7 @@ describe("AdjustBalanceModal", () => {
     expect(mockMutate).not.toHaveBeenCalled();
   });
 
-  it("должен безопасно обрабатывать XSS-инъекцию в комментарии", async () => {
+  it("должен безопасно передавать XSS-инъекцию из комментария в мутацию", async () => {
     const user = userEvent.setup({ delay: null });
     render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
 
@@ -98,6 +118,8 @@ describe("AdjustBalanceModal", () => {
     const submitBtn = screen.getByTestId(DATA_CY.admin.wallet.SUBMIT_BTN);
     await user.click(submitBtn);
 
+    // Обычный Input пропускает всё, но React безопасно экранирует это при рендере.
+    // Строка улетает на бэкенд как есть, где Laravel её очистит.
     expect(mockMutate).toHaveBeenCalledWith(
       expect.objectContaining({
         comment: '<script>alert(1)</script>',
@@ -106,7 +128,7 @@ describe("AdjustBalanceModal", () => {
     );
   });
 
-  it("должен безопасно обрабатывать SQL-инъекцию в комментарии", async () => {
+  it("должен безопасно передавать SQL-инъекцию из комментария в мутацию", async () => {
     const user = userEvent.setup({ delay: null });
     render(<AdjustBalanceModal user={mockUser} isOpen={true} onClose={mockOnClose} />);
 
@@ -119,6 +141,7 @@ describe("AdjustBalanceModal", () => {
     const submitBtn = screen.getByTestId(DATA_CY.admin.wallet.SUBMIT_BTN);
     await user.click(submitBtn);
 
+    // Строка передается в мутацию, защита от SQLi лежит на бэкенде (Prepared Statements)
     expect(mockMutate).toHaveBeenCalledWith(
       expect.objectContaining({
         comment: "' OR 1=1 --",
