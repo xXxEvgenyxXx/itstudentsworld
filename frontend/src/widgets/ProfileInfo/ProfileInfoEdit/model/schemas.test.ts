@@ -39,35 +39,56 @@ describe("profileInfoSchema (Валидация Zod)", () => {
     }
   });
 
-  it("должна блокировать XSS и SQL-инъекции в Имени, Фамилии и Отчестве", () => {
-    const payloads = [
-      '<script>alert("xss")</script>',
-      "' OR 1=1 --",
-      "<img src=x onerror=alert(1)>",
-    ];
-
-    payloads.forEach((payload) => {
-      // Проверка Имени
-      const nameResult = profileInfoSchema.safeParse({ ...validData, name: payload });
-      expect(nameResult.success).toBe(false);
-
-      // Проверка Фамилии
-      const surnameResult = profileInfoSchema.safeParse({ ...validData, surname: payload });
-      expect(surnameResult.success).toBe(false);
-
-      // Проверка Отчества
-      const patronymicResult = profileInfoSchema.safeParse({ ...validData, patronymic: payload });
-      expect(patronymicResult.success).toBe(false);
+  it("должна блокировать XSS-инъекцию в поле Имя", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      name: '<script>alert("xss")</script>',
     });
+    expect(result.success).toBe(false);
   });
 
-  it("должна блокировать некорректный email и SQL-инъекции в нем", () => {
-    const invalidEmails = [
-      "invalid-email",
-      "test@",
-      "' OR '1'='1",
-      "<script>alert(1)</script>@test.com",
-    ];
+  it("должна блокировать SQL-инъекцию в поле Имя", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      name: "' OR 1=1 --",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("должна блокировать XSS-инъекцию в поле Фамилия", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      surname: '<img src=x onerror=alert(1)>',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("должна блокировать SQL-инъекцию в поле Фамилия", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      surname: "' OR 1=1 --",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("должна блокировать XSS-инъекцию в поле Отчество", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      patronymic: '<script>alert("xss")</script>',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("должна блокировать SQL-инъекцию в поле Отчество", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      patronymic: "' OR 1=1 --",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("должна блокировать некорректный формат email", () => {
+    const invalidEmails = ["invalid-email", "test@", "user@.com"];
 
     invalidEmails.forEach((email) => {
       const result = profileInfoSchema.safeParse({ ...validData, email });
@@ -76,5 +97,27 @@ describe("profileInfoSchema (Валидация Zod)", () => {
         expect(result.error.issues[0].message).toBe("Введите корректный email");
       }
     });
+  });
+
+  it("должна блокировать XSS-инъекцию в поле Email", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      email: '<script>alert(1)</script>@test.com',
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe("Введите корректный email");
+    }
+  });
+
+  it("должна блокировать SQL-инъекцию в поле Email", () => {
+    const result = profileInfoSchema.safeParse({
+      ...validData,
+      email: "' OR '1'='1'@test.com",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0].message).toBe("Введите корректный email");
+    }
   });
 });
