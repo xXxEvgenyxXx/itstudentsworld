@@ -6,6 +6,14 @@
   font-display: swap;
 }
 
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html,
 body {
   font-family: "Monocraft", sans-serif !important;

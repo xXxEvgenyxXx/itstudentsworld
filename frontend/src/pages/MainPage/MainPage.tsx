@@ -1,3 +1,9 @@
+import { HeroSection } from "./ui/HeroSection";
+
 export function MainPage() {
-  return <div>Главная</div>;
+  return (
+    <>
+      <HeroSection/>
+    </>
+  );
 }

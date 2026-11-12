@@ -1,0 +1,113 @@
+.hero {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden; 
+
+  background-image: url("/images/hero-image.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Текст в левом нижнем углу с жестким отступом 25px */
+.content {
+  position: absolute;
+  bottom: 10vh; /* Чуть подняли, так как текст стал меньше */
+  left: 25px;   /* 👈 ТОЧНЫЙ ОТСТУП 25 ПИКСЕЛЕЙ */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 8px; /* Уменьшили расстояние между строками */
+  max-width: 450px; /* Ограничили ширину, чтобы блок не растягивался */
+  animation: fadeIn 1s ease-out;
+}
+
+.eyebrow {
+  color: rgba(255, 255, 255, 0.7) !important; 
+  font-size: 14px; /* Уменьшили */
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.title {
+  color: var(--text-main) !important;
+  font-size: 20px !important; /* 👈 ТОЧНО 20 ПИКСЕЛЕЙ */
+  line-height: 1.3 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  margin: 0 !important;
+}
+
+.highlight {
+  color: var(--color-secondary);
+}
+
+.subtitle {
+  color: var(--text-main) !important;
+  font-size: 14px; /* Уменьшили подзаголовок */
+  line-height: 1.4;
+  max-width: 400px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  margin-top: 2px;
+}
+
+/* Кнопка по центру внизу */
+.buttonWrapper {
+  position: absolute;
+  bottom: 8vh; 
+  left: 50%;
+  transform: translateX(-50%); 
+  z-index: 2;
+}
+
+.startButton {
+  height: 56px; 
+  padding: 0 40px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 12px; 
+  letter-spacing: 1px;
+  
+  background-color: rgba(var(--bg-main-rgb), 0.75) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2.5px solid var(--bg-secondary) !important;
+  color: var(--text-main) !important;
+  
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--color-primary-hover) !important; 
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.scrollAnchor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  visibility: hidden;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
