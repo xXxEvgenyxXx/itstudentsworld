@@ -15,6 +15,7 @@ export const profileInfoSchema = z.object({
     .string()
     .regex(cyrillicCapitalizedRegex, "Только кириллица, с заглавной буквы")
     .or(z.literal("")) // Разрешаем пустую строку
+    .nullable()
     .optional(),
   email: z.string().email("Введите корректный email"),
 });

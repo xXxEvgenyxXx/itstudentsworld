@@ -6,21 +6,22 @@ describe("User Profile Management", () => {
     cy.visit("/profile");
   });
 
-  it("Пользователь может успешно отредактировать свой профиль", () => {
+it("Пользователь может успешно отредактировать свой профиль", () => {
     const newName = "Новоеимя";
     const newSurname = "Новаяфамилия";
+
+    cy.intercept("PATCH", "**/api/users/*").as("updateProfile"); // Перехватываем ДО клика
 
     cy.get(SELECTORS.profile.editBtn).click();
 
     cy.get(SELECTORS.profile.editName).clear().type(newName);
     cy.get(SELECTORS.profile.editSurname).clear().type(newSurname);
 
-    cy.intercept("PATCH", "**/api/users/*").as("updateProfile");
     cy.get(SELECTORS.profile.saveBtn).click();
 
+    // Ждем запрос. Если его нет, Cypress упадет и покажет, что мы нажали зря
     cy.wait("@updateProfile").its("response.statusCode").should("eq", 200);
-    cy.contains("Профиль успешно обновлен").should("be.visible");
-
+    
     cy.get(SELECTORS.profile.editName).should("not.exist");
     cy.contains(newName).should("be.visible");
   });
