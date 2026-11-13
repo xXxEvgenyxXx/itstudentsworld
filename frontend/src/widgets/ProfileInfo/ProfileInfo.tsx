@@ -22,24 +22,27 @@ export function ProfileInfo({ user }: { user: User }) {
 
   const { setUser } = useAuth();
 
-    const handleSave = () => {
-    form.validateFields().then((values) => {
-      const result = profileInfoSchema.safeParse(values);
-      if (!result.success) return;
+  const handleSave = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        const result = profileInfoSchema.safeParse(values);
+        if (!result.success) return;
 
-      updateProfile(
-        { userId: user.id, data: result.data },
-        {
-          onSuccess: (data) => {
-            setIsEditing(false);
-            form.resetFields();
-            if (data?.user) {
-              setUser(data.user); 
-            }
+        updateProfile(
+          { userId: user.id, data: result.data },
+          {
+            onSuccess: (data) => {
+              setIsEditing(false);
+              form.resetFields();
+              if (data?.user) {
+                setUser(data.user);
+              }
+            },
           },
-        }
-      );
-    }).catch(() => {});
+        );
+      })
+      .catch(() => {});
   };
 
   const handleCancel = () => {

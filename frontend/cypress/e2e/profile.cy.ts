@@ -6,7 +6,7 @@ describe("User Profile Management", () => {
     cy.visit("/profile");
   });
 
-it("Пользователь может успешно отредактировать свой профиль", () => {
+  it("Пользователь может успешно отредактировать свой профиль", () => {
     const newName = "Новоеимя";
     const newSurname = "Новаяфамилия";
 
@@ -21,7 +21,7 @@ it("Пользователь может успешно отредактиров�
 
     // Ждем запрос. Если его нет, Cypress упадет и покажет, что мы нажали зря
     cy.wait("@updateProfile").its("response.statusCode").should("eq", 200);
-    
+
     cy.get(SELECTORS.profile.editName).should("not.exist");
     cy.contains(newName).should("be.visible");
   });
