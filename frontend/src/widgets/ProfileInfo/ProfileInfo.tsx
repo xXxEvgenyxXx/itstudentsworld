@@ -10,6 +10,8 @@ import { useUpdateProfile } from "@/entities/user/lib/useUserProfile";
 import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
+import { profileInfoSchema } from "./ProfileInfoEdit/model/schemas";
+import { useAuth } from "@/entities/user";
 import { DATA_CY } from "@/shared/config";
 import s from "./ProfileInfo.module.scss";
 
@@ -18,15 +20,29 @@ export function ProfileInfo({ user }: { user: User }) {
   const [form] = Form.useForm();
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
+  const { setUser } = useAuth();
+
   const handleSave = () => {
-    form.validateFields().then((values) => {
-      updateProfile(
-        { userId: user.id, data: values },
-        {
-          onSuccess: () => setIsEditing(false),
-        },
-      );
-    });
+    form
+      .validateFields()
+      .then((values) => {
+        const result = profileInfoSchema.safeParse(values);
+        if (!result.success) return;
+
+        updateProfile(
+          { userId: user.id, data: result.data },
+          {
+            onSuccess: (data) => {
+              setIsEditing(false);
+              form.resetFields();
+              if (data?.user) {
+                setUser(data.user);
+              }
+            },
+          },
+        );
+      })
+      .catch(() => {});
   };
 
   const handleCancel = () => {
@@ -42,7 +58,7 @@ export function ProfileInfo({ user }: { user: User }) {
           <UserOutlined /> Профиль игрока
         </>
       }
-      bordered={false}
+      variant="borderless"
       style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)", height: "100%" }}
       extra={
         !isEditing ? (

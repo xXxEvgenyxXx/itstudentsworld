@@ -32,7 +32,10 @@ export const loginFields: AuthFieldConfig[] = [
     dataCy: DATA_CY.auth.LOGIN_PASSWORD,
     placeholder: "Введите пароль",
     isPassword: true,
-    rules: [{ required: true, message: "Введите пароль" }],
+    rules: [
+      { required: true, message: "Введите пароль" },
+      { min: 8, message: "Пароль должен быть не менее 8 символов" },
+    ],
   },
 ];
 
@@ -64,6 +67,7 @@ export const registerFields: AuthFieldConfig[] = [
   {
     name: "patronymic",
     label: "Отчество (при наличии)",
+    dataCy: DATA_CY.auth.REG_PATRONYMIC,
     rules: [
       {
         pattern: cyrillicCapitalizedRegex,
@@ -89,7 +93,8 @@ export const registerFields: AuthFieldConfig[] = [
       { required: true, message: "Введите логин" },
       {
         pattern: minecraftLoginRegex,
-        message: "3-16 символов: латиница, цифры, _",
+        message:
+          "Логин должен содержать от 3 до 16 символов: латиница, цифры и подчеркивания",
       },
     ],
   },

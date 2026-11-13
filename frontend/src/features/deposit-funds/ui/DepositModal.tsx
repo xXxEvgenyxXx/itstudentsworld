@@ -12,14 +12,19 @@ export function DepositModal({ isOpen, onClose }: Props) {
   const { mutate: deposit, isPending } = useDeposit();
 
   const handleOk = () => {
-    form.validateFields().then((values) => {
-      deposit(values.amount, {
-        onSuccess: () => {
-          form.resetFields();
-          onClose();
-        },
+    form
+      .validateFields()
+      .then((values) => {
+        deposit(values.amount, {
+          onSuccess: () => {
+            form.resetFields();
+            onClose();
+          },
+        });
+      })
+      .catch(() => {
+        // Ошибки валидации отображаются под полями
       });
-    });
   };
 
   return (
