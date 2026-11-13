@@ -67,10 +67,23 @@ class UserController extends Controller
             'surname' => ['sometimes', 'string', 'max:50'],
             'patronymic' => ['nullable', 'string', 'max:50'],
             'email' => ['sometimes', 'email', 'max:250', 'unique:user,email,' . $user->id],
-            'login' => ['prohibited'],  // запрещает поле, вернёт 422 с понятным сообщением
+            'login' => ['prohibited'],
         ]);
 
-        return response()->json($this->userService->updateProfile($user, $data));
+        if ($request->exists('patronymic') && empty($data['patronymic'])) {
+            $user->patronymic = null;
+            $user->save(); // Сохраняем в БД напрямую
+            $data['patronymic'] = null; // Передаем null сервису
+        }
+
+        // Обновляем остальные поля через сервис
+        $user = $this->userService->updateProfile($user, $data);
+
+        // Возвращаем свежую модель со связями
+        return response()->json([
+            'message' => 'Профиль успешно обновлен',
+            'user' => $user->fresh()->load('role', 'wallet', 'wishlist', 'cosmetics')
+        ]);
     }
 
     public function changePassword(Request $request, User $user): JsonResponse

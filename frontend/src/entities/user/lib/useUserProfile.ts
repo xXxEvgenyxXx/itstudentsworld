@@ -14,7 +14,8 @@ export function useUpdateProfile() {
       userApi.updateProfile(userId, data),
     onSuccess: (response) => {
       message.success("Профиль успешно обновлен");
-      setUser(response.user);
+      const updatedUser = response.user || response; 
+      setUser(updatedUser);
       queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
     },
     onError: (error: ApiException) => {

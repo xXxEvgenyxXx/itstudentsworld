@@ -30,7 +30,7 @@ export function ProfileInfoView({ user }: { user: User }) {
         </Text>
       </Descriptions.Item>
       <Descriptions.Item label="ФИО">
-        {user.surname} {user.name} {user.patronymic}
+        {[user.surname, user.name, user.patronymic].filter(Boolean).join(" ")}
       </Descriptions.Item>
       <Descriptions.Item label="Email">
         <span data-cy={DATA_CY.profile.VIEW_EMAIL}>{user.email}</span>

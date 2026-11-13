@@ -11,6 +11,7 @@ import type { User } from "@/entities/user";
 import { ProfileInfoView } from "./ProfileInfoView";
 import { ProfileInfoEdit } from "./ProfileInfoEdit";
 import { profileInfoSchema } from "./ProfileInfoEdit/model/schemas";
+import { useAuth } from "@/entities/user";
 import { DATA_CY } from "@/shared/config";
 import s from "./ProfileInfo.module.scss";
 
@@ -19,23 +20,26 @@ export function ProfileInfo({ user }: { user: User }) {
   const [form] = Form.useForm();
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
-  const handleSave = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        const result = profileInfoSchema.safeParse(values);
-        if (!result.success) return;
+  const { setUser } = useAuth();
 
-        updateProfile(
-          { userId: user.id, data: result.data },
-          {
-            onSuccess: () => setIsEditing(false),
+    const handleSave = () => {
+    form.validateFields().then((values) => {
+      const result = profileInfoSchema.safeParse(values);
+      if (!result.success) return;
+
+      updateProfile(
+        { userId: user.id, data: result.data },
+        {
+          onSuccess: (data) => {
+            setIsEditing(false);
+            form.resetFields();
+            if (data?.user) {
+              setUser(data.user); 
+            }
           },
-        );
-      })
-      .catch((info) => {
-        console.log("Ошибка валидации формы:", info);
-      });
+        }
+      );
+    }).catch(() => {});
   };
 
   const handleCancel = () => {
