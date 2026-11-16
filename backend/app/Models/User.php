@@ -23,9 +23,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'surname', 'patronymic', 'login',
         'email', 'created_at',
+        'privacy_policy_accepted_at',
+        'personal_data_consent_at',
+        'consent_ip_address',
+        'consent_document_version',
     ];
 
-    protected $hidden = ['password_hash'];
+    protected $hidden = ['password_hash','consent_ip_address',
+        'consent_document_version'];
 
     protected $casts = [
         'is_banned' => 'boolean',
