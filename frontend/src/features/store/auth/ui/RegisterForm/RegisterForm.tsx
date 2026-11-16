@@ -1,5 +1,5 @@
 import { Button, Form, Input, Alert, Checkbox, Typography } from "antd";
-import { useNavigate, Link } from "react-router-dom"; // 👈 Добавили Link
+import { useNavigate, Link } from "react-router-dom";
 import { useRegister } from "@/entities/user";
 import { registerSchema, type RegisterFormData } from "../../model/schemas";
 import { parseApiError } from "@/shared/api";
