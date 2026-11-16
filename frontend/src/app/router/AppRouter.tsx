@@ -3,11 +3,13 @@ import { allRoutes } from "./routes";
 import { ApiAuthListener } from "../providers/ApiAuthListener";
 import { ProtectedRoute } from "./guards/ProtectedRoute";
 import { PublicLayout, UserLayout, AdminLayout } from "@/app/layouts";
+import { CookieConsent } from "@/widgets/CookieConsent";
 
 export function AppRouter() {
   return (
     <Router>
       <ApiAuthListener />
+      <CookieConsent/>
       <Routes>
         {/* Доступные всем маршруты */}
         <Route element={<PublicLayout />}>
