@@ -1,1 +1,1 @@
-export {PrivacyPage} from './PrivacyPage'
+export { PrivacyPage } from "./PrivacyPage";

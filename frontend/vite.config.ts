@@ -1,6 +1,6 @@
 import { defineConfig } from "vitest/config";
 import { resolve } from "path";
-import fs from 'fs';
+import fs from "fs";
 import Sitemap from "vite-plugin-sitemap";
 
 export default defineConfig({

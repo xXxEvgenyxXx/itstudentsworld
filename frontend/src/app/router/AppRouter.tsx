@@ -9,7 +9,7 @@ export function AppRouter() {
   return (
     <Router>
       <ApiAuthListener />
-      <CookieConsent/>
+      <CookieConsent />
       <Routes>
         {/* Доступные всем маршруты */}
         <Route element={<PublicLayout />}>

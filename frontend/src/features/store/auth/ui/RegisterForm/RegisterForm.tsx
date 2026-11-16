@@ -74,7 +74,15 @@ export function RegisterForm() {
         </Form.Item>
       ))}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "24px", marginTop: "8px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          marginBottom: "24px",
+          marginTop: "8px",
+        }}
+      >
         <Form.Item
           name="personal_data_consent"
           valuePropName="checked"
@@ -83,7 +91,9 @@ export function RegisterForm() {
               validator: (_, value) =>
                 value
                   ? Promise.resolve()
-                  : Promise.reject(new Error("Необходимо согласие на обработку ПДн")),
+                  : Promise.reject(
+                      new Error("Необходимо согласие на обработку ПДн"),
+                    ),
             },
           ]}
           style={{ marginBottom: 0 }}
@@ -113,7 +123,11 @@ export function RegisterForm() {
           <Checkbox data-cy="privacy-policy-accepted">
             <Text style={{ fontSize: 14 }}>
               Я ознакомлен(а) и согласен(на) с{" "}
-              <Link to={allRoutes.publicRoutes.PRIVACY_PAGE.path} target="_blank" style={{ color: "var(--color-secondary)" }}>
+              <Link
+                to={allRoutes.publicRoutes.PRIVACY_PAGE.path}
+                target="_blank"
+                style={{ color: "var(--color-secondary)" }}
+              >
                 Политикой конфиденциальности
               </Link>
             </Text>

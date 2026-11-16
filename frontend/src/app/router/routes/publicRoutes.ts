@@ -34,6 +34,6 @@ export const publicRoutes = {
   PRIVACY_PAGE: {
     path: "/privacy-policy",
     element: PrivacyPage,
-    access: "public"
-  }
+    access: "public",
+  },
 };

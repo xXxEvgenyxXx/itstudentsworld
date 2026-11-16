@@ -33,7 +33,7 @@ export const registerSchema = z
       ),
     password: z.string().min(8, "Пароль должен быть не менее 8 символов"),
     password_confirmation: z.string(),
-    
+
     privacy_policy_accepted: z.boolean().refine((val) => val === true, {
       message: "Необходимо ознакомиться с Политикой конфиденциальности",
     }),
@@ -43,7 +43,7 @@ export const registerSchema = z
   })
   .refine((data) => data.password === data.password_confirmation, {
     message: "Пароли не совпадают",
-    path: ["password_confirmation"], 
+    path: ["password_confirmation"],
   });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
