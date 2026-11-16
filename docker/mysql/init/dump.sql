@@ -155,6 +155,14 @@ CREATE TABLE `user` (
   `is_banned` int(11) NOT NULL,
   `login` varchar(50) COLLATE utf8mb4_unicode_ci UNIQUE NOT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+
+-- Поля для 152-ФЗ / 198-ФЗ
+
+  `privacy_policy_accepted_at` timestamp NULL DEFAULT NULL COMMENT 'Дата и время ознакомления с Политикой конфиденциальности',
+  `personal_data_consent_at` timestamp NULL DEFAULT NULL COMMENT 'Дата и время согласия на обработку ПДн',
+  `consent_ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'IP-адрес, с которого дано согласие',
+  `consent_document_version` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Версия документа (например, v1.0)',
+
   `created_at` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

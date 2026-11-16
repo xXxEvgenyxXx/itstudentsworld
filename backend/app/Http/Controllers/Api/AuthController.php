@@ -17,7 +17,14 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        $user = $this->authService->register($request->validated());
+        $data = $request->validated();
+
+        $data['privacy_policy_accepted_at'] = now();
+        $data['personal_data_consent_at'] = now();
+        $data['consent_ip_address'] = $request->ip();
+        $data['consent_document_version'] = 'v1.0';
+
+        $user = $this->authService->register($data);
         $token = $user->createToken('auth')->plainTextToken;
 
         return response()->json([
