@@ -1,0 +1,25 @@
+.container {
+  max-width: 900px;
+  margin: 100px auto 40px;
+  padding: 40px;
+  background-color: var(--bg-secondary);
+  border-radius: 12px;
+  border: 2.5px solid var(--bg-tertiary);
+
+  .title {
+    color: var(--text-main) !important;
+    text-align: center;
+    margin-bottom: 30px !important;
+  }
+
+  .subtitle {
+    color: var(--color-secondary) !important;
+    margin-top: 24px !important;
+  }
+
+  .text {
+    color: var(--text-main) !important;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
