@@ -1,0 +1,87 @@
+.cookieModal {
+  :global {
+    .ant-modal-content {
+      background-color: var(--bg-secondary) !important;
+      border: 2.5px solid var(--bg-tertiary);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  color: var(--text-main) !important;
+  text-align: center;
+  margin-bottom: 8px !important;
+  font-size: 24px !important;
+}
+
+.text {
+  color: var(--text-main) !important;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.infoBlock {
+  background-color: var(--bg-main);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--bg-tertiary);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .infoText {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0;
+
+    strong {
+      color: var(--text-main);
+    }
+  }
+}
+
+.link {
+  color: var(--color-secondary);
+  text-decoration: underline;
+
+  &:hover {
+    color: var(--color-warning);
+  }
+}
+
+.buttons {
+  margin-top: 16px;
+}
+
+.btnPrimary {
+  background-color: var(--color-secondary) !important;
+  color: var(--bg-main) !important;
+  font-weight: 600;
+  border: none !important;
+  height: 48px;
+
+  &:hover {
+    background-color: var(--color-warning) !important;
+  }
+}
+
+.btnSecondary {
+  background-color: transparent !important;
+  color: var(--text-main) !important;
+  border: 2px solid var(--bg-tertiary) !important;
+  height: 48px;
+
+  &:hover {
+    border-color: var(--color-primary-hover) !important;
+    color: var(--color-primary-hover) !important;
+  }
+}

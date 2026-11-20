@@ -27,6 +27,10 @@ class OwnerSeeder extends Seeder
             $owner->role_id = $ownerRole->id;
             $owner->is_banned = false;
             $owner->created_at = now();
+            $owner->privacy_policy_accepted_at = now();
+            $owner->personal_data_consent_at = now();
+            $owner->consent_ip_address = '127.0.0.1';
+            $owner->consent_document_version = 'v1.0';
             $owner->save();
 
             $wallet = new UserWallet();
