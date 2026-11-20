@@ -4,18 +4,20 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import boundaries from "eslint-plugin-boundaries";
 import eslintConfigPrettier from "eslint-config-prettier";
+import sonarjs from "eslint-plugin-sonarjs";
 
 export default tseslint.config(
   { ignores: ["dist", "node_modules"] },
+
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  reactHooks.configs.flat.recommended,
+  reactRefresh.configs.vite,
+  eslintConfigPrettier,
+  sonarjs.configs.recommended,
+
   {
     files: ["**/*.{ts,tsx}"],
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.recommended,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-      eslintConfigPrettier,
-    ],
     plugins: {
       boundaries,
     },
@@ -30,8 +32,10 @@ export default tseslint.config(
       ],
     },
     rules: {
+      "complexity": ["error", 10],
+      
       "boundaries/element-types": [
-        2,
+        "error",
         {
           default: "disallow",
           rules: [
@@ -50,5 +54,5 @@ export default tseslint.config(
         },
       ],
     },
-  },
+  }
 );
