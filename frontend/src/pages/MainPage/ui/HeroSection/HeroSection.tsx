@@ -15,14 +15,12 @@ export function HeroSection() {
     <section className={s.hero}>
       {/* Блок с текстом (слева внизу) */}
       <div className={s.content}>
-        <Text className={s.eyebrow}>Добро пожаловать в Мир студента IT</Text>
-        
         <Title level={1} className={s.title}>
-          Мир студента IT - <span className={s.highlight}>уникальное кубическое путешествие</span> в Minecraft
+          Мир студента IT - <span className={s.highlight}>уникальное кубическое путешествие</span>
         </Title>
         
         <Text className={s.subtitle}>
-          Стройте бесконечные магистрали, управляйте поездами и создавайте уникальные станции. Мы ценим честную игру: никаких читов, только чистое творчество и стиль.
+          Стройте бесконечные магистрали, прокладывайте маршруты и создавайте уникальные станции
         </Text>
       </div>
 
