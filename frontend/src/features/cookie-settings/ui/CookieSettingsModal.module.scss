@@ -1,0 +1,73 @@
+.modal {
+  :global {
+    .ant-modal-content {
+      background-color: var(--bg-secondary) !important;
+      border: 2.5px solid var(--bg-tertiary);
+      border-radius: 12px;
+    }
+    .ant-modal-header {
+      background-color: transparent !important;
+      border-bottom: 1px solid var(--bg-tertiary);
+      margin-bottom: 20px;
+    }
+    .ant-modal-title {
+      color: var(--text-main) !important;
+      font-size: 20px !important;
+    }
+    .ant-modal-close-x {
+      color: var(--text-secondary) !important;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.description {
+  color: var(--text-secondary) !important;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.cookieGroup {
+  background-color: var(--bg-main);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--bg-tertiary);
+
+  .fakeCheckbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .fakeCheckboxIcon {
+    font-size: 12px;
+    color: var(--text-main);
+    font-weight: bold;
+  }
+
+  .groupTitle {
+    display: block;
+    color: var(--text-main) !important;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .groupDescription {
+    color: var(--text-secondary) !important;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
