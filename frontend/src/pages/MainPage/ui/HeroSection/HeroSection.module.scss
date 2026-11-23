@@ -16,7 +16,7 @@
 .content {
   position: absolute;
   bottom: 10vh; /* Чуть подняли, так как текст стал меньше */
-  left: 25px;   /* 👈 ТОЧНЫЙ ОТСТУП 25 ПИКСЕЛЕЙ */
+  left: 25px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,8 @@
 }
 
 .eyebrow {
-  color: rgba(255, 255, 255, 0.7) !important; 
+  color: var(--text-main) !important; 
+  text-shadow: 0 2px 8px var(--text-shadow);
   font-size: 14px; /* Уменьшили */
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -36,9 +37,9 @@
 
 .title {
   color: var(--text-main) !important;
-  font-size: 20px !important; /* 👈 ТОЧНО 20 ПИКСЕЛЕЙ */
+  font-size: 20px !important;
   line-height: 1.3 !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 8px var(--text-shadow);
   margin: 0 !important;
 }
 
@@ -51,7 +52,7 @@
   font-size: 14px; /* Уменьшили подзаголовок */
   line-height: 1.4;
   max-width: 400px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 2px 6px var(--text-shadow);
   margin-top: 2px;
 }
 
