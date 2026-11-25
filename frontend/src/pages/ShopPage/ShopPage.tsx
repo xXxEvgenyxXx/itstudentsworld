@@ -5,6 +5,7 @@ import { useAuth } from "@/entities/user";
 import { CosmeticCard } from "@/widgets/CosmeticCard";
 import { PurchaseModal } from "@/features/purchase-cosmetic/ui/PurchaseModal";
 import { useWishlist } from "@/features/purchase-cosmetic/api/useWishlist";
+import s from './ShopPage.module.scss'
 
 const { Title } = Typography;
 
@@ -34,7 +35,7 @@ export function ShopPage() {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: 1200, margin: "0 auto" }}>
+    <div className={s.shopPage}>
       <Title level={2} style={{ marginBottom: 24 }}>
         Магазин косметики
       </Title>
