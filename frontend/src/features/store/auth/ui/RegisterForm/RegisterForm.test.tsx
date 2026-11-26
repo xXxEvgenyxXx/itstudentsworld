@@ -36,6 +36,8 @@ describe("RegisterForm (Безопасность и Валидация)", () => 
     await user.type(screen.getByLabelText(/Игровой логин/i), "Steve");
     await user.type(screen.getByLabelText(/^Пароль/i), "password123");
     await user.type(screen.getByLabelText(/Повторите пароль/i), "password123");
+    await user.click(screen.getByTestId("personal-data-consent"));
+    await user.click(screen.getByTestId("privacy-policy-accepted"));
   };
 
   it("должна вызывать мутацию при валидных данных", async () => {
