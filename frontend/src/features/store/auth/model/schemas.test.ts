@@ -51,6 +51,8 @@ describe("Безопасность и валидация Zod-схем", () => {
       login: "Steve_123",
       password: "password123",
       password_confirmation: "password123",
+      personal_data_consent: true, 
+      privacy_policy_accepted: true, 
     };
 
     it("должна пропускать корректные данные (с кириллицей в имени)", () => {

@@ -26,6 +26,10 @@ class AuthService
             $user->role_id = $userRole->id;
             $user->is_banned = false;
             $user->created_at = now();
+            $user->privacy_policy_accepted_at = $data['privacy_policy_accepted_at'] ?? null;
+            $user->personal_data_consent_at = $data['personal_data_consent_at'] ?? null;
+            $user->consent_ip_address = $data['consent_ip_address'] ?? null;
+            $user->consent_document_version = $data['consent_document_version'] ?? null;
             $user->save();
 
             UserWallet::create([

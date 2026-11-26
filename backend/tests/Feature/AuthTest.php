@@ -20,6 +20,8 @@ class AuthTest extends TestCase
             'login' => 'test_phpunit_login',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(201)
@@ -33,7 +35,6 @@ class AuthTest extends TestCase
 
     public function test_user_can_login(): void
     {
-        // ИСПОЛЬЗУЕМ ФАБРИКУ ВМЕСТО РУЧНОГО СОЗДАНИЯ
         User::factory()->create([
             'email' => 'login_phpunit@example.com',
             'login' => 'login_phpunit_login',
@@ -53,7 +54,7 @@ class AuthTest extends TestCase
     public function test_guest_cannot_get_users_list(): void
     {
         $response = $this->getJson('/api/users');
-        $response->assertStatus(401); // Unauthorized
+        $response->assertStatus(401);
     }
 
     public function test_cannot_register_with_duplicate_login(): void
@@ -63,6 +64,8 @@ class AuthTest extends TestCase
             'email' => 'unique@example.com',
             'login' => 'test_dup_login',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response = $this->postJson('/api/auth/register', [
@@ -70,6 +73,8 @@ class AuthTest extends TestCase
             'email' => 'unique2@example.com',
             'login' => 'test_dup_login', // Дубликат
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(422)
@@ -83,6 +88,8 @@ class AuthTest extends TestCase
             'email' => 'test_dup_email@example.com',
             'login' => 'unique_login',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response = $this->postJson('/api/auth/register', [
@@ -90,6 +97,8 @@ class AuthTest extends TestCase
             'email' => 'test_dup_email@example.com', // Дубликат
             'login' => 'unique_login_2',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(422)
@@ -103,13 +112,17 @@ class AuthTest extends TestCase
             'email' => 'both_dup@example.com',
             'login' => 'both_dup_login',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response = $this->postJson('/api/auth/register', [
             'name' => 'Тест 2', 'surname' => 'Тестов 2',
-            'email' => 'both_dup@example.com', // Дубликат
-            'login' => 'both_dup_login',       // Дубликат
+            'email' => 'both_dup@example.com',
+            'login' => 'both_dup_login',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(422)
@@ -138,6 +151,8 @@ class AuthTest extends TestCase
             'login' => 'xss_api_login',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(201);
@@ -159,14 +174,16 @@ class AuthTest extends TestCase
             'password_confirmation' => 'password123',
             'role_id' => 3,
             'is_banned' => true,
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('user', [
             'email' => 'hacker@example.com',
-            'role_id' => 1,       // Должна быть роль user
-            'is_banned' => false, // Должен быть false
+            'role_id' => 1,
+            'is_banned' => false,
         ]);
     }
 
@@ -176,7 +193,7 @@ class AuthTest extends TestCase
             'email' => 'banned_login@example.com',
             'login' => 'banned_login',
             'password_hash' => Hash::make('password123'),
-            'is_banned' => true, // БАНИМ
+            'is_banned' => true,
         ]);
 
         $response = $this->postJson('/api/auth/login', [
@@ -234,6 +251,8 @@ class AuthTest extends TestCase
             'email' => 'hash_test@example.com',
             'login' => 'hash_test_login',
             'password' => 'password123', 'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
         $user = User::where('email', 'hash_test@example.com')->first();
@@ -241,24 +260,26 @@ class AuthTest extends TestCase
         $this->assertNotEquals('password123', $user->password_hash);
         $this->assertTrue(Hash::check('password123', $user->password_hash));
     }
+
     public function test_all_text_fields_handle_xss_safely(): void
     {
         $xssPayload = '<script>alert("hacked")</script>';
         $uniqueId = uniqid();
 
         $response = $this->postJson('/api/auth/register', [
-            'name' => $xssPayload, // XSS в имя
-            'surname' => $xssPayload, // XSS в фамилию
-            'patronymic' => $xssPayload, // XSS в отчество
+            'name' => $xssPayload,
+            'surname' => $xssPayload,
+            'patronymic' => $xssPayload,
             'email' => "xss_all_{$uniqueId}@example.com",
             'login' => "xss_all_{$uniqueId}",
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true
         ]);
 
         $response->assertStatus(201);
 
-        // Проверяем, что все поля сохранились как безопасные строки
         $this->assertDatabaseHas('user', [
             'email' => "xss_all_{$uniqueId}@example.com",
             'name' => $xssPayload,
@@ -280,15 +301,15 @@ class AuthTest extends TestCase
             'login' => "sqli_all_{$uniqueId}",
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'personal_data_consent' => true,
+            'privacy_policy_accepted' => true,
         ]);
 
-        // Если бы SQLi сработала, база данных упала бы или вернула 500-ю ошибку.
-        // Если 201 — значит Eloquent безопасно сохранил это как обычный текст.
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('user', [
             'email' => "sqli_all_{$uniqueId}@example.com",
-            'name' => $sqliPayload, // Строка сохранилась в БД как есть
+            'name' => $sqliPayload,
         ]);
     }
 }

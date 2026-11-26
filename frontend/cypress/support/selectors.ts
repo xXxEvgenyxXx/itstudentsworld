@@ -17,6 +17,8 @@ export const SELECTORS = {
     regSubmit: cy(DATA_CY.auth.REG_SUBMIT),
     errorAlert: cy(DATA_CY.auth.ERROR_ALERT),
     regNameWrapper: cy(DATA_CY.auth.REG_NAME_WRAPPER),
+    regPersonalDataConsent: cy(DATA_CY.auth.REG_PERSONAL_DATA_CONSENT),
+    regPrivacyPolicyAccepted: cy(DATA_CY.auth.REG_PRIVACY_POLICY_ACCEPTED),
   },
   header: {
     username: cy(DATA_CY.header.USERNAME),
