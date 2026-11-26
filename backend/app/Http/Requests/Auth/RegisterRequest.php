@@ -20,6 +20,8 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'max:250', 'unique:user,email'],
             'login' => ['required', 'string', 'max:50', 'unique:user,login'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'personal_data_consent' => ['required', 'accepted'],
+            'privacy_policy_accepted' => ['required', 'accepted']
         ];
     }
 

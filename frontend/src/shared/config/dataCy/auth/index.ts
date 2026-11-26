@@ -12,4 +12,6 @@ export const AUTH_DATA_CY = {
   REG_SUBMIT: "reg-submit",
   ERROR_ALERT: "error-alert",
   REG_NAME_WRAPPER: "reg-name-wrapper",
+  REG_PERSONAL_DATA_CONSENT: "personal-data-consent",
+  REG_PRIVACY_POLICY_ACCEPTED: "privacy-policy-accepted",
 } as const;

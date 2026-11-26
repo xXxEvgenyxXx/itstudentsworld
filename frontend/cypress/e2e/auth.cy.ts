@@ -19,6 +19,10 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regLogin).type(testUser.login);
     cy.get(SELECTORS.auth.regPassword).type(testUser.password);
     cy.get(SELECTORS.auth.regPasswordConfirm).type(testUser.password);
+
+    cy.get(SELECTORS.auth.regPersonalDataConsent).click();
+    cy.get(SELECTORS.auth.regPrivacyPolicyAccepted).click();
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 201);
@@ -56,6 +60,9 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
 
+    cy.get(SELECTORS.auth.regPersonalDataConsent).click();
+    cy.get(SELECTORS.auth.regPrivacyPolicyAccepted).click();
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.get(SELECTORS.auth.regNameWrapper).should(
@@ -78,6 +85,10 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regLogin).type("owner");
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
+
+    cy.get(SELECTORS.auth.regPersonalDataConsent).click();
+    cy.get(SELECTORS.auth.regPrivacyPolicyAccepted).click();
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
@@ -97,6 +108,10 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regLogin).type(uniqueLogin);
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
+
+    cy.get(SELECTORS.auth.regPersonalDataConsent).click();
+    cy.get(SELECTORS.auth.regPrivacyPolicyAccepted).click();
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);
@@ -114,6 +129,10 @@ describe("Auth Flow & Security", () => {
     cy.get(SELECTORS.auth.regLogin).type("owner");
     cy.get(SELECTORS.auth.regPassword).type("password123");
     cy.get(SELECTORS.auth.regPasswordConfirm).type("password123");
+
+    cy.get(SELECTORS.auth.regPersonalDataConsent).click();
+    cy.get(SELECTORS.auth.regPrivacyPolicyAccepted).click();
+
     cy.get(SELECTORS.auth.regSubmit).click();
 
     cy.wait("@registerRequest").its("response.statusCode").should("eq", 422);

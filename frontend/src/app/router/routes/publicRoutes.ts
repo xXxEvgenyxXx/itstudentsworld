@@ -3,6 +3,7 @@ import { MainPage } from "@/pages/MainPage";
 import { AboutPage } from "@/pages/AboutPage";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
+import { PrivacyPage } from "@/pages/PrivacyPage";
 
 export const publicRoutes = {
   MAIN_PAGE: {
@@ -28,6 +29,11 @@ export const publicRoutes = {
   REGISTER_PAGE: {
     path: "/register",
     element: RegisterPage,
+    access: "public",
+  },
+  PRIVACY_PAGE: {
+    path: "/privacy-policy",
+    element: PrivacyPage,
     access: "public",
   },
 };
